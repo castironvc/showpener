@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 15.95627">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #220038;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 5px;
+      }
+
+      .cls-2 {
+        fill: #220038;
+      }
+    </style>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Spotify">
+      <g id="Mobile">
+        <g>
+          <line class="cls-1" x1="2.5" y1="7.97815" x2="56.51801" y2="7.97815"/>
+          <polygon class="cls-2" points="54.184 15.956 68 7.978 54.184 0 54.184 15.956"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

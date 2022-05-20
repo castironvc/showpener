@@ -7,7 +7,7 @@ import { Provider } from "../types/globals";
 import Image from "next/image";
 import styles from "../styles/connectSpotify.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
-
+import send from "./api/queues/send";
 function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const { dispatch } = useContext(DispatchContext);
@@ -43,6 +43,10 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
     const result = await user.json();
     console.log(result);
+    /*     const sendResult = await send.enqueue({
+      to: "+19176782017",
+    });
+    console.log(sendResult); */
     return result;
   };
   useEffect(() => {
@@ -107,10 +111,9 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
               <div className={styles.fieldContainer}>
                 <input
-                  id="phone-number"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
+                  id="state-region"
+                  name="state-region"
+                  type="text"
                   value={state.userProfile.state}
                   onChange={(e) => setStateRegion(e.target.value)}
                   required

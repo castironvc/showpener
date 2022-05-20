@@ -6,6 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useState, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
+import { normalizePhone } from "../utils/validation";
 const Home: NextPage = () => {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);
@@ -74,11 +75,13 @@ const Home: NextPage = () => {
                     name="phone"
                     type="tel"
                     autoComplete="tel"
-                    value={state.userProfile.phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    value={state.userProfile.mobilePhone}
+                    onChange={(e) =>
+                      setPhone(normalizePhone(e.target.value) || "")
+                    }
                     required
                     className={styles.input}
-                    placeholder="(000)000-0000"
+                    placeholder="(000) 000-0000"
                   />
                 </div>
                 <div className={styles.checkboxContainer}>

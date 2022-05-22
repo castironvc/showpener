@@ -21,11 +21,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const sendResult = await client.messages.create({
+  /*   const sendResult = await client.messages.create({
     body: "hello how are you",
     from: phonenumber,
     to: "+19176782017",
   });
 
-  return res.status(200).json(sendResult);
+  return res.status(200).json(sendResult); */
+  console.log(req.body);
+  return res.status(200).json(req.body);
 }

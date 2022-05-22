@@ -45,6 +45,20 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
     return result;
   };
+
+  const welcomeText = async (tmpProfile: UserProfileProps) => {
+    const user = await fetch("/api/sms/init", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tmpProfile),
+    });
+
+    const result = await user.json();
+    console.log(result);
+  };
+
   const createNewUser = async (tmpProfile: UserProfileProps) => {
     const user = await fetch("/api/spotify/newuser", {
       method: "POST",
@@ -63,6 +77,10 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
     // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
     const ticketData = await fetchTicketData(artistObj);
     console.log(ticketData);
+
+    // STEP 3: SEND WELCOME TEXT MESSAGE
+
+    await welcomeText(tmpProfile);
     return ticketData;
 
     //// ***** HERE IS WHERE IT ALL ENDS
@@ -77,6 +95,7 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
       createNewUser(tmpProfile);
+      /*  welcomeText(tmpProfile); */
       if (status === "authenticated") {
         router.push({
           pathname: "/Thanks",

@@ -4,20 +4,19 @@ module.exports = {
   images: {
     domains: ["bit.ly"],
   },
-  node: {
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-  },
-  /*  webpack5: true,
-  webpack: (config) => {
+
+  webpack(config) {
     config.resolve.fallback = {
-      crypto: require.resolve("crypto-browserify"),
-      os: require.resolve("os-browserify/browser"),
-      stream: require.resolve("stream-browserify"),
-      fs: false,
-      path: require.resolve("path-browserify"),
-      querystring: require.resolve("querystring-es3"),
+      ...config.resolve.fallback, // if you miss it, all the other options in fallback, specified
+      // by next.js will be dropped. Doesn't make much sense, but how it is
+      fs: false, // the solution
     };
-  }, */
+
+    return config;
+  },
+  env: {
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_NUMBER: process.env.TWILIO_NUMBER,
+  },
 };

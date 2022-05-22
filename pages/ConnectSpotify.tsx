@@ -1,13 +1,11 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
-
 import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import { Provider } from "../types/globals";
 import Image from "next/image";
 import styles from "../styles/connectSpotify.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
-import send from "./api/queues/send";
 function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const { dispatch } = useContext(DispatchContext);
@@ -18,7 +16,10 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
     mobilePhone: any;
     state: any;
   };
-
+  type foundArtistProps = {
+    artists: any;
+    state: any;
+  };
   const tmpProfile: UserProfileProps = {
     session: {},
     mobilePhone: "",
@@ -31,8 +32,20 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
       payload: region,
     });
   };
-  const fetchData = async (tmpProfile: UserProfileProps) => {
-    console.log(tmpProfile);
+  const fetchTicketData = async (tmpArray: foundArtistProps) => {
+    const events = await fetch("/api/tm/getallevents", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tmpArray),
+    });
+
+    const result = await events.json();
+
+    return result;
+  };
+  const createNewUser = async (tmpProfile: UserProfileProps) => {
     const user = await fetch("/api/spotify/newuser", {
       method: "POST",
       headers: {
@@ -42,12 +55,17 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await user.json();
-    console.log(result);
-    /*     const sendResult = await send.enqueue({
-      to: "+19176782017",
-    });
-    console.log(sendResult); */
-    return result;
+    const artistObj: foundArtistProps = {
+      artists: result,
+      state: tmpProfile.state,
+    };
+
+    // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
+    const ticketData = await fetchTicketData(artistObj);
+    console.log(ticketData);
+    return ticketData;
+
+    //// ***** HERE IS WHERE IT ALL ENDS
   };
   useEffect(() => {
     console.log(session);
@@ -57,7 +75,8 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
       tmpProfile.state = router.query.state;
       tmpProfile.session = session.user;
 
-      fetchData(tmpProfile);
+      // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
+      createNewUser(tmpProfile);
       if (status === "authenticated") {
         router.push({
           pathname: "/Thanks",

@@ -5,25 +5,16 @@ import supabase from "../../../lib/supabase";
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
 const GET_TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
 const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=artist`;
-const discoverArtistUrl =
-  "http://app.ticketmaster.com/discovery/v1/events.json?keyword=";
 
 type UserProfileProps = {
-  name: string | unknown;
-  email: string | unknown;
-  mobilePhone: string | unknown;
-  spotifyId: string | unknown;
-  state: string | unknown;
-  tc: boolean | unknown;
+  name: string;
+  email: string;
+  mobilePhone: string;
+  spotifyId: string;
+  state: string;
+  tc: boolean;
 };
 
-type IdsProps = [
-  {
-    id: number;
-    spotifyId: string;
-    name: string;
-  }
-];
 const userProfile: UserProfileProps = {
   name: "",
   email: "",
@@ -32,7 +23,13 @@ const userProfile: UserProfileProps = {
   state: "",
   tc: true,
 };
-
+type IdsProps = [
+  {
+    id: number;
+    spotifyId: string;
+    name: string;
+  }
+];
 type foundArtistProps = {
   artistname: string;
   spotify_artist_id: string;
@@ -47,12 +44,7 @@ type HeadersType = {
   };
 };
 
-const checkEvents = async (artists: Array<string>) => {
-  let url = discoverArtistUrl + artists[0];
-  url += "&apikey=" + process.env.TICKETMASTER_CONSUMER_KEY;
-};
-
-const addArtists = async (records: foundArtistProps, ids: IdsProps) => {
+const addArtists = async (records: foundArtistProps[], ids: IdsProps) => {
   let { error, data } = await supabase
     .from("Artists")
     .upsert(records, {
@@ -126,6 +118,7 @@ const parseRecentlyPlayed = async (data: any) => {
     return tmpArr;
   } else {
     console.log("No Recently Played Tracks");
+    ("No Recently Played Tracks");
   }
 };
 const parseTopTracks = async (data: any) => {
@@ -144,7 +137,8 @@ const parseTopTracks = async (data: any) => {
     });
     return tmpArr;
   } else {
-    console.log("No Recently Played Tracks");
+    console.log("No Top Tracks");
+    return "No Top Tracks";
   }
 };
 const parseFollowed = async (data: any) => {
@@ -161,7 +155,8 @@ const parseFollowed = async (data: any) => {
     });
     return tmpArr;
   } else {
-    console.log("No Recently Played Tracks");
+    console.log("No Followed Tracks");
+    return "No Followed Tracks";
   }
 };
 const getArtists = async (headers: HeadersType, ids: any) => {
@@ -191,8 +186,13 @@ const getArtists = async (headers: HeadersType, ids: any) => {
   const followedResult = await parseFollowed(followedArtistsJson);
 
   foundArtists.followedArtists = followedArtistsJson;
-
-  let combinedArtists: any = Array.from(
+  /*   type foundArtistProps = {
+    artistname: string;
+    spotify_artist_id: string;
+    external_url: string;
+    uri: string;
+  }; */
+  let combinedArtists: foundArtistProps[] = Array.from(
     recentPlayedResult.concat(topTracksResult).concat(followedResult)
   );
   await addArtists(combinedArtists, ids);
@@ -231,7 +231,7 @@ export default async function handler(
     return res.status(200).json(error);
   } else {
     data!.map(async (id: any) => {
-      let artistData: foundArtistProps = await getArtists(headers, id);
+      let artistData: foundArtistProps[] = await getArtists(headers, id);
       return res.status(200).json(artistData);
     });
   }

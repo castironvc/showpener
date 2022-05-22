@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently 'next dev' 'quirrel'",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -12,14 +12,19 @@
     "@supabase/supabase-js": "^1.35.3",
     "@types/spotify-web-api-node": "^5.0.7",
     "concurrently": "^7.2.0",
+    "dotenv": "^16.0.1",
+    "fs": "^0.0.1-security",
+    "net": "^1.0.2",
     "next": "12.1.6",
     "next-auth": "^4.3.4",
-    "quirrel": "^1.9.0",
+    "node-cron": "^3.0.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "spotify-web-api-node": "^5.0.2",
     "supabase": "^0.5.0",
-    "twilio": "^3.77.1"
+    "tls": "^0.0.1",
+    "twilio": "^3.77.1",
+    "webpack": "^5.72.1"
   },
   "devDependencies": {
     "@types/node": "17.0.33",
@@ -28,5 +33,13 @@
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
     "typescript": "4.6.4"
+  },
+  "browser": {
+    "http": false,
+    "https": false,
+    "net": false,
+    "path": false,
+    "stream": false,
+    "tls": false
   }
 }

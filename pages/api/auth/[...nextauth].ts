@@ -27,7 +27,6 @@ async function refreshAccessToken(token: JWT) {
       refreshToken: refreshToken.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
-    console.error(error);
     return {
       ...token,
       error: "Refresh token failed",
@@ -70,8 +69,8 @@ export default NextAuth({
       }
 
       //   Refresh token
-      console.log("Refreshing token...");
-      return await refreshAccessToken(token);
+      const gotToken = await refreshAccessToken(token);
+      return gotToken;
     },
     async session({ session, token }) {
       let user: any = session.user as string;

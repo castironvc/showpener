@@ -7,6 +7,7 @@ import { useState, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { normalizePhone } from "../utils/validation";
+import { LogOutput } from "concurrently";
 const Home: NextPage = () => {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);

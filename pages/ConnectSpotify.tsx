@@ -95,7 +95,7 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
       createNewUser(tmpProfile);
-      /*  welcomeText(tmpProfile); */
+      /*       welcomeText(tmpProfile); */
       if (status === "authenticated") {
         router.push({
           pathname: "/Thanks",

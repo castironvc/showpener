@@ -51,7 +51,7 @@ export default async function handler(
 
     let i: number = 0; // number to control artist loop
     let numberOfRecordsToGet: number =
-      dedupedArtistArray.length > 10 ? 10 : dedupedArtistArray.length;
+      dedupedArtistArray.length > 10 ? 10 : dedupedArtistArray.length; // NUMBER OF ARTISTS I WANT TO CHECK EVENTS FOR
     let eventArray: EventDetailProps[] = new Array();
     const getArtistEvent = async () => {
       if (i < numberOfRecordsToGet - 1) {
@@ -64,8 +64,6 @@ export default async function handler(
         allEventsJson.artistname = dedupedArtistArray[i].artistname;
         allEventsJson.spotify_artist_id =
           dedupedArtistArray[i].spotify_artist_id;
-        /*       allEventsJson.spotify_artist_id = dedupedArtistArray[i].spotify_artist_id;
-      allEventsJson.artist = dedupedArtistArray[i].name;  */
 
         if (allEventsJson && allEventsJson.page.totalElements > 0) {
           allEventsJson._embedded.events.map((eventItem: any) => {

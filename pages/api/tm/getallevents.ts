@@ -61,7 +61,9 @@ export default async function handler(
           `keyword=${dedupedArtistArray[i].artistname}&stateCode=${req.body.state}`;
         const allEvents = await fetch(NEW_EVENTS_ENDPOINT);
         const allEventsJson = await allEvents.json();
+
         allEventsJson.artistname = dedupedArtistArray[i].artistname;
+
         allEventsJson.spotify_artist_id =
           dedupedArtistArray[i].spotify_artist_id;
 
@@ -72,8 +74,14 @@ export default async function handler(
               artist_name: allEventsJson.artistname,
               event_name: eventItem.name,
               event_id: eventItem.id,
-              event_date: eventItem.dates.start.dateTime,
-              event_sale_date: eventItem.sales.public.startDateTime,
+              event_date:
+                eventItem.dates.start.dateTime ||
+                eventItem.dates.start.localDate ||
+                "TBD",
+              event_sale_date:
+                eventItem.sales.public.startDateTime ||
+                eventItem.sales.public.localDate ||
+                "TBD",
               event_url: eventItem.url,
               state_code: req.body.state,
             });
@@ -82,8 +90,10 @@ export default async function handler(
 
         i++;
         getArtistEvent();
+
         return true;
       } else {
+        /*         return res.status(200).json(eventArray); */
         await addEvents(eventArray);
       }
     };

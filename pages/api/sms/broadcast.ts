@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
+import { getSession } from "next-auth/react";
 require("dotenv").config({ path: "../../../.env" });
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -14,12 +15,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  i++;
-  const sendResult = await client.messages.create({
-    body: "hello how are you - " + i,
-    from: phonenumber,
-    to: "+19176782017",
-  });
-
-  return res.status(200).json(sendResult);
+  const session = await getSession({ req });
+  if (session) {
+    i++;
+    const sendResult = await client.messages.create({
+      body: "hello how are you - " + i,
+      from: phonenumber,
+      to: "+19176782017",
+    });
+    return res.status(200).json(sendResult);
+  } else {
+    res.status(401);
+  }
+  res.end();
 }

@@ -4,7 +4,7 @@ export const initialState = {
     mobilePhone: "",
     state: "",
   },
-  errors: {},
+  error: {},
 };
 export const reducer = (state: any, action: any) => {
   switch (action.type) {
@@ -18,6 +18,12 @@ export const reducer = (state: any, action: any) => {
         ...state,
         userProfile: { ...state.userProfile, mobilePhone: action.payload },
       };
+    case "setError":
+      return {
+        ...state,
+        error: { ...state.errors, message: action.payload },
+      };
+
     default:
       return state;
   }

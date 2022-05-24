@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import supabase from "../../../lib/supabase";
+import moment from "moment";
 require("dotenv").config({ path: "../../../.env" });
 
 let GET_ALL_EVENTS_ENDPOINT = `https://app.ticketmaster.com/discovery/v2/events?apikey=${process.env.TICKETMASTER_CONSUMER_KEY}&size=200&classificationName=music&`;
@@ -49,13 +50,34 @@ export default async function handler(
         ) === i
     );
 
+    const getRelevantDate = (date: string) => {
+      const nowDate = moment();
+
+      console.log(date);
+
+      if (date && date !== "TBD") {
+        const tmpDate = moment(date, "YYYY-MM-DDTHH:mm:ss.SSSZ");
+
+        // check to see if the date is before right now meaning that we are rejecting this event
+        if (tmpDate.isBefore(nowDate)) {
+          console.log(tmpDate + " --- DATE MISMATCH");
+          return null;
+        } else {
+          console.log(tmpDate + " --- DATE MATCH");
+          return tmpDate;
+        }
+      } else {
+        console.log("NO DATE FOUND");
+        return null;
+      }
+    };
     let i: number = 0; // number to control artist loop
     let numberOfRecordsToGet: number =
       dedupedArtistArray.length > 10 ? 10 : dedupedArtistArray.length; // NUMBER OF ARTISTS I WANT TO CHECK EVENTS FOR
     let eventArray: EventDetailProps[] = new Array();
+
     const getArtistEvent = async () => {
       if (i < numberOfRecordsToGet - 1) {
-        console.log(dedupedArtistArray[i]);
         const NEW_EVENTS_ENDPOINT =
           GET_ALL_EVENTS_ENDPOINT +
           `keyword=${dedupedArtistArray[i].artistname}&stateCode=${req.body.state}`;
@@ -69,22 +91,25 @@ export default async function handler(
 
         if (allEventsJson && allEventsJson.page.totalElements > 0) {
           allEventsJson._embedded.events.map((eventItem: any) => {
-            eventArray.push({
-              spotify_artist_id: allEventsJson.spotify_artist_id,
-              artist_name: allEventsJson.artistname,
-              event_name: eventItem.name,
-              event_id: eventItem.id,
-              event_date:
-                eventItem.dates.start.dateTime ||
-                eventItem.dates.start.localDate ||
-                "TBD",
-              event_sale_date:
-                eventItem.sales.public.startDateTime ||
-                eventItem.sales.public.localDate ||
-                "TBD",
-              event_url: eventItem.url,
-              state_code: req.body.state,
-            });
+            if (
+              getRelevantDate(eventItem.sales.public.startDateTime) &&
+              getRelevantDate(eventItem.dates.start.localDate)
+            ) {
+              eventArray.push({
+                spotify_artist_id: allEventsJson.spotify_artist_id,
+                artist_name: allEventsJson.artistname,
+                event_name: eventItem.name,
+                event_id: eventItem.id,
+                event_date:
+                  eventItem.dates.start.dateTime ||
+                  eventItem.dates.start.localDate,
+                event_sale_date:
+                  eventItem.sales.public.startDateTime ||
+                  eventItem.sales.public.localDate,
+                event_url: eventItem.url,
+                state_code: req.body.state,
+              });
+            }
           });
         }
 
@@ -93,7 +118,8 @@ export default async function handler(
 
         return true;
       } else {
-        /*         return res.status(200).json(eventArray); */
+        /*     return res.status(200).json(eventArray); */
+
         await addEvents(eventArray);
       }
     };

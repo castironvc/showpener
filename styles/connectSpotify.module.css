@@ -162,6 +162,13 @@
   font-size: 13px;
   padding: 20px 10px 0 10px;
 }
+.notice {
+  margin: 10px;
+  background: rgb(225, 225, 225);
+  padding: 10px 30px 10px 30px;
+  border-radius: 10px;
+  font-size: 14px;
+}
 /* 
 @media (max-width: 600px) {
   .grid {

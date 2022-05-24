@@ -1,11 +1,14 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import { Provider } from "../types/globals";
 import Image from "next/image";
 import styles from "../styles/connectSpotify.module.css";
+import { AppContext, DispatchContext } from "../context/StateContext";
+
 function Thanks({ providers }: { providers: { spotify: Provider } }) {
+  const { state } = useContext(AppContext);
   const { status, data: session } = useSession();
   const router = useRouter();
   const logOut = async (e: any) => {
@@ -18,6 +21,8 @@ function Thanks({ providers }: { providers: { spotify: Provider } }) {
       router.push("/");
     }
   }, [status, router]);
+
+  console.log(state);
   return (
     <div className={styles.container}>
       {status && status === "authenticated" ? (
@@ -39,7 +44,9 @@ function Thanks({ providers }: { providers: { spotify: Provider } }) {
                   Look out for shows happening near you{" "}
                   <span className="widow">for artists that you love:</span>
                 </div>
-
+                {state.error.message ? (
+                  <div className={styles.notice}>{state.error.message}</div>
+                ) : null}
                 <div className={styles.buttonContainer}>
                   <button className={styles.submitButton} onClick={logOut}>
                     <span>Log out of {provider.name}</span>

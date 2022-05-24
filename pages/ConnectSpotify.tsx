@@ -76,7 +76,17 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
 
     // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
     const ticketData = await fetchTicketData(artistObj);
-    console.log(ticketData);
+    if (!ticketData || ticketData.length < 1) {
+      console.log("No Events Found");
+      dispatch({
+        type: "setError",
+        payload:
+          "The events that were found either had no event date, no on sale date, or the on sale date was in the past.",
+      });
+    } else {
+      console.log("Events Found");
+      console.log(ticketData);
+    }
 
     // STEP 3: SEND WELCOME TEXT MESSAGE
 

@@ -20,6 +20,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "context/StateContext.ts"  ],
+, "context/StateContext.ts", "functions/hello-world.js"  ],
   "exclude": ["node_modules"],
 }

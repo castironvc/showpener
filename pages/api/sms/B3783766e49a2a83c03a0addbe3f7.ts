@@ -23,9 +23,9 @@ export default async function handler(
       from: phonenumber,
       to: "+19176782017",
     });
-    return res.status(500).json(sendResult);
+    return res.status(200).json(sendResult);
   } else {
-    return res.status(500).json("what?");
+    return res.status(200).json("How on earth did you find this endpoint?");
   }
   /*   res.writeHead(301, {
     Location: "/",

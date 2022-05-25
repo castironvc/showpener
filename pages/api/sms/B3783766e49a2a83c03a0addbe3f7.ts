@@ -23,6 +23,8 @@ export default async function handler(
       from: phonenumber,
       to: "+19176782017",
     });
+  } else {
+    return res.status(309).json("what?");
   }
   /*   res.writeHead(301, {
     Location: "/",

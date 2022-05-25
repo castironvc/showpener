@@ -4,7 +4,21 @@ module.exports = {
   images: {
     domains: ["bit.ly"],
   },
-
+  /*   async redirects() {
+    return [
+      {
+        source: "/api/sms/B3783766e49a2a83c03a0addbe3f7",
+        has: [
+          {
+            type: 'host',
+            value: 'example.com',
+          },
+        ],
+        destination: "/", // Matched parameters can be used in the destination
+        permanent: true,
+      },
+    ];
+  }, */
   webpack(config) {
     config.resolve.fallback = {
       ...config.resolve.fallback, // if you miss it, all the other options in fallback, specified

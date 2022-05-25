@@ -22,7 +22,7 @@ export default async function handler(
     from: phonenumber,
     to: "+19176782017",
   }); */
-  return res.status(200).json(req);
+  return res.status(200).json("sex");
   /*   res.writeHead(301, {
     Location: "/",
   }); */

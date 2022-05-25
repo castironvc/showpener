@@ -16,15 +16,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   i++;
-  console.log(req);
-  if (req.body.hello === "world") {
+
+  if (req.body.dbcall === true) {
     const sendResult = await client.messages.create({
       body: "hello how are you - " + i,
       from: phonenumber,
       to: "+19176782017",
     });
+    return res.status(500).json(sendResult);
   } else {
-    return res.status(309).json("what?");
+    return res.status(500).json("what?");
   }
   /*   res.writeHead(301, {
     Location: "/",

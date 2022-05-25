@@ -17,11 +17,12 @@ export default async function handler(
 ) {
   i++;
   console.log(req);
-  const sendResult = await client.messages.create({
+  /*   const sendResult = await client.messages.create({
     body: "hello how are you - " + i,
     from: phonenumber,
     to: "+19176782017",
-  });
+  }); */
+  return res.status(200).json(req);
   /*   res.writeHead(301, {
     Location: "/",
   }); */

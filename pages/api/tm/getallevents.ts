@@ -88,8 +88,12 @@ export default async function handler(
 
         allEventsJson.spotify_artist_id =
           dedupedArtistArray[i].spotify_artist_id;
-
-        if (allEventsJson && allEventsJson.page.totalElements > 0) {
+        console.log(allEventsJson);
+        if (
+          allEventsJson &&
+          allEventsJson.page &&
+          allEventsJson.page.totalElements > 0
+        ) {
           allEventsJson._embedded.events.map((eventItem: any) => {
             if (
               getRelevantDate(eventItem.sales.public.startDateTime) &&

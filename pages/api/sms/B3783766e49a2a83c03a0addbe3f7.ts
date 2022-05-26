@@ -1,34 +1,112 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
-
+import supabase from "../../../lib/supabase";
+import moment from "moment";
 require("dotenv").config({ path: "../../../.env" });
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
+const minutesBeforeAlert = 30;
 const client = twilio(accountSid, token);
 
-let i: number = 0;
+type EventDetailProps = {
+  spotify_artist_id: string;
+  artist_name: string;
+  event_name: string;
+  event_id: string;
+  event_date: string;
+  event_sale_date: string;
+  event_url: string;
+  state_code: string;
+};
 
+type shortEvent = {
+  artist_id: string;
+  event_url: string;
+};
+type messageDetails = {
+  body: string;
+  from: string | undefined;
+  to: string;
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  i++;
+  const nowDate = moment.utc();
+  const timeBefore = moment.utc(nowDate).add(minutesBeforeAlert, "minutes");
 
-  if (req.body.dbcall === true) {
-    const sendResult = await client.messages.create({
-      body: "hello how are you - " + i,
-      from: phonenumber,
-      to: "+19176782017",
-    });
+  const sendAlert = async (messageDetails: messageDetails) => {
+    const sendResult = await client.messages.create(messageDetails);
     return res.status(200).json(sendResult);
+  };
+
+  const matchEventsToUsers = async (artist: shortEvent) => {
+    let { error, data } = await supabase
+      .from("UserArtists")
+      .select("*")
+      .match({ artist_id: artist.artist_id });
+
+    // GET THIS ARRAY FROM THE RESPONSE
+    // WHICH WILL SHOW ALL THE ARTISTS
+    // MATCHED TO THE EVENTS FOUND WITHIN THE TIMEFRAME
+    // AND THE USER PHONE NUMBER
+    // TO SEND THE ALERT TO
+
+    if (error) {
+      return res.status(200).json(error);
+    } else if (data) {
+      data.map((eventItem: any) => {
+        sendAlert({
+          body:
+            "Tickets for " +
+            eventItem.artist +
+            " are going on sale in the next 30 minutes! Click here to get them before it's too late:" +
+            artist.event_url,
+          from: phonenumber,
+          to: eventItem.user_phone,
+        });
+      });
+
+      return data;
+    } else {
+      return res.status(200).json("No Events for that artist found");
+    }
+  };
+
+  /// THIS CHECK IS FOR THE PG_CRON
+  /// IT'S SO THAT YOU CANNOT TRIGGER THE ENDPOINT IF YOU FIND IT IN THE BROWSER
+  // if (req.body.dbcall === true) {
+
+  let { error, data } = await supabase
+    .from("Events")
+    .select("*")
+    .gt("event_sale_date", nowDate)
+    .lt("event_sale_date", timeBefore);
+  let EventHitsResult = data;
+
+  if (error) {
+    return res.status(200).json(error);
   } else {
+    // return res.status(200).json(data);
+    if (EventHitsResult && EventHitsResult.length > 0) {
+      EventHitsResult.map(async (event: EventDetailProps) => {
+        const match = await matchEventsToUsers({
+          artist_id: event.spotify_artist_id,
+          event_url: event.event_url,
+        });
+        return res.status(200).json(match);
+      });
+    } else {
+      return res.status(200).json("poes");
+    }
+  }
+  /*  
+/// END OF PG_CRON TEST WHEN NOT TESTING
+} else {
     return res.status(200).json("How on earth did you find this endpoint?");
   }
-  /*   res.writeHead(301, {
-    Location: "/",
-  }); */
-  /*  return res.status(200).json(sendResult); */
+ */
 }

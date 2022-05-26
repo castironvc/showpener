@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { StringifyOptions } from "querystring";
 import supabase from "../../../lib/supabase";
 
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
@@ -76,6 +77,7 @@ type userArtistBridgeProps = {
   user: string;
   artist_id: string;
   spotifyId: string;
+  user_phone: String;
 };
 
 const addUserArtists = async (ids: any, artistData: foundArtistProps[]) => {
@@ -88,8 +90,11 @@ const addUserArtists = async (ids: any, artistData: foundArtistProps[]) => {
       user: ids.name,
       artist_id: artist.spotify_artist_id,
       spotifyId: ids.spotifyId,
+      user_phone: ids.mobilePhone,
     });
   });
+
+  // UPDATE THE USER ARTISTS TABLE
   let { error, data } = await supabase
     .from("UserArtists")
     .upsert(userArtistBridge);
@@ -225,7 +230,7 @@ export default async function handler(
       ignoreDuplicates: true,
       onConflict: "spotifyId",
     })
-    .select("id,spotifyId,name");
+    .select("id,spotifyId,name,mobilePhone");
 
   if (error) {
     return res.status(200).json(error);

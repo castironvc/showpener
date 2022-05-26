@@ -37,7 +37,16 @@ const Home: NextPage = () => {
       });
     }
   };
+  const sendAlertsToUsers = async (e: any) => {
+    e.preventDefault();
+    const events = await fetch("/api/sms/B3783766e49a2a83c03a0addbe3f7", {
+      method: "GET",
+    });
 
+    const result = await events.json();
+    console.log(result);
+    return result;
+  };
   return (
     <div className={styles.container}>
       {!session && status === "unauthenticated" ? (
@@ -105,6 +114,14 @@ const Home: NextPage = () => {
                   >
                     <span>Sign up</span>
                   </button>
+                  {/*          <button
+                    onClick={sendAlertsToUsers}
+                    type="submit"
+                    className={styles.submitButton}
+          
+                  >
+                    <span>Alert Test</span>
+                  </button> */}
                 </div>
               </form>
             </div>

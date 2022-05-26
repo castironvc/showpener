@@ -1,31 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import supabase from "../../../lib/supabase";
-import moment from "moment";
+import { EventDetailProps } from "../../../types/globals";
+import getRelevantDate from "../../../utils/getRelevantDate";
+
 require("dotenv").config({ path: "../../../.env" });
 
 let GET_ALL_EVENTS_ENDPOINT = `https://app.ticketmaster.com/discovery/v2/events?apikey=${process.env.TICKETMASTER_CONSUMER_KEY}&size=200&classificationName=music&`;
 
-type EventDetailProps = {
-  spotify_artist_id: string;
-  artist_name: string;
-  event_name: string;
-  event_id: string;
-  event_date: string;
-  event_sale_date: string;
-  event_url: string;
-  state_code: string;
-};
-let eventDetail: EventDetailProps = {
-  spotify_artist_id: "",
-  artist_name: "",
-  event_name: "",
-  event_id: "",
-  event_date: "",
-  event_sale_date: "",
-  event_url: "",
-  state_code: "",
-};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -42,7 +24,8 @@ export default async function handler(
       return res.status(200).json(data);
     }
   };
-  if (req.body) {
+
+  if (req.body && req.body.artists) {
     const dedupedArtistArray = req.body.artists.filter(
       (v: any, i: any, a: any) =>
         a.findIndex(
@@ -50,27 +33,6 @@ export default async function handler(
         ) === i
     );
 
-    const getRelevantDate = (date: string) => {
-      const nowDate = moment();
-
-      console.log(date);
-
-      if (date && date !== "TBD") {
-        const tmpDate = moment(date, "YYYY-MM-DDTHH:mm:ss.SSSZ");
-
-        // check to see if the date is before right now meaning that we are rejecting this event
-        if (tmpDate.isBefore(nowDate)) {
-          console.log(tmpDate + " --- DATE MISMATCH");
-          return null;
-        } else {
-          console.log(tmpDate + " --- DATE MATCH");
-          return tmpDate;
-        }
-      } else {
-        console.log("NO DATE FOUND");
-        return null;
-      }
-    };
     let i: number = 0; // number to control artist loop
     let numberOfRecordsToGet: number =
       dedupedArtistArray.length > 10 ? 10 : dedupedArtistArray.length; // NUMBER OF ARTISTS I WANT TO CHECK EVENTS FOR
@@ -88,7 +50,7 @@ export default async function handler(
 
         allEventsJson.spotify_artist_id =
           dedupedArtistArray[i].spotify_artist_id;
-        console.log(allEventsJson);
+
         if (
           allEventsJson &&
           allEventsJson.page &&

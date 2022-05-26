@@ -2,16 +2,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import SpotifyProviders from "next-auth/providers/spotify";
 import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
 import { JWT } from "next-auth/jwt";
+import { ProvidersType, UserProps } from "../../../types/globals";
 
-type ProvidersType = {
-  clientId: string;
-  clientSecret: string;
-  authorization: string;
-  id: string;
-  display_name: string;
-  email: string;
-  images: any;
-};
 async function refreshAccessToken(token: JWT) {
   try {
     spotifyApi.setAccessToken(token.accessToken as string);
@@ -19,7 +11,6 @@ async function refreshAccessToken(token: JWT) {
 
     const { body: refreshToken } = await spotifyApi.refreshAccessToken();
 
-    console.log("Refreshed access token is", refreshToken);
     return {
       ...token,
       accessToken: refreshToken.access_token,
@@ -33,7 +24,12 @@ async function refreshAccessToken(token: JWT) {
     };
   }
 }
-
+let user: UserProps = {
+  id: "",
+  name: "",
+  accessToken: "",
+  refreshToken: "",
+};
 export default NextAuth({
   providers: [
     SpotifyProviders<ProvidersType>({
@@ -44,7 +40,7 @@ export default NextAuth({
   ],
   secret: process.env.JWT_SECRET as string,
   pages: {
-    signIn: "/ConnectSpotify",
+    signIn: "/auth/signin",
   },
   callbacks: {
     async jwt({ token, user, account }) {
@@ -72,12 +68,17 @@ export default NextAuth({
       const gotToken = await refreshAccessToken(token);
       return gotToken;
     },
+
+    /*     id: string,
+    name: string,
+    accessToken: string,
+    refreshToken: string */
+
     async session({ session, token }) {
-      let user: any = session.user as string;
-      user = token.user;
-      user.accessToken = token.accessToken;
-      user.refreshToken = token.refreshToken;
-      user.name = token.name;
+      user.id = token.username as string;
+      user.name = token.name as string;
+      user.accessToken = token.accessToken as string;
+      user.refreshToken = token.refreshToken as string;
       session.user = user;
 
       return session;

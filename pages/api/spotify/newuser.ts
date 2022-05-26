@@ -2,21 +2,19 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StringifyOptions } from "querystring";
 import supabase from "../../../lib/supabase";
-
+import {
+  foundArtistsOfUsersProps,
+  NewUserProfileProps,
+  IdsProps,
+  HeadersType,
+  userArtistBridgeProps,
+  ArtistType,
+} from "../../../types/globals";
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
 const GET_TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
 const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=artist`;
 
-type UserProfileProps = {
-  name: string;
-  email: string;
-  mobilePhone: string;
-  spotifyId: string;
-  state: string;
-  tc: boolean;
-};
-
-const userProfile: UserProfileProps = {
+const userProfile: NewUserProfileProps = {
   name: "",
   email: "",
   mobilePhone: "",
@@ -24,28 +22,11 @@ const userProfile: UserProfileProps = {
   state: "",
   tc: true,
 };
-type IdsProps = [
-  {
-    id: number;
-    spotifyId: string;
-    name: string;
-  }
-];
-type foundArtistProps = {
-  artistname: string;
-  spotify_artist_id: string;
-  external_url: string;
-  uri: string;
-};
 
-type HeadersType = {
-  headers: {
-    Authorization: string;
-    type: string;
-  };
-};
-
-const addArtists = async (records: foundArtistProps[], ids: IdsProps) => {
+const addArtists = async (
+  records: foundArtistsOfUsersProps[],
+  ids: IdsProps
+) => {
   let { error, data } = await supabase
     .from("Artists")
     .upsert(records, {
@@ -61,29 +42,24 @@ const addArtists = async (records: foundArtistProps[], ids: IdsProps) => {
     return error;
   } else {
     if (data!.length > 0) {
-      let tmpArr: foundArtistProps[] = new Array();
-      data!.map(async (item: any) => {
+      let tmpArr: foundArtistsOfUsersProps[] = new Array();
+      data!.map(async (item: foundArtistsOfUsersProps) => {
         tmpArr.push(item);
       });
+
       await addUserArtists(ids, tmpArr);
     }
     return data;
   }
 };
 
-type userArtistBridgeProps = {
-  artist: string;
-  user_id: number;
-  user: string;
-  artist_id: string;
-  spotifyId: string;
-  user_phone: String;
-};
-
-const addUserArtists = async (ids: any, artistData: foundArtistProps[]) => {
+const addUserArtists = async (
+  ids: IdsProps,
+  artistData: foundArtistsOfUsersProps[]
+) => {
   const userArtistBridge: userArtistBridgeProps[] = new Array();
-  console.log(ids);
-  artistData.map((artist: foundArtistProps) => {
+
+  artistData.map((artist: foundArtistsOfUsersProps) => {
     userArtistBridge.push({
       artist: artist.artistname,
       user_id: ids.id,
@@ -105,13 +81,13 @@ const addUserArtists = async (ids: any, artistData: foundArtistProps[]) => {
     return data;
   }
 };
+
 const parseRecentlyPlayed = async (data: any) => {
-  let tmpArr: foundArtistProps[] = new Array();
-  console.log(data);
+  let tmpArr: foundArtistsOfUsersProps[] = new Array();
   if (data) {
-    data.items.map((track: any) => {
-      track.track.artists.map((artist: any) => {
-        const foundArtists: foundArtistProps = {
+    data.map((track: any) => {
+      track.track.artists.map((artist: ArtistType) => {
+        const foundArtists: foundArtistsOfUsersProps = {
           artistname: artist.name,
           spotify_artist_id: artist.id,
           external_url: artist.external_urls.spotify,
@@ -127,11 +103,11 @@ const parseRecentlyPlayed = async (data: any) => {
   }
 };
 const parseTopTracks = async (data: any) => {
-  let tmpArr: foundArtistProps[] = new Array();
+  let tmpArr: foundArtistsOfUsersProps[] = new Array();
   if (data) {
-    data.items.map((track: any) => {
-      track.artists.map((artist: any) => {
-        const foundArtists: foundArtistProps = {
+    data.map((track: any) => {
+      track.artists.map((artist: ArtistType) => {
+        const foundArtists: foundArtistsOfUsersProps = {
           artistname: artist.name,
           spotify_artist_id: artist.id,
           external_url: artist.external_urls.spotify,
@@ -147,10 +123,10 @@ const parseTopTracks = async (data: any) => {
   }
 };
 const parseFollowed = async (data: any) => {
-  let tmpArr: foundArtistProps[] = new Array();
+  let tmpArr: foundArtistsOfUsersProps[] = new Array();
   if (data) {
-    data.artists.items.map((artist: any) => {
-      const foundArtists: foundArtistProps = {
+    data.items.map((artist: ArtistType) => {
+      const foundArtists: foundArtistsOfUsersProps = {
         artistname: artist.name,
         spotify_artist_id: artist.id,
         external_url: artist.external_urls.spotify,
@@ -164,42 +140,28 @@ const parseFollowed = async (data: any) => {
     return "No Followed Tracks";
   }
 };
-const getArtists = async (headers: HeadersType, ids: any) => {
-  const foundArtists = {
-    recentPlayed: null,
-    topTracks: null,
-    followedArtists: null,
-  };
-
+const getArtists = async (headers: HeadersType, ids: IdsProps) => {
   // Get Recently Played
   const recentlyPlayed = await fetch(RECENTLY_PLAYED_ENDPOINT, headers);
   const recentPlayedJson = await recentlyPlayed.json();
-  const recentPlayedResult: any = await parseRecentlyPlayed(recentPlayedJson);
-  /*   artistSet.add(recentPlayedResult); */
-  foundArtists.recentPlayed = recentPlayedJson;
+  const recentPlayedResult: any = await parseRecentlyPlayed(
+    recentPlayedJson.items
+  );
 
   // Get Top Tracks
   const topTracks = await fetch(GET_TOP_TRACKS_ENDPOINT, headers);
   const topTracksJson = await topTracks.json();
-  const topTracksResult: any = await parseTopTracks(topTracksJson);
-
-  foundArtists.topTracks = topTracksJson;
+  const topTracksResult: any = await parseTopTracks(topTracksJson.items);
 
   // Get Followed Artists
   const followedArtists = await fetch(FOLLOWED_ARTISTS_ENDPOINT, headers);
   const followedArtistsJson = await followedArtists.json();
-  const followedResult = await parseFollowed(followedArtistsJson);
+  const followedResult = await parseFollowed(followedArtistsJson.artists);
 
-  foundArtists.followedArtists = followedArtistsJson;
-  /*   type foundArtistProps = {
-    artistname: string;
-    spotify_artist_id: string;
-    external_url: string;
-    uri: string;
-  }; */
-  let combinedArtists: foundArtistProps[] = Array.from(
+  let combinedArtists: foundArtistsOfUsersProps[] = Array.from(
     recentPlayedResult.concat(topTracksResult).concat(followedResult)
   );
+
   await addArtists(combinedArtists, ids);
 
   return combinedArtists;
@@ -214,8 +176,6 @@ export default async function handler(
   userProfile.email = req.body.session.email;
   userProfile.mobilePhone = req.body.mobilePhone;
   userProfile.state = req.body.state;
-
-  console.log(userProfile);
 
   const headers = {
     headers: {
@@ -235,8 +195,12 @@ export default async function handler(
   if (error) {
     return res.status(200).json(error);
   } else {
-    data!.map(async (id: any) => {
-      let artistData: foundArtistProps[] = await getArtists(headers, id);
+    data!.map(async (id: IdsProps) => {
+      let artistData: foundArtistsOfUsersProps[] = await getArtists(
+        headers,
+        id
+      );
+
       return res.status(200).json(artistData);
     });
   }

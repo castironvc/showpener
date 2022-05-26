@@ -1,9 +1,14 @@
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import { getProviders, signIn, signOut, useSession } from "next-auth/react";
-import { Provider } from "../types/globals";
-import Image from "next/image";
+import {
+  Provider,
+  foundArtistsForEventProps,
+  UserProfileProps,
+} from "../types/globals";
+
 import styles from "../styles/connectSpotify.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
 function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
@@ -11,15 +16,7 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
   const { dispatch } = useContext(DispatchContext);
   const router = useRouter();
   const { status, data: session } = useSession();
-  type UserProfileProps = {
-    session: any;
-    mobilePhone: any;
-    state: any;
-  };
-  type foundArtistProps = {
-    artists: any;
-    state: any;
-  };
+
   const tmpProfile: UserProfileProps = {
     session: {},
     mobilePhone: "",
@@ -32,7 +29,7 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
       payload: region,
     });
   };
-  const fetchTicketData = async (tmpArray: foundArtistProps) => {
+  const fetchTicketData = async (tmpArray: foundArtistsForEventProps) => {
     const events = await fetch("/api/tm/getallevents", {
       method: "POST",
       headers: {
@@ -69,12 +66,13 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await user.json();
-    const artistObj: foundArtistProps = {
+    const artistObj: foundArtistsForEventProps = {
       artists: result,
       state: tmpProfile.state,
     };
 
     // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
+
     const ticketData = await fetchTicketData(artistObj);
     if (!ticketData || ticketData.length < 1) {
       console.log("No Events Found");

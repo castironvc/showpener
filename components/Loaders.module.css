@@ -1,0 +1,9 @@
+.Text {
+  text-align: center;
+  display: flex;
+  margin-top: 10px;
+}
+
+.Hide {
+  display: none;
+}

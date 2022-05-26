@@ -3,40 +3,30 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 import supabase from "../../../lib/supabase";
 import moment from "moment";
+import {
+  EventDetailProps,
+  shortEvent,
+  messageDetails,
+  eventForBroadcast,
+} from "../../../types/globals";
 require("dotenv").config({ path: "../../../.env" });
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
-const minutesBeforeAlert = 30;
+
+// use this to set how long before the On Sale date/time to send the message
+const daysOrMinutes = "days";
+const unitsBeforeAlert = 30;
+
 const client = twilio(accountSid, token);
 
-type EventDetailProps = {
-  spotify_artist_id: string;
-  artist_name: string;
-  event_name: string;
-  event_id: string;
-  event_date: string;
-  event_sale_date: string;
-  event_url: string;
-  state_code: string;
-};
-
-type shortEvent = {
-  artist_id: string;
-  event_url: string;
-};
-type messageDetails = {
-  body: string;
-  from: string | undefined;
-  to: string;
-};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const nowDate = moment.utc();
-  const timeBefore = moment.utc(nowDate).add(minutesBeforeAlert, "minutes");
+  const timeBefore = moment.utc(nowDate).add(unitsBeforeAlert, daysOrMinutes);
 
   const sendAlert = async (messageDetails: messageDetails) => {
     const sendResult = await client.messages.create(messageDetails);
@@ -58,7 +48,7 @@ export default async function handler(
     if (error) {
       return res.status(200).json(error);
     } else if (data) {
-      data.map((eventItem: any) => {
+      data.map((eventItem: eventForBroadcast) => {
         sendAlert({
           body:
             "Tickets for " +

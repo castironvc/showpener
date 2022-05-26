@@ -4,6 +4,7 @@ export const initialState = {
     mobilePhone: "",
     state: "",
   },
+  loading: false,
   error: {},
 };
 export const reducer = (state: any, action: any) => {
@@ -17,6 +18,16 @@ export const reducer = (state: any, action: any) => {
       return {
         ...state,
         userProfile: { ...state.userProfile, mobilePhone: action.payload },
+      };
+    case "setSession":
+      return {
+        ...state,
+        userProfile: { ...state.userProfile, session: action.payload },
+      };
+    case "setLoader":
+      return {
+        ...state,
+        loading: action.payload,
       };
     case "setError":
       return {

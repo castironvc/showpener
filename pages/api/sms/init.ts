@@ -12,7 +12,7 @@ const client = twilio(accountSid, token);
   name: string | unknown;
   email: string | unknown;
   mobilePhone: string | unknown;
-  spotifyId: string | unknown;
+  spotify_user_id: string | unknown;
   state: string | unknown;
   tc: boolean | unknown;
 }; */

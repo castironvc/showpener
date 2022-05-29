@@ -37,7 +37,7 @@ export default async function handler(
     let { error, data } = await supabase
       .from("UserArtists")
       .select("*")
-      .match({ artist_id: artist.artist_id });
+      .match({ spotify_artist_id: artist.spotify_artist_id });
 
     // GET THIS ARRAY FROM THE RESPONSE
     // WHICH WILL SHOW ALL THE ARTISTS
@@ -84,7 +84,7 @@ export default async function handler(
     if (EventHitsResult && EventHitsResult.length > 0) {
       EventHitsResult.map(async (event: EventDetailProps) => {
         const match = await matchEventsToUsers({
-          artist_id: event.spotify_artist_id,
+          spotify_artist_id: event.spotify_artist_id,
           event_url: event.event_url,
         });
         return res.status(200).json(match);

@@ -96,7 +96,6 @@ function ConnectSpotify({ providers }: { providers: { spotify: Provider } }) {
   useEffect(() => {
     console.log(session);
     if (session) {
-      /*    userProfile.spotifyId = session.user!.tc; */
       tmpProfile.mobilePhone = router.query.phone;
       tmpProfile.state = router.query.state;
       tmpProfile.session = session.user;

@@ -6,7 +6,7 @@ import { Provider } from "../types/globals";
 import Image from "next/image";
 import styles from "../styles/connectSpotify.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
-
+import { Loader } from "../components/Loader";
 function Thanks({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const { status, data: session } = useSession();
@@ -17,7 +17,8 @@ function Thanks({ providers }: { providers: { spotify: Provider } }) {
   };
 
   useEffect(() => {
-    if (status && status !== "authenticated") {
+    console.log(status);
+    if (status && status === "unauthenticated") {
       router.push("/");
     }
   }, [status, router]);
@@ -25,6 +26,7 @@ function Thanks({ providers }: { providers: { spotify: Provider } }) {
   console.log(state);
   return (
     <div className={styles.container}>
+      {status === "loading" ? <Loader /> : null}
       {status && status === "authenticated" ? (
         <div className={styles.main}>
           {Object.values(providers).map((provider: Provider) => (

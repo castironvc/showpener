@@ -24,13 +24,13 @@ export interface NewUserProfileProps {
   name: string;
   email: string;
   mobilePhone: string;
-  spotifyId: string;
+  spotify_user_id: string;
   state: string;
   tc: boolean;
 }
 export interface IdsProps {
   id: number;
-  spotifyId: string;
+  spotify_user_id: string;
   name: string;
   mobilePhone: string;
 }
@@ -45,8 +45,8 @@ export interface userArtistBridgeProps {
   artist: string;
   user_id: number;
   user: string;
-  artist_id: string;
-  spotifyId: string;
+  spotify_artist_id: string;
+  spotify_user_id: string;
   user_phone: String;
 }
 
@@ -89,7 +89,7 @@ export interface EventDetailProps {
   state_code: string;
 }
 export interface shortEvent {
-  artist_id: string;
+  spotify_artist_id: string;
   event_url: string;
 }
 export interface messageDetails {
@@ -103,7 +103,24 @@ export interface eventForBroadcast {
   artist: string;
   user_id: number;
   user: string;
-  artist_id: string;
-  spotifyId: string;
+  spotify_artist_id: string;
+  spotify_user_id: string;
   user_phone: string;
+}
+export interface errorProps {
+  error: {
+    message: string;
+    code: string;
+    details?: object;
+    hint: string;
+  };
+  success: boolean;
+}
+
+export interface errorProps {
+  server: any;
+  details: {
+    message: string;
+  };
+  error: boolean;
 }

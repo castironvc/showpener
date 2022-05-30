@@ -51,7 +51,7 @@ export default async function handler(
           GET_ALL_EVENTS_ENDPOINT +
           `keyword=${dedupedArtistArray[i].artist}&stateCode=${req.body.state}`;
         const allEvents = await fetch(NEW_EVENTS_ENDPOINT);
-        return res.status(200).json(allEvents);
+
         const allEventsJson = await allEvents.json();
 
         if (allEventsJson.error) {

@@ -26,7 +26,7 @@ body {
 }
 body {
   background-color: black;
-  background: url(/images/Showpener_BG.jpg) no-repeat center center fixed;
+  /*   background: url(/images/Showpener_BG2.jpeg) no-repeat center center fixed; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -38,14 +38,108 @@ a {
   color: inherit;
   text-decoration: none;
 }
+p {
+  color: white;
+  line-height: 1.3;
+}
 
 * {
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.container {
+  padding: 0 2rem;
+}
+.logo {
+  padding: 5px 20px 40px 20px;
+  margin-top: -90px;
+
+  display: flex;
+  justify-content: center;
+}
+.main {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .widow {
   white-space: nowrap;
 }
+.blackpanel {
+  background-color: rgba(0, 0, 0, 0.618);
+  border-radius: 50px;
+  padding: 40px;
+}
+h1,
+h2 {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+h1 {
+  margin: 0px 0px 0px 0px;
+  font-size: 40px;
+  font-weight: 800;
+}
+h2 {
+  margin-top: 10px;
+}
+.center-text {
+  text-align: center;
+}
+.disclaimer {
+  color: rgb(189, 189, 189);
+  text-align: center;
+  font-size: 13px;
+  padding: 20px 10px 0 10px;
+}
 
+.submitButton span {
+  background: rgba(222, 222, 222, 0.584);
+  display: block;
+  padding: 15px 25px;
+  border-radius: 20px;
+  font-size: 18px;
+  transition: all 0.2s ease-in-out;
+}
+.submitButton span:hover {
+  background: rgba(150, 136, 156, 0.584);
+  box-shadow: 0 0px 0 #000, 0 0px 20px 5px #823b6b;
+}
+.submitButton:active {
+  padding-bottom: 1px;
+  box-shadow: 0 1px 0 #000;
+}
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: auto;
+}
+.submitButton:hover {
+  background: rgba(246, 221, 253, 0.671);
+}
+.submitButton {
+  cursor: pointer;
+  height: auto;
+  margin: 0 0 10px 0;
+  padding: 0px;
+  position: relative;
+  float: left;
+  padding: 5px;
+  color: #000;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.456);
+  border-radius: 25px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
 /* LOADERS */
 
 /* LOADERS */

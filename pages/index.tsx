@@ -1,33 +1,29 @@
 import { GetServerSideProps } from "next";
-import Head from "next/head";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useContext, useEffect, useRef } from "react";
 import styles from "../styles/Home.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { normalizePhone } from "../utils/validation";
 import getStateCode from "../utils/getStateCode";
-import { Loader } from "../components/Loader";
-import { getProviders, signIn, signOut, useSession } from "next-auth/react";
+
+import { getProviders, signIn, useSession } from "next-auth/react";
 
 import {
   Provider,
   foundArtistsForEventProps,
   UserProfileProps,
 } from "../types/globals";
-import { ErrorProps } from "next/error";
-
 let states = require("../utils/states");
+const randNum = Math.floor(Math.random() * 4);
 
 function Home({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);
-  const [error, setError] = useState(false);
   const { dispatch } = useContext(DispatchContext);
   const router = useRouter();
   const { status, data: session } = useSession();
   const [stateCodes, setStates] = useState(states);
-  const inputEl = useRef(null);
+
   /*   if (status === "authenticated") {
     router.push("/Thanks");
   }
@@ -188,101 +184,73 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   });
 
   return (
-    <div className={styles.container}>
-      <div ref={inputEl}></div>
-      {state.loading ? <Loader /> : null}
-      {!router.query.phone ? (
-        <div className={styles.main}>
-          {Object.values(providers).map((provider: Provider) => (
-            <div key={provider.id} className="">
-              <div className="logo">
-                <Image
-                  src="/images/Showpener_logo.svg"
-                  layout="responsive"
-                  width={140}
-                  height={35}
-                  className=""
-                  alt=""
-                ></Image>
+    <div>
+      {Object.values(providers).map((provider: Provider) => (
+        <div key={provider.id}>
+          <h1 className="mainTitle">Showpener</h1>
+          <h2 className="subTitle">Never Miss A Show.</h2>
+          <p className="center-text">
+            Text alerts for new concerts in your area and ticket sale releases.
+          </p>
+          <div>
+            <input type="hidden" name="remember" defaultValue="true" />
+            <div className={styles.statePhoneFieldContainer}>
+              <div className={styles.fieldContainer}>
+                <div className={styles.hint}>Enter your phone number.</div>
+                <input
+                  id="phone-number"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={state.userProfile.mobilePhone}
+                  onChange={(e) =>
+                    setPhone(normalizePhone(e.target.value) || "")
+                  }
+                  className={styles.input}
+                  placeholder="(000) 000-0000"
+                />
               </div>
-              <div className={styles.formContainer}>
-                <h1 className={styles.mainTitle}>Showpener</h1>
-                <h2 className={styles.subTitle}>Never Miss A Show.</h2>
-                <p className={styles.p}>
-                  Text alerts for new concerts in your area and ticket sale
-                  releases.
-                </p>
-
-                <input type="hidden" name="remember" defaultValue="true" />
-                <div className={styles.statePhoneFieldContainer}>
-                  <div className={styles.fieldContainer}>
-                    <div className={styles.hint}>Enter your phone number.</div>
-                    <input
-                      id="phone-number"
-                      name="phone"
-                      type="tel"
-                      autoComplete="tel"
-                      value={state.userProfile.mobilePhone}
-                      onChange={(e) =>
-                        setPhone(normalizePhone(e.target.value) || "")
-                      }
-                      className={styles.input}
-                      placeholder="(000) 000-0000"
-                    />
-                  </div>
-                  <div className={styles.fieldContainer}>
-                    <div className={styles.hint}>Enter your state.</div>
-                    <select
-                      className={styles.select}
-                      onChange={(e) => setStateRegion(e.target)}
+              <div className={styles.fieldContainer}>
+                <div className={styles.hint}>Enter your state.</div>
+                <select
+                  className={styles.select}
+                  onChange={(e) => setStateRegion(e.target)}
+                >
+                  {stateCodes.states.map((stateCode: any, i: number) => (
+                    <option
+                      key={i}
+                      id={Object.keys(stateCode)[i]}
+                      value={Object.keys(stateCode)[i]}
                     >
-                      {stateCodes.states.map((stateCode: any, i: number) => (
-                        <option
-                          key={i}
-                          id={Object.keys(stateCode)[i]}
-                          value={Object.keys(stateCode)[i]}
-                        >
-                          {Object.values(stateCode)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className={styles.checkboxContainer}>
-                  <input
-                    type="checkbox"
-                    id="TC"
-                    onChange={() => acceptTerms(!checked)}
-                    value="I agree to Showpener's Terms of Usage & Privacy Policy"
-                  ></input>
-                  <label htmlFor="TC" className="">
-                    I agree to Showpener&apos;s Terms & Privacy Policy
-                  </label>
-                </div>
-                <div className={styles.fieldContainer}>
-                  <button
-                    className={styles.submitButton}
-                    disabled={!checked}
-                    onClick={() => beginSignIn(provider)}
-                  >
-                    <span>Log in with {provider.name}</span>
-                  </button>
-                </div>
-              </div>
-              <div className={styles.disclaimer}>
-                We will not be sharing your personal information with{" "}
-                <span className="widow">third parties.</span>
+                      {Object.values(stateCode)}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-          ))}
+            <div className={styles.checkboxContainer}>
+              <input
+                type="checkbox"
+                id="TC"
+                onChange={() => acceptTerms(!checked)}
+                value="I agree to Showpener's Terms of Usage & Privacy Policy"
+              ></input>
+              <label htmlFor="TC" className="">
+                I agree to Showpener&apos;s Terms & Privacy Policy
+              </label>
+            </div>
+            <div className={styles.fieldContainer}>
+              <button
+                className="submitButton"
+                disabled={!checked}
+                onClick={() => beginSignIn(provider)}
+              >
+                <span>Log in with {provider.name}</span>
+              </button>
+            </div>
+          </div>
         </div>
-      ) : null}
-      {/*   <button
-        onClick={logOut}
-        className="rounded-lg bg-[#18D860] p-5 text-white"
-      >
-        Log Out
-      </button> */}
+      ))}
     </div>
   );
 }

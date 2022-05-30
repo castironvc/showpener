@@ -5,6 +5,7 @@ import React, { useContext, useReducer } from "react";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { reducer } from "../context/reducer";
 import { initialState } from "../context/reducer";
+import Layout from "./Layout";
 /* import ErrorBoundary from "../utils/errorBoundary"; */
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       {/*       <ErrorBoundary> */}
       <AppContext.Provider value={{ state }}>
         <SessionProvider session={session}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </SessionProvider>
       </AppContext.Provider>
       {/*       </ErrorBoundary> */}

@@ -38,12 +38,12 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
               ></Image>
             </div>
             <div>{children}</div>
-          </div>
+          </div>{" "}
+          <footer className="disclaimer">
+            We will not be sharing your personal information with{" "}
+            <span className="widow">third parties.</span>
+          </footer>
         </div>
-        <footer className="disclaimer">
-          We will not be sharing your personal information with{" "}
-          <span className="widow">third parties.</span>
-        </footer>
       </div>
     </div>
   );

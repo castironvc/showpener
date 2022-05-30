@@ -23,6 +23,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <style>{customCss} </style>
       </Head>
+
       <div className="container">
         {state.loading ? <Loader /> : null}
         <div className="main">
@@ -31,9 +32,9 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
               <Image
                 src="/images/Showpener_logo.svg"
                 layout="intrinsic"
-                width={200}
-                height={100}
-                className=""
+                width={180}
+                height={90}
+                className="logoimg"
                 alt=""
               ></Image>
             </div>

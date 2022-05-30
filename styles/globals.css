@@ -50,18 +50,11 @@ p {
 }
 
 .container {
-  padding: 0 2rem;
+  padding: 2rem 1rem 1rem 1rem;
 }
-.logo {
-  padding: 5px 20px 40px 20px;
-  margin-top: -90px;
 
-  display: flex;
-  justify-content: center;
-}
 .main {
-  min-height: 100vh;
-
+  min-height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -71,11 +64,22 @@ p {
   white-space: nowrap;
 }
 .blackpanel {
+  position: relative;
   background-color: rgba(0, 0, 0, 0.618);
   border-radius: 50px;
-  padding: 40px;
-  max-width: 50vw;
+  padding: 70px 30px 10px 30px;
+  max-width: 65vw;
 }
+.logo {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  margin-top: -110px;
+  width: calc(100% - 80px);
+}
+
 h1,
 h2 {
   color: white;
@@ -100,7 +104,7 @@ h2 {
   color: rgb(240, 240, 240);
   text-align: center;
   font-size: 14px;
-  padding: 20px 10px 0 10px;
+  padding: 10px 10px 0 10px;
 
   text-shadow: 1px 1px 2px #000000;
 }
@@ -206,5 +210,15 @@ h2 {
   /* Between 20% and 100%, nothing changes */
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .blackpanel {
+    max-width: none;
+    width: 100%;
+  }
+  p {
+    font-size: 14px;
   }
 }

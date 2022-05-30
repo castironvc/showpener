@@ -63,4 +63,7 @@
   .hint {
     margin-top: 10px;
   }
+  .checkboxContainer label {
+    font-size: 12px;
+  }
 }

@@ -74,6 +74,7 @@ p {
   background-color: rgba(0, 0, 0, 0.618);
   border-radius: 50px;
   padding: 40px;
+  max-width: 50vw;
 }
 h1,
 h2 {
@@ -103,7 +104,13 @@ h2 {
 
   text-shadow: 1px 1px 2px #000000;
 }
-
+.notice {
+  margin: 0px 0 50px 0;
+  background: rgba(225, 225, 225, 0.44);
+  padding: 10px 30px 10px 30px;
+  border-radius: 10px;
+  font-size: 14px;
+}
 .submitButton span {
   background: rgba(222, 222, 222, 0.584);
   display: block;

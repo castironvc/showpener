@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getError } from "../../../utils/error";
 import { dedupeArray } from "../../../utils/dedupeArray";
 import supabase from "../../../lib/supabase";
+import { passEncrypt } from "../auth/crypt";
 import {
   foundArtistsOfUsersProps,
   NewUserProfileProps,
@@ -185,7 +186,7 @@ export default async function handler(
   userProfile.name = req.body.session.name;
   userProfile.spotify_user_id = req.body.session.id;
   userProfile.email = req.body.session.email;
-  userProfile.mobilePhone = req.body.mobilePhone;
+  userProfile.mobilePhone = passEncrypt(req.body.mobilePhone);
   userProfile.state = req.body.state;
 
   const headers = {

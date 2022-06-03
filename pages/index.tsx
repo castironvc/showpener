@@ -4,6 +4,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import styles from "../styles/Home.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { normalizePhone } from "../utils/validation";
+
 import getStateCode from "../utils/getStateCode";
 
 import { getProviders, signIn, useSession } from "next-auth/react";
@@ -81,7 +82,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
     } else {
-      console.log(result);
       // Retrieved the stuff needed to proceed to TicketMaster for the event data
       const artistObj: foundArtistsForEventProps = {
         artists: result,

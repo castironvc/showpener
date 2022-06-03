@@ -31,7 +31,7 @@ function Thanks() {
         </p>{" "}
       </div>
       {state.error.message ? (
-        <div className={styles.notice}>{state.error.message}</div>
+        <div className="notice">{state.error.message}</div>
       ) : null}
       <div></div>
       <button className="submitButton" onClick={logOut}>

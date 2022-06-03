@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 import supabase from "../../../lib/supabase";
 import moment from "moment";
+import { passDecrypt } from "../auth/crypt";
 import {
   EventDetailProps,
   shortEvent,
@@ -14,7 +15,7 @@ require("dotenv").config({ path: "../../../.env" });
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
-
+const appUURL = process.env.VERCEL_URL;
 // use this to set how long before the On Sale date/time to send the message
 const daysOrMinutes = "days";
 const unitsBeforeAlert = 30;
@@ -49,14 +50,17 @@ export default async function handler(
       return res.status(200).json(error);
     } else if (data) {
       data.map((eventItem: eventForBroadcast) => {
+        const decryptedNumber = passDecrypt(eventItem.user_phone).toString();
         sendAlert({
           body:
             "Tickets for " +
             eventItem.artist +
-            " are going on sale in the next 30 minutes! Click here to get them before it's too late:" +
+            " are going on sale in the next 30 minutes! Click here to get them before it's too late: " +
+            appUURL +
+            "Tickets/?tm=" +
             artist.event_url,
           from: phonenumber,
-          to: eventItem.user_phone,
+          to: decryptedNumber,
         });
       });
 

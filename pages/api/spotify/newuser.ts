@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getError } from "../../../utils/error";
+import { dedupeArray } from "../../../utils/dedupeArray";
 import supabase from "../../../lib/supabase";
 import {
   foundArtistsOfUsersProps,
@@ -29,14 +30,28 @@ const userProfile: NewUserProfileProps = {
   tc: true,
 };
 
+const makeUserIds = (
+  id: number,
+  spotify_user_id: string,
+  name: string,
+  mobilePhone: string
+) => {
+  return {
+    id: id,
+    spotify_user_id: spotify_user_id,
+    name: name,
+    mobilePhone: mobilePhone,
+  };
+};
+
 const addArtists = async (records: foundArtistsOfUsersProps[]) => {
-  let { error, data: foundArtists } = await supabase
+  let { error, data: postedArtists } = await supabase
     .from("Artists")
     .upsert(records, {
       ignoreDuplicates: true,
       onConflict: "spotify_artist_id",
-    })
-    .select("artistname,spotify_artist_id");
+    });
+  /*     .select("artistname,spotify_artist_id"); */
 
   /*   data!.map(async (id: any) => {
     await addUserArtists(id, artistData);
@@ -44,14 +59,29 @@ const addArtists = async (records: foundArtistsOfUsersProps[]) => {
   if (error) {
     return getError(error, "issues inserting into the Artists table");
   } else {
-    if (foundArtists) {
-      let tmpArr: foundArtistsOfUsersProps[] = new Array();
-      foundArtists.map(async (item: foundArtistsOfUsersProps) => {
+    //  if (postedArtists && postedArtists.length > 0) {
+    let tmpArr: foundArtistsOfUsersProps[] = new Array();
+    /*       postedArtists.map(async (item: foundArtistsOfUsersProps) => {
         tmpArr.push(item);
+      }); */
+    records.map(async (item: foundArtistsOfUsersProps) => {
+      tmpArr.push({
+        artistname: item.artistname,
+        spotify_artist_id: item.spotify_artist_id,
+        external_url: item.external_url,
+        uri: item.uri,
       });
-      return tmpArr;
-    }
+    });
+
+    return tmpArr;
+    // } else if (!postedArtists || postedArtists.length === 0) {
+    // console.log(records);
+    //    return [];
+    //  }
+
+    /*  return records; */
   }
+  return records;
 };
 
 const addUserArtists = async (
@@ -70,20 +100,35 @@ const addUserArtists = async (
       user_phone: ids.mobilePhone,
     });
   });
+  const dedupedArtists = dedupeArray(userArtistBridge, "spotify_artist_id");
 
   // UPDATE THE USER ARTISTS TABLE
-  let { error, data: userArtists } = await supabase
+  // clean out the user's data
+  let { error, data: deleteResult } = await supabase
     .from("UserArtists")
-    .upsert(userArtistBridge)
+    .delete()
+    .match({ user_id: ids.id })
     .select("*");
 
   if (error) {
-    return getError(error, "trying to access the 'UserArtists' table");
+    return getError(
+      error,
+      "trying to delete all user events in preparation for adding the new ones"
+    );
   } else {
-    return userArtists;
+    // now add the artists again, including any new ones. This keeps Database clean
+    let { error, data: userArtists } = await supabase
+      .from("UserArtists")
+      .insert(dedupedArtists)
+      .select("*");
+
+    if (error) {
+      return getError(error, "trying to insert the 'UserArtists' table");
+    } else {
+      return userArtists;
+    }
   }
 };
-
 const getArtists = async (headers: HeadersType) => {
   // Get Recently Played
   const recentlyPlayed = await fetch(RECENTLY_PLAYED_ENDPOINT, headers);
@@ -150,7 +195,38 @@ export default async function handler(
     },
   };
 
-  let { error, data } = await supabase
+  // Add user function
+  const addUser = async (userDataIds: IdsProps) => {
+    // 1. GET ARTISTS OF USER
+    let getArtistData: foundArtistsOfUsersProps | ErrorProps | any =
+      await getArtists(headers);
+
+    if (!getArtistData.error) {
+      // 2. ADD THE USER'S ARTISTS
+      const addArtistData: foundArtistsOfUsersProps[] | ErrorProps | any =
+        await addArtists(getArtistData);
+
+      // 3. ADD TO THE USER/ARTIST BRIDGING TABLE
+      if (!addArtistData.error) {
+        const addUserArtistData: any = await addUserArtists(
+          userDataIds,
+          addArtistData
+        );
+
+        if (!addUserArtistData.error) {
+          // 4. END OF USERS, NOW MOVE TO EVENTS (GO BACK TO INDEX.TSX)
+          return res.status(200).json(addUserArtistData);
+        } else {
+          return res.status(500).json(addUserArtistData);
+        }
+      } else {
+        return res.status(500).json(addArtistData);
+      }
+    } else {
+      return res.status(500).json(getArtistData);
+    }
+  };
+  let { error, data: updatedUser } = await supabase
     .from("Users")
     .upsert(userProfile, {
       ignoreDuplicates: true,
@@ -165,42 +241,54 @@ export default async function handler(
         getError(error, "trying to add the new user to the 'Users' table.")
       );
   } else {
-    if (data && data.length > 0) {
-      data.map(async (userDataIds: IdsProps) => {
-        // 1. GET ARTISTS OF USER
-        let getArtistData: foundArtistsOfUsersProps | ErrorProps | any =
-          await getArtists(headers);
+    if (updatedUser && updatedUser.length > 0) {
+      const userDataIds = makeUserIds(
+        updatedUser[0].id,
+        updatedUser[0].spotify_user_id,
+        updatedUser[0].name,
+        updatedUser[0].mobilePhone
+      );
+      addUser(userDataIds);
 
-        if (!getArtistData.error) {
-          // 2. ADD THE USER'S ARTISTS
-          const addArtistData: foundArtistsOfUsersProps[] | ErrorProps | any =
-            await addArtists(getArtistData);
-
-          // 3. ADD TO THE USER/ARTIST BRIDGING TABLE
-          if (!addArtistData.error) {
-            const addUserArtistData: any = await addUserArtists(
-              userDataIds,
-              addArtistData
-            );
-
-            if (!addUserArtistData.error) {
-              // 4. END OF USERS, NOW MOVE TO EVENTS (GO BACK TO INDEX.TSX)
-              return res.status(200).json(addUserArtistData);
-            } else {
-              return res.status(500).json(addUserArtistData);
-            }
-          } else {
-            return res.status(500).json(addArtistData);
-          }
-        } else {
-          return res.status(500).json(getArtistData);
-        }
-
-        // return res.status(200).json(artistData);
-      });
-    } else {
+      // return res.status(200).json(artistData);
+    } else if (!updatedUser || updatedUser.length === 0) {
       // User already exists which is why no data was returned
-      return res.status(200).json("user_exists");
+      let { error, data: foundUser } = await supabase
+        .from("Users")
+        .select("id,spotify_user_id,name,mobilePhone")
+        .match({ spotify_user_id: userProfile.spotify_user_id });
+
+      if (error) {
+        return res
+          .status(500)
+          .json(
+            getError(
+              error,
+              "trying to get data from a user that already exists"
+            )
+          );
+      } else {
+        /*       */
+        if (foundUser && foundUser.length > 0) {
+          const userDataIds = makeUserIds(
+            foundUser[0].id,
+            foundUser[0].spotify_user_id,
+            foundUser[0].name,
+            foundUser[0].mobilePhone
+          );
+
+          addUser(userDataIds);
+        }
+      }
+    } else {
+      return res
+        .status(500)
+        .json(
+          getError(
+            error,
+            "something occured while upserting the user data. It was supposed to return either the record that was updated, or an empty array but it came back with neither."
+          )
+        );
     }
   }
 }

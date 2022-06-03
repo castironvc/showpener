@@ -90,7 +90,7 @@ export default async function handler(
         return res.status(200).json(match);
       });
     } else {
-      return res.status(200).json("poes");
+      return res.status(200).json("No events found");
     }
   }
   /*  

@@ -4,6 +4,7 @@ import supabase from "../../../lib/supabase";
 import { EventDetailProps } from "../../../types/globals";
 import getRelevantDate from "../../../utils/getRelevantDate";
 import { getTicketMasterError } from "../../../utils/error";
+import { dedupeArray } from "../../../utils/dedupeArray";
 require("dotenv").config({ path: "../../../.env" });
 
 let GET_ALL_EVENTS_ENDPOINT = `https://app.ticketmaster.com/discovery/v2/events?apikey=${process.env.TICKETMASTER_CONSUMER_KEY}&size=200&classificationName=music&`;
@@ -33,12 +34,17 @@ export default async function handler(
   };
 
   if (req.body && req.body.artists) {
-    const dedupedArtistArray = req.body.artists.filter(
+    /*   return res.status(200).json({ fart: req.body }); */
+    const dedupedArtistArray: any = dedupeArray(
+      req.body.artists,
+      "spotify_artist_id"
+    );
+    /* const dedupedArtistArray = req.body.artists.filter(
       (v: any, i: any, a: any) =>
         a.findIndex(
           (v2: any) => v2.spotify_artist_id === v.spotify_artist_id
         ) === i
-    );
+    ); */
 
     let i: number = 0; // number to control artist loop
     /*  let numberOfRecordsToGet: number =

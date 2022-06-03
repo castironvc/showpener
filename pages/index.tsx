@@ -72,7 +72,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await user.json();
-    console.log(result);
 
     if (result.error) {
       errorRedirect(result.details.message);
@@ -82,6 +81,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
     } else {
+      console.log(result);
       // Retrieved the stuff needed to proceed to TicketMaster for the event data
       const artistObj: foundArtistsForEventProps = {
         artists: result,
@@ -173,6 +173,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
       createNewUser(state.userProfile);
+      console.log(session);
       /*       welcomeText(tmpProfile); */
 
       /*   router.push("/"); */

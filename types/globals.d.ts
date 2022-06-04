@@ -28,6 +28,16 @@ export interface NewUserProfileProps {
   state: string;
   tc: boolean;
 }
+export interface adminProfileProps {
+  mobilePhone: string;
+  role: string;
+}
+export interface adminUserProps {
+  id: number;
+  created_at: string;
+  mobilePhone: string;
+  role: string;
+}
 export interface IdsProps {
   id: number;
   spotify_user_id: string;
@@ -72,7 +82,10 @@ export interface UserProfileProps {
   mobilePhone: any;
   state: any;
 }
-
+export interface UserProfileAdminProps {
+  session: any;
+  mobilePhone: any;
+}
 export interface foundArtistsForEventProps {
   artists: foundArtistsOfUsersProps[];
   state: any;

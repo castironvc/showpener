@@ -1,5 +1,6 @@
 .input,
-.select {
+.select,
+.inputShort {
   display: block;
   color: rgb(74, 38, 87);
   outline: 0;
@@ -8,10 +9,16 @@
   background: rgba(255, 255, 255, 0.738);
   padding: 15px 15px 15px 20px;
   border-radius: 8px;
-  width: 100%;
+
   border: solid 1px rgba(194, 194, 194, 0.675);
 }
 .input {
+  text-align: center;
+  width: 100%;
+}
+.inputShort {
+  width: 50%;
+  margin: auto;
   text-align: center;
 }
 .select {

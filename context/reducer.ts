@@ -4,6 +4,9 @@ export const initialState = {
     mobilePhone: "",
     state: "",
   },
+  phoneAuth: {
+    authCode: "",
+  },
   loading: false,
   error: {},
 };
@@ -28,6 +31,11 @@ export const reducer = (state: any, action: any) => {
       return {
         ...state,
         loading: action.payload,
+      };
+    case "setCode":
+      return {
+        ...state,
+        phoneAuth: { ...state.phoneAuth, authCode: action.payload },
       };
     case "setError":
       return {

@@ -22,7 +22,7 @@ export interface ArtistType {
 }
 export interface NewUserProfileProps {
   name: string;
-  email: string;
+
   mobilePhone: string;
   spotify_user_id: string;
   state: string;

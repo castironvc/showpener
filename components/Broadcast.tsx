@@ -33,12 +33,14 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
       payload: true,
     });
     getArtistOnce = true;
+
     const foundArtists = await fetch("/api/admin/findfans", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ stateCode: stateRegion }),
+
+      body: JSON.stringify({ stateCode: stateRegion, artist: artist }),
     });
 
     const result = await foundArtists.json();
@@ -84,7 +86,11 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
   });
   return (
     <div>
-      <p>Here is where we have all the Promoter Functionality!</p>
+      <p>
+        Enter a state and an artist to estimate reach and cost for direct
+        messaging to your qualified audience of music fans.
+      </p>
+
       <div className={adminstyles.twoColumn}>
         <div>
           <div className={styles.fieldContainer}>
@@ -94,12 +100,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
               onChange={(e) => setArtist(e.target.value)}
             >
               {artists.map((artist: any, i: number) => (
-                <option
-                  key={i}
-                  id={Object.keys(artist.id)[i]}
-                  value={Object.keys(artist.artistname)[i]}
-                >
-                  {Object.values(artist.artistname)}
+                <option key={i} id={artist.id} value={artist.artistname}>
+                  {artist.artistname}
                 </option>
               ))}
             </select>
@@ -120,14 +122,6 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
                 </option>
               ))}
             </select>
-          </div>
-          <div
-            className={styles.fieldContainer}
-            style={{ margin: "40px 0 40px 0" }}
-          >
-            <button className="submitButton" onClick={findFans}>
-              <span>Find Fans</span>
-            </button>
           </div>
         </div>
         <div className={adminstyles.resultsColumn}>

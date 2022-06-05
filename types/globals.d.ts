@@ -22,12 +22,21 @@ export interface ArtistType {
 }
 export interface NewUserProfileProps {
   name: string;
-
   mobilePhone: string;
   spotify_user_id: string;
   state: string;
   tc: boolean;
 }
+export interface FindUserProps {
+  id: number;
+  created_at: string;
+  name: string;
+  mobilePhone: string;
+  spotify_user_id: string;
+  tc: boolean;
+  state: string;
+}
+
 export interface adminProfileProps {
   mobilePhone: string;
   role: string;

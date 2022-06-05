@@ -45,6 +45,14 @@ export interface IdsProps {
   mobilePhone: string;
 }
 [];
+
+export interface ArtistProps {
+  id: number;
+  artistname: string;
+  spotify_artist_id: string;
+  external_url: string;
+  uri: string;
+}
 export interface HeadersType {
   headers: {
     Authorization: string;

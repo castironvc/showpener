@@ -48,7 +48,21 @@ p {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
+.spacer1 {
+  height: 10px;
+}
+.spacer2 {
+  height: 20px;
+}
+.spacer3 {
+  height: 30px;
+}
+.spacer4 {
+  height: 40px;
+}
+.spacer5 {
+  height: 50px;
+}
 .container {
   padding: 2rem 1rem 1rem 1rem;
 }
@@ -215,6 +229,15 @@ h2 {
 }
 .noborder {
   border: none;
+}
+.whitelink {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.whitelink:hover {
+  color: rgb(194, 154, 214);
+  text-decoration: none;
 }
 .admin-user-row button {
   width: 100%;

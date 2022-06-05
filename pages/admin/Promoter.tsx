@@ -6,6 +6,7 @@ import styles from "../../styles/thanks.module.css";
 import { AppContext, DispatchContext } from "../../context/StateContext";
 import { adminUserProps } from "../../types/globals";
 import Roles from "../../components/Roles";
+import Broadcast from "../../components/Broadcast";
 import Image from "next/image";
 let i: number = 0;
 let getUserOnce: boolean = false;
@@ -103,7 +104,7 @@ function Promoter() {
             One of our agents will call you soon.
           </p>
         ) : myuser && myuser.role === "promoter" ? (
-          <p>Here is where we have all the Promoter Functionality.</p>
+          <Broadcast />
         ) : myuser && myuser.role === "admin" && allUsers ? (
           <Roles
             allUsers={allUsers}
@@ -116,9 +117,12 @@ function Promoter() {
         <div className="notice">{state.error.message}</div>
       ) : null}
       <div></div>
-      <button className="submitButton" onClick={logOut}>
+      <span className="whitelink" onClick={logOut}>
+        Log out
+      </span>
+      {/*     <button className="submitButton" onClick={logOut}>
         <span>Log out</span>
-      </button>
+      </button> */}
     </div>
   );
 }

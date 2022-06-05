@@ -135,6 +135,12 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
           </div>
         </div>
       </div>
+
+      <div className={styles.fieldContainer} style={{ margin: "40px 0 0px 0" }}>
+        <button className="submitButton" onClick={findFans}>
+          <span>Find Fans</span>
+        </button>
+      </div>
     </div>
   );
 };

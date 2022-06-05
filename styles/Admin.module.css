@@ -1,0 +1,27 @@
+.twoColumn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.resultsColumn {
+  text-align: center;
+  width: 100%;
+}
+.resultsContainer {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.618);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px 20px 0 20px;
+}
+.resultsHeader,
+.resultsFigure {
+  color: white;
+}
+
+.resultsHeader {
+  color: rgb(181, 181, 181);
+}
+.resultsFigure {
+  font-size: 30px;
+  font-weight: 800;
+}

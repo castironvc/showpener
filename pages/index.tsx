@@ -46,7 +46,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
   };
   const setStateRegion = (stateCode: any) => {
-    console.log(getStateCode(stateCode));
     dispatch({
       type: "setRegion",
       payload: getStateCode(stateCode),
@@ -174,9 +173,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
       createNewUser(state.userProfile);
       console.log(session);
-      /*       welcomeText(tmpProfile); */
-
-      /*   router.push("/"); */
     } else if (status === "authenticated") {
       router.push({
         pathname: "/Thanks",

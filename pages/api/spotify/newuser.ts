@@ -24,7 +24,6 @@ const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=
 
 const userProfile: NewUserProfileProps = {
   name: "",
-  email: "",
   mobilePhone: "",
   spotify_user_id: "",
   state: "",
@@ -185,7 +184,6 @@ export default async function handler(
 ) {
   userProfile.name = req.body.session.name;
   userProfile.spotify_user_id = req.body.session.id;
-  userProfile.email = req.body.session.email;
   userProfile.mobilePhone = passEncrypt(req.body.mobilePhone);
   userProfile.state = req.body.state;
 

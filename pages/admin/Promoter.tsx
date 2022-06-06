@@ -90,6 +90,11 @@ function Promoter() {
         pathname: "/admin/",
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
+    } else if (!session) {
+      router.push({
+        pathname: "/admin/",
+        //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
+      });
     }
   });
 
@@ -103,14 +108,18 @@ function Promoter() {
             <br />
             One of our agents will call you soon.
           </p>
-        ) : myuser && myuser.role === "promoter" ? (
-          <Broadcast />
-        ) : myuser && myuser.role === "admin" && allUsers ? (
+        ) : null}
+
+        {myuser && myuser.role === "admin" && allUsers ? (
           <Roles
             allUsers={allUsers}
             getAllUsers={getAllUsers}
             myuser={myuser}
           />
+        ) : null}
+        {(myuser && myuser.role === "promoter") ||
+        (myuser && myuser.role === "admin") ? (
+          <Broadcast />
         ) : null}
       </div>
       {state.error.message ? (

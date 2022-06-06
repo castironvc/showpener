@@ -36,8 +36,8 @@ const Roles: FunctionComponent<RolesProps> = ({
   };
 
   return (
-    <div>
-      <p>Here is where we have all the Admin Functionality.</p>
+    <div style={{ marginBottom: "40px" }}>
+      <p>Manage user roles here:</p>
       <div className="userRow">
         {allUsers &&
           allUsers.map((user, i) => {

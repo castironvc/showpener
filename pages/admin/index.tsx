@@ -80,6 +80,7 @@ function Promoter() {
 
     if (error) {
       setAuthError(error.message);
+      console.log(error.message);
     } else if (session && session.user) {
       setSession(session);
       setStatus(session.user.aud);
@@ -89,6 +90,10 @@ function Promoter() {
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
     }
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
   };
   const createAdminUser = async () => {
     addUserOnce = true;

@@ -17,7 +17,7 @@ export default async function handler(
   }; */
   console.log(req.body);
   let { error, data: changedRoleUser } = await supabase
-    .from("AdminUsers")
+    .from("adminusers_table")
     .upsert({
       id: req.body.id,
       role: req.body.role,

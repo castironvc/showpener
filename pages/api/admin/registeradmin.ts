@@ -17,7 +17,7 @@ export default async function handler(
   }; */
   console.log(req.body);
   let { error, data: updatedUser } = await supabase
-    .from("AdminUsers")
+    .from("adminusers_table")
     .upsert(req.body)
     .match({ id: req.body.id });
 
@@ -27,7 +27,7 @@ export default async function handler(
       .json(
         getError(
           error,
-          "trying to get the data from the 'Admin Users' table in order to determine role."
+          "trying to add name and email to the user record in AdminUsers"
         )
       );
   } else if (updatedUser) {

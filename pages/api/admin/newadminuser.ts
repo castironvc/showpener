@@ -9,6 +9,7 @@ import { ErrorProps } from "next/error";
 const userAdminProfile: adminProfileProps = {
   mobilePhone: "",
   role: "standard",
+  totalmessages: 0,
 };
 
 export default async function handler(
@@ -24,7 +25,7 @@ export default async function handler(
   userAdminProfile.mobilePhone = req.body.mobilePhone;
   userAdminProfile.role = "standard";
   let { error, data: updatedUser } = await supabase
-    .from("AdminUsers")
+    .from("adminusers_table")
     .upsert(userAdminProfile, {
       ignoreDuplicates: true,
       onConflict: "mobilePhone",

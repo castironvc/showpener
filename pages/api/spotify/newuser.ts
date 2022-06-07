@@ -45,7 +45,7 @@ const makeUserIds = (
 
 const addArtists = async (records: foundArtistsOfUsersProps[]) => {
   let { error, data: postedArtists } = await supabase
-    .from("Artists")
+    .from("artists_table")
     .upsert(records, {
       ignoreDuplicates: true,
       onConflict: "spotify_artist_id",
@@ -104,7 +104,7 @@ const addUserArtists = async (
   // UPDATE THE USER ARTISTS TABLE
   // clean out the user's data
   let { error, data: deleteResult } = await supabase
-    .from("UserArtists")
+    .from("userartists_table")
     .delete()
     .match({ user_id: ids.id })
     .select("*");
@@ -117,7 +117,7 @@ const addUserArtists = async (
   } else {
     // now add the artists again, including any new ones. This keeps Database clean
     let { error, data: userArtists } = await supabase
-      .from("UserArtists")
+      .from("userartists_table")
       .insert(dedupedArtists)
       .select("*");
 
@@ -225,7 +225,7 @@ export default async function handler(
     }
   };
   let { error, data: updatedUser } = await supabase
-    .from("Users")
+    .from("users_table")
     .upsert(userProfile, {
       ignoreDuplicates: true,
       onConflict: "spotify_user_id",
@@ -252,7 +252,7 @@ export default async function handler(
     } else if (!updatedUser || updatedUser.length === 0) {
       // User already exists which is why no data was returned
       let { error, data: foundUser } = await supabase
-        .from("Users")
+        .from("users_table")
         .select("id,spotify_user_id,name,mobilePhone")
         .match({ spotify_user_id: userProfile.spotify_user_id });
 

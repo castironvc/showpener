@@ -40,6 +40,7 @@ export interface FindUserProps {
 export interface adminProfileProps {
   mobilePhone: string;
   role: string;
+  totalmessages: number;
 }
 export interface adminUserProps {
   id: number;

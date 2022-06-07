@@ -1,32 +1,83 @@
 import React, { FunctionComponent /* useState */ } from "react";
-import { ArtistProps } from "../types/globals";
+import { ArtistProps, adminUserProps } from "../types/globals";
+
 import Image from "next/image";
 import getStateCode from "../utils/getStateCode";
 import { useState, useEffect, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import adminstyles from "../styles/Admin.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
+import { useRouter } from "next/router";
 const costPerUser: number = 1;
 type BroadcasterProps = {
   /*   userid: number; */
+  myuser: adminUserProps;
 };
 
-const Broadcast: FunctionComponent<BroadcasterProps> = (
-  {
-    /* userid */
-  }
-) => {
+const Broadcast: FunctionComponent<BroadcasterProps> = ({
+  /* userid */
+  myuser,
+}) => {
   /*  const [logoChoice, logoSet] = useState(logo); */
   let states = require("../utils/states");
   const [stateRegion, setStateRegion] = useState<string>();
   const [artist, setArtist] = useState<string>();
   const [stateCodes, setStates] = useState(states);
+  const router = useRouter();
   const [getArtistOnce, setGetArtistOnce] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
   const [artists, setAllArtists] = useState<ArtistProps[]>([]);
   const [dollarAmount, setDollarAmount] = useState(0);
   const [foundUsers, setFoundUsers] = useState(0);
   const { state } = useContext(AppContext);
   const { dispatch } = useContext(DispatchContext);
+
+  const errorRedirect = (message: string) => {
+    router.push({
+      pathname: "/Oops/",
+      search: `?message=${encodeURIComponent(message)}`,
+    });
+  };
+  const setBroadcastMessage = (message: string) => {
+    dispatch({
+      type: "SET_ADMIN_BROADCASTMESSAGE",
+      payload: message,
+    });
+  };
+
+  const saveBroadcastMessage = async () => {
+    dispatch({
+      type: "setLoader",
+      payload: true,
+    });
+
+    const saveBroadcast = await fetch("/api/admin/postbroadcastmessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        message: state.admin.adminBroadcastMessage,
+        userid: myuser.id,
+      }),
+    });
+    const result = await saveBroadcast.json();
+
+    if (result.error) {
+      //  errorRedirect(result.details.message);
+      console.log(result.error);
+    } else {
+      setSubmitted(true);
+      console.log(result);
+      /*       setGetUserOnce(false);
+      engageDataCapture(false); */
+    }
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
+  };
   const findFans = async () => {
     dispatch({
       type: "setLoader",
@@ -34,7 +85,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
     });
     setGetArtistOnce(true);
 
-    const foundArtists = await fetch("/api/admin/findfans", {
+    const foundFans = await fetch("/api/admin/findfans", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +94,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
       body: JSON.stringify({ stateCode: stateRegion, artist: artist }),
     });
 
-    const result = await foundArtists.json();
+    const result = await foundFans.json();
 
     if (result.error) {
       //errorRedirect(result.details.message);
@@ -71,6 +122,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
     const result = await foundArtists.json();
 
     if (result.error) {
+      console.log(result.error);
+      errorRedirect(result.error);
       //errorRedirect(result.details.message);
       console.log(result.details.message);
     } else {
@@ -92,56 +145,110 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
       </p>
 
       <div className={adminstyles.twoColumn}>
-        <div>
-          <div className={styles.fieldContainer}>
-            <div className={styles.hint}>Pick an artist</div>
-            <select
-              className={styles.select}
-              onChange={(e) => setArtist(e.target.value)}
-            >
-              {artists &&
-                artists.map((artist: any, i: number) => (
-                  <option key={i} id={artist.id} value={artist.artistname}>
-                    {artist.artistname}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className={styles.fieldContainer}>
-            <div className={styles.hint}>Enter your state.</div>
-            <select
-              className={styles.select}
-              onChange={(e) => setStateRegion(getStateCode(e.target))}
-            >
-              {stateCodes.states.map((stateCode: any, i: number) => (
-                <option
-                  key={i}
-                  id={Object.keys(stateCode)[i]}
-                  value={Object.keys(stateCode)[i]}
-                >
-                  {Object.values(stateCode)}
+        <div className={styles.fieldContainer}>
+          <div className={styles.hint}>Pick an artist</div>
+          <select
+            className={styles.select}
+            onChange={(e) => setArtist(e.target.value)}
+          >
+            {artists &&
+              artists.map((artist: any, i: number) => (
+                <option key={i} id={artist.id} value={artist.artistname}>
+                  {artist.artistname}
                 </option>
               ))}
-            </select>
-          </div>
+          </select>
         </div>
+        <div className={styles.fieldContainer}>
+          <div className={styles.hint}>Enter your state.</div>
+          <select
+            className={styles.select}
+            onChange={(e) => setStateRegion(getStateCode(e.target))}
+          >
+            {stateCodes.states.map((stateCode: any, i: number) => (
+              <option
+                key={i}
+                id={Object.keys(stateCode)[i]}
+                value={Object.keys(stateCode)[i]}
+              >
+                {Object.values(stateCode)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {foundUsers ? (
         <div className={adminstyles.resultsColumn}>
           <div className={styles.hint}>Results</div>
-          <div className={adminstyles.resultsContainer}>
-            <div className={adminstyles.resultsHeader}>Total Users</div>
-            <div className={adminstyles.resultsFigure}>{foundUsers}</div>
-            <div className="spacer2" />
-            <div className={adminstyles.resultsHeader}>Reach cost</div>
-            <div className={adminstyles.resultsFigure}>${dollarAmount}</div>
+          <div>
+            <div className={adminstyles.resultsContainer}>
+              <div>
+                <div className={adminstyles.resultsHeader}>Total Users</div>
+                <div className={adminstyles.resultsFigure}>{foundUsers}</div>
+              </div>
+              <div>
+                <div className={adminstyles.resultsHeader}>Reach cost</div>
+                <div className={adminstyles.resultsFigure}>${dollarAmount}</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
+      ) : (
+        <div>
+          <div className="spacer3" />
+          <div className="notice">
+            There are no search results. Refine your selection.
+          </div>
+        </div>
+      )}
       <div className={styles.fieldContainer} style={{ margin: "40px 0 0px 0" }}>
-        <button className="submitButton" onClick={findFans}>
-          <span>Find Fans</span>
+        <button
+          className={`${foundUsers ? "smallButton" : "submitButton"}`}
+          onClick={findFans}
+        >
+          <span>{foundUsers ? "Search again" : "Find Fans"}</span>
         </button>
       </div>
+      {foundUsers ? (
+        <div>
+          {!submitted ? (
+            <div>
+              <div className={styles.fieldContainer}>
+                <div className={styles.hint}>
+                  Submit your broadcast message for admin approval.
+                </div>
+                <textarea
+                  id="adminBroadcastMessage"
+                  name="adminBroadcastMessage"
+                  value={
+                    (state &&
+                      state.admin &&
+                      state.admin.adminBroadcastMessage) ||
+                    ""
+                  }
+                  onChange={(e) => setBroadcastMessage(e.target.value)}
+                  className={styles.input}
+                  rows={3}
+                />
+              </div>
+              <div
+                className={styles.fieldContainer}
+                style={{ margin: "40px 0 0px 0" }}
+              >
+                <button className="submitButton" onClick={saveBroadcastMessage}>
+                  <span>Submit Broadcast Message</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className={adminstyles.thankyou}>
+              Thank you for submitting your suggested broadcast message.
+              <br />
+              We will be in touch shortly.
+            </div>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };

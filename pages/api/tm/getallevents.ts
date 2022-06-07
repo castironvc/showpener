@@ -14,7 +14,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const addEvents = async (events: EventDetailProps[]) => {
-    let { error, data } = await supabase.from("Events").upsert(events, {
+    let { error, data } = await supabase.from("events_table").upsert(events, {
       ignoreDuplicates: true,
       onConflict: "event_id",
     });

@@ -18,7 +18,7 @@ export default async function handler(
 
   console.log(req.body.stateCode);
   let { error, data: users } = await supabase
-    .from("Users")
+    .from("users_table")
     .select("*")
     .match({ state: req.body.stateCode });
   /*     .order("artist", { ascending: true }); */
@@ -39,7 +39,7 @@ export default async function handler(
     });
 
     let { error, data: artists } = await supabase
-      .from("UserArtists")
+      .from("userartists_table")
       .select("*")
       /*  .rangeLt("id", "[150, 250]"); */
       .filter("user_id", "in", `(${tmpUserIdArr})`)

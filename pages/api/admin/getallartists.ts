@@ -17,7 +17,7 @@ export default async function handler(
   }; */
 
   let { error, data: artists } = await supabase
-    .from("Artists")
+    .from("artists_table")
     .select("*")
     .order("artistname", { ascending: true });
 

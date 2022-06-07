@@ -17,7 +17,7 @@ export default async function handler(
   }; */
 
   let { error, data: users } = await supabase
-    .from("AdminUsers")
+    .from("adminusers_table")
     .select("*")
     .order("created_at", { ascending: false });
 

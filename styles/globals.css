@@ -129,43 +129,62 @@ h2 {
   border-radius: 10px;
   font-size: 14px;
 }
-.submitButton span {
+.submitButton span,
+.smallButton span {
   background: rgba(222, 222, 222, 0.584);
   display: block;
-  padding: 15px 25px;
   border-radius: 20px;
-  font-size: 18px;
   transition: all 0.2s ease-in-out;
 }
-.submitButton span:hover {
+.submitButton span {
+  padding: 15px 25px;
+  font-size: 18px;
+}
+
+.smallButton span {
+  padding: 8px 10px;
+  font-size: 16px;
+}
+.submitButton span:hover,
+.smallButton span:hover {
   background: rgba(150, 136, 156, 0.584);
   box-shadow: 0 0px 0 #000, 0 0px 20px 5px #823b6b;
 }
-.submitButton:active {
+.submitButton:active,
+.smallButton:active {
   padding-bottom: 1px;
   box-shadow: 0 1px 0 #000;
 }
-.submitButton:disabled {
+.submitButton:disabled,
+.smallButton:disabled {
   opacity: 0.5;
   cursor: auto;
 }
-.submitButton:hover {
+.submitButton:hover,
+.smallButton:hover {
   background: rgba(246, 221, 253, 0.671);
 }
-.submitButton {
+.submitButton,
+.smallButton {
   cursor: pointer;
   height: auto;
   margin: 0 0 10px 0;
-  padding: 0px;
   position: relative;
   float: left;
-  padding: 5px;
   color: #000;
   text-decoration: none;
-  background-color: rgba(255, 255, 255, 0.456);
   border-radius: 25px;
   border: none;
   transition: all 0.2s ease-in-out;
+}
+.submitButton {
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.456);
+}
+.smallButton {
+  padding: 3px;
+  background-color: rgba(0, 0, 0, 0.355);
+  width: 80%;
 }
 /* LOADERS */
 
@@ -215,7 +234,7 @@ h2 {
 }
 .admin-user-row {
   display: grid;
-  grid-template-columns: 3fr 2fr 2fr;
+  grid-template-columns: 0.4fr 3fr 2fr 2fr;
   text-align: left;
   width: 100%;
   padding: 10px;

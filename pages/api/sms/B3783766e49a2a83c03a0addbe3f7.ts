@@ -36,7 +36,7 @@ export default async function handler(
 
   const matchEventsToUsers = async (artist: shortEvent) => {
     let { error, data } = await supabase
-      .from("UserArtists")
+      .from("userartists_table")
       .select("*")
       .match({ spotify_artist_id: artist.spotify_artist_id });
 
@@ -75,7 +75,7 @@ export default async function handler(
   // if (req.body.dbcall === true) {
 
   let { error, data } = await supabase
-    .from("Events")
+    .from("events_table")
     .select("*")
     .gt("event_sale_date", nowDate)
     .lt("event_sale_date", timeBefore);

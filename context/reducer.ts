@@ -3,6 +3,9 @@ export const initialState = {
     session: {},
     mobilePhone: "",
     state: "",
+  },
+  admin: {
+    adminBroadcastMessage: "",
     adminName: "",
     adminEmail: "",
   },
@@ -27,13 +30,19 @@ export const reducer = (state: any, action: any) => {
     case "SET_ADMIN_NAME":
       return {
         ...state,
-        userProfile: { ...state.userProfile, adminName: action.payload },
+        admin: { ...state.admin, adminName: action.payload },
       };
     case "SET_ADMIN_EMAIL":
       return {
         ...state,
-        userProfile: { ...state.userProfile, adminEmail: action.payload },
+        admin: { ...state.admin, adminEmail: action.payload },
       };
+    case "SET_ADMIN_BROADCASTMESSAGE":
+      return {
+        ...state,
+        admin: { ...state.admin, adminBroadcastMessage: action.payload },
+      };
+
     case "setSession":
       return {
         ...state,

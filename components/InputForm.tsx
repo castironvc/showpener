@@ -6,7 +6,7 @@ import { useState, useEffect, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 import { AppContext, DispatchContext } from "../context/StateContext";
-const costPerUser: number = 1;
+
 type BroadcasterProps = {
   /*   userid: number; */
   myuser: adminUserProps;
@@ -58,8 +58,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       },
 
       body: JSON.stringify({
-        adminName: state.userProfile.adminName,
-        adminEmail: state.userProfile.adminEmail,
+        adminName: state.admin.adminName,
+        adminEmail: state.admin.adminEmail,
         id: myuser.id,
       }),
     });
@@ -90,9 +90,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
           id="adminName"
           name="adminName"
           type="text"
-          value={
-            (state && state.userProfile && state.userProfile.adminName) || ""
-          }
+          value={(state && state.admin && state.admin.adminName) || ""}
           onChange={(e) => setName(e.target.value)}
           className={styles.input}
         />
@@ -103,7 +101,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
           id="adminEmail"
           name="adminEmail"
           type="email"
-          value={(state && state.userProfile && state.userProfile.email) || ""}
+          value={(state && state.admin && state.admin.email) || ""}
           onChange={(e) => setEmail(e.target.value)}
           className={styles.input}
         />

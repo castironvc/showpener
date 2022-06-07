@@ -49,6 +49,7 @@ const Roles: FunctionComponent<RolesProps> = ({
                 }`}
               >
                 {/*          <div>{user.id}</div> */}
+                <div>Dot</div>
                 <div>{user.mobilePhone}</div>
                 <div className="admin-user-row-role">
                   <div id={user.role}>{user.role}</div>

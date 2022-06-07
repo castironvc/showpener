@@ -19,11 +19,11 @@ function Oops() {
       pathname: `/`,
     });
   };
-  useEffect(() => {
+  /*   useEffect(() => {
     if (status && status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, router]);
+  }, [status, router]); */
   console.log(state);
   return (
     <div className={styles.centerColumnContent}>

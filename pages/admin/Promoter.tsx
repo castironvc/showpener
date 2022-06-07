@@ -131,7 +131,7 @@ function Promoter() {
               ) : null}
               {(myuser && myuser.role === "promoter") ||
               (myuser && myuser.role === "admin") ? (
-                <Broadcast />
+                <Broadcast myuser={myuser} />
               ) : null}
             </div>
           ) : (

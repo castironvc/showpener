@@ -17,7 +17,7 @@ export default async function handler(
   }; */
   console.log(req.body);
   let { error, data: foundUser } = await supabase
-    .from("AdminUsers")
+    .from("adminusers_table")
     .select("*")
     .match({ mobilePhone: req.body });
 

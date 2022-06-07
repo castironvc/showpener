@@ -11,7 +11,6 @@ type BroadcasterProps = {
   /*   userid: number; */
 };
 
-let getArtistOnce = false;
 const Broadcast: FunctionComponent<BroadcasterProps> = (
   {
     /* userid */
@@ -22,6 +21,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
   const [stateRegion, setStateRegion] = useState<string>();
   const [artist, setArtist] = useState<string>();
   const [stateCodes, setStates] = useState(states);
+  const [getArtistOnce, setGetArtistOnce] = useState<boolean>(false);
   const [artists, setAllArtists] = useState<ArtistProps[]>([]);
   const [dollarAmount, setDollarAmount] = useState(0);
   const [foundUsers, setFoundUsers] = useState(0);
@@ -32,7 +32,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
       type: "setLoader",
       payload: true,
     });
-    getArtistOnce = true;
+    setGetArtistOnce(true);
 
     const foundArtists = await fetch("/api/admin/findfans", {
       method: "POST",
@@ -60,7 +60,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
     });
   };
   const getAllArtists = async () => {
-    getArtistOnce = true;
+    setGetArtistOnce(true);
     const foundArtists = await fetch("/api/admin/getallartists", {
       method: "GET",
       headers: {
@@ -99,11 +99,12 @@ const Broadcast: FunctionComponent<BroadcasterProps> = (
               className={styles.select}
               onChange={(e) => setArtist(e.target.value)}
             >
-              {artists.map((artist: any, i: number) => (
-                <option key={i} id={artist.id} value={artist.artistname}>
-                  {artist.artistname}
-                </option>
-              ))}
+              {artists &&
+                artists.map((artist: any, i: number) => (
+                  <option key={i} id={artist.id} value={artist.artistname}>
+                    {artist.artistname}
+                  </option>
+                ))}
             </select>
           </div>
           <div className={styles.fieldContainer}>

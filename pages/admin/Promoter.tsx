@@ -7,9 +7,10 @@ import { AppContext, DispatchContext } from "../../context/StateContext";
 import { adminUserProps } from "../../types/globals";
 import Roles from "../../components/Roles";
 import Broadcast from "../../components/Broadcast";
+import InputForm from "../../components/InputForm";
 import Image from "next/image";
 let i: number = 0;
-let getUserOnce: boolean = false;
+/* let getUserOnce: boolean = false; */
 function Promoter() {
   const { state } = useContext(AppContext);
   const [session, setSession] = useState(supabase.auth.session());
@@ -17,10 +18,13 @@ function Promoter() {
     session && session.user && session.user.aud
   );
   const [myuser, setUser] = useState<adminUserProps>();
+  const [dataCapture, engageDataCapture] = useState<boolean>(false);
+  const [getUserOnce, setGetUserOnce] = useState<boolean>(false);
   const [allUsers, setAllUsers] = useState<[adminUserProps]>();
   const router = useRouter();
   const { dispatch } = useContext(DispatchContext);
   const logOut = async (e: any) => {
+    setGetUserOnce(false);
     dispatch({
       type: "setLoader",
       payload: true,
@@ -33,6 +37,9 @@ function Promoter() {
     router.push({
       pathname: "/admin/",
       //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
+    });
+    dispatch({
+      type: "resetState",
     });
   };
 
@@ -56,7 +63,7 @@ function Promoter() {
   };
 
   const getAdminUser = async () => {
-    getUserOnce = true;
+    setGetUserOnce(true);
 
     const user = await fetch("/api/admin/getadminuser", {
       method: "POST",
@@ -75,27 +82,30 @@ function Promoter() {
       console.log(result);
       setUser(result);
 
-      if (result.role === "admin") {
+      if (result.adminName && result.role === "admin") {
+        console.log("Is Admin");
         getAllUsers();
+      }
+      if (!result.adminName && result.role === "admin") {
+        engageDataCapture(!dataCapture);
       }
     }
   };
 
   useEffect(() => {
     if (session && status === "authenticated" && !getUserOnce) {
-      console.log(i++);
       getAdminUser();
-    } else if (session && status === "unauthenticated") {
+    } else if ((session && status === "unauthenticated") || !session) {
       router.push({
         pathname: "/admin/",
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
-    } else if (!session) {
+    } /* else if (!session) {
       router.push({
         pathname: "/admin/",
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
-    }
+    } */
   });
 
   return (
@@ -109,29 +119,44 @@ function Promoter() {
             One of our agents will call you soon.
           </p>
         ) : null}
-
-        {myuser && myuser.role === "admin" && allUsers ? (
-          <Roles
-            allUsers={allUsers}
-            getAllUsers={getAllUsers}
-            myuser={myuser}
-          />
+        <div>
+          {!dataCapture && myuser ? (
+            <div>
+              {myuser && myuser.role === "admin" && allUsers ? (
+                <Roles
+                  allUsers={allUsers}
+                  getAllUsers={getAllUsers}
+                  myuser={myuser}
+                />
+              ) : null}
+              {(myuser && myuser.role === "promoter") ||
+              (myuser && myuser.role === "admin") ? (
+                <Broadcast />
+              ) : null}
+            </div>
+          ) : (
+            <div>
+              {myuser ? (
+                <InputForm
+                  myuser={myuser}
+                  engageDataCapture={engageDataCapture}
+                  setGetUserOnce={setGetUserOnce}
+                />
+              ) : null}
+            </div>
+          )}
+        </div>
+        {state.error.message ? (
+          <div className="notice">{state.error.message}</div>
         ) : null}
-        {(myuser && myuser.role === "promoter") ||
-        (myuser && myuser.role === "admin") ? (
-          <Broadcast />
-        ) : null}
-      </div>
-      {state.error.message ? (
-        <div className="notice">{state.error.message}</div>
-      ) : null}
-      <div></div>
-      <span className="whitelink" onClick={logOut}>
-        Log out
-      </span>
-      {/*     <button className="submitButton" onClick={logOut}>
+        <div></div>
+        <span className="whitelink" onClick={logOut}>
+          Log out
+        </span>
+        {/*     <button className="submitButton" onClick={logOut}>
         <span>Log out</span>
       </button> */}
+      </div>
     </div>
   );
 }

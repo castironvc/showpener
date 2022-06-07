@@ -75,7 +75,7 @@ function Promoter() {
     });
     let { session, error } = await supabase.auth.verifyOTP({
       phone: stripLetters(state.userProfile.mobilePhone),
-      token: state.phoneAuth.authCode,
+      token: state.phoneAuth && state.phoneAuth.authCode,
     });
 
     if (error) {
@@ -124,6 +124,7 @@ function Promoter() {
   };
 
   useEffect(() => {
+    console.log(state);
     if (session && status === "authenticated" && !addUserOnce) {
       createAdminUser();
     }
@@ -149,10 +150,13 @@ function Promoter() {
                   name="phone"
                   type="tel"
                   autoComplete="tel"
-                  value={state.userProfile.mobilePhone}
-                  onChange={(e) =>
-                    setPhone(normalizePhone(e.target.value) || "")
+                  value={
+                    (state &&
+                      state.userProfile &&
+                      state.userProfile.mobilePhone) ||
+                    ""
                   }
+                  onChange={(e) => setPhone(normalizePhone(e.target.value))}
                   className={styles.inputShort}
                   placeholder="(000) 000-0000"
                 />
@@ -183,7 +187,6 @@ function Promoter() {
             </>
           ) : (
             <>
-              {" "}
               {!authError ? (
                 <>
                   <div className={styles.fieldContainer}>
@@ -194,8 +197,13 @@ function Promoter() {
                       id="code"
                       name="verifycode"
                       type="text"
-                      value={state.phoneAuth.authCode}
-                      onChange={(e) => setCode(e.target.value || "")}
+                      value={
+                        (state &&
+                          state.phoneAuth &&
+                          state.phoneAuth.authCode) ||
+                        ""
+                      }
+                      onChange={(e) => setCode(e.target.value)}
                       className={styles.inputShort}
                     />
                   </div>

@@ -3,6 +3,8 @@ export const initialState = {
     session: {},
     mobilePhone: "",
     state: "",
+    adminName: "",
+    adminEmail: "",
   },
   phoneAuth: {
     authCode: "",
@@ -21,6 +23,16 @@ export const reducer = (state: any, action: any) => {
       return {
         ...state,
         userProfile: { ...state.userProfile, mobilePhone: action.payload },
+      };
+    case "SET_ADMIN_NAME":
+      return {
+        ...state,
+        userProfile: { ...state.userProfile, adminName: action.payload },
+      };
+    case "SET_ADMIN_EMAIL":
+      return {
+        ...state,
+        userProfile: { ...state.userProfile, adminEmail: action.payload },
       };
     case "setSession":
       return {
@@ -42,7 +54,23 @@ export const reducer = (state: any, action: any) => {
         ...state,
         error: { ...state.errors, message: action.payload },
       };
-
+    case "resetState":
+      return {
+        state: {
+          userProfile: {
+            session: {},
+            mobilePhone: "",
+            state: "",
+            tree: "",
+          },
+          phoneAuth: {
+            authCode: "",
+          },
+          loading: false,
+          error: {},
+        },
+        error: { ...state.errors, message: action.payload },
+      };
     default:
       return state;
   }

@@ -64,7 +64,13 @@ p {
   height: 50px;
 }
 .container {
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+
+  padding-top: 50px;
 }
 
 .main {
@@ -90,8 +96,8 @@ p {
   position: absolute;
   display: flex;
   align-items: center;
-  margin-top: -110px;
   width: calc(100% - 80px);
+  top: -30px;
 }
 
 h1,
@@ -104,7 +110,7 @@ h2 {
   text-align: center;
 }
 h1 {
-  margin: 0px 0px 0px 0px;
+  margin: 0;
   font-size: 40px;
   font-weight: 800;
 }
@@ -315,24 +321,27 @@ h2 {
   );
 }
 .adminMessages {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.841);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100%);
   z-index: 1;
   border-radius: 20px;
-  padding: 30px;
 }
 .innerbox_heading {
   color: white;
   font-size: 20px;
   font-weight: 800;
+  height: 50px;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .closex {
   color: white;
-  position: absolute;
   left: 20px;
   top: 20px;
   background-color: rgba(255, 255, 255, 0.204);
@@ -353,8 +362,8 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 20px;
-  height: 100%;
+  padding: 0 20px 20px 20px;
+  height: calc(100% - 60px);
   position: relative;
   overflow-y: scroll;
 }
@@ -362,7 +371,7 @@ h2 {
   color: rgb(226, 226, 226);
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.199);
+  background-color: rgba(66, 66, 66, 0.724);
   padding: 18px;
   border-radius: 10px;
   font-size: 14px;
@@ -394,10 +403,39 @@ h2 {
 
 @media (max-width: 600px) {
   .blackpanel {
-    max-width: none;
     width: 100%;
+    padding: 40px 10px 010px;
   }
   p {
     font-size: 14px;
+  }
+  .admin-user-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+  }
+  .userRow {
+    width: 100%;
+    border-radius: 20px;
+    min-height: auto;
+    position: relative;
+  }
+  .user_row_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 50px;
   }
 }

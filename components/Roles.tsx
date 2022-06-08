@@ -68,10 +68,13 @@ const Roles: FunctionComponent<RolesProps> = ({
       <div className="userRow">
         {messageOpen ? (
           <div className="adminMessages">
-            <div className="closex" onClick={() => setmessageOpen(false)}>
-              X
+            <div className="innerbox_heading">
+              {" "}
+              <div className="closex" onClick={() => setmessageOpen(false)}>
+                X
+              </div>
+              Promoter messages
             </div>
-            <div className="innerbox_heading">Promoter messages</div>
             <div className="innerbox_container">
               {messages &&
                 messages.map((message, i) => {
@@ -84,7 +87,7 @@ const Roles: FunctionComponent<RolesProps> = ({
             </div>
           </div>
         ) : null}
-        <div>
+        <div className="user_row_container">
           {allUsers &&
             allUsers.map((user, i) => {
               return (

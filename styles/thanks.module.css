@@ -5,14 +5,12 @@
   align-items: center;
 }
 .messageContainer {
-  margin: 20px 0 40px 0;
+  margin: 0px 0 0px 0;
   text-align: center;
 }
-/* 
+
 @media (max-width: 600px) {
-  .grid {
+  .messageContainer {
     width: 100%;
-    flex-direction: column;
   }
 }
- */

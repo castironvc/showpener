@@ -28,15 +28,17 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
         {state.loading ? <Loader /> : null}
         <div className="main">
           <div className="blackpanel">
-            <div className="logo">
-              <Image
-                src="/images/Showpener_logo.svg"
-                layout="intrinsic"
-                width={180}
-                height={90}
-                className="logoimg"
-                alt=""
-              ></Image>
+            <div className="logo-container">
+              <div className="logo">
+                <Image
+                  src="/images/Showpener_logo.svg"
+                  layout="intrinsic"
+                  width={180}
+                  height={90}
+                  className="logoimg"
+                  alt=""
+                ></Image>
+              </div>
             </div>
             <div>{children}</div>
           </div>

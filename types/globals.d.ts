@@ -47,6 +47,7 @@ export interface adminUserProps {
   created_at: string;
   mobilePhone: string;
   role: string;
+  totalmessages: number;
 }
 export interface IdsProps {
   id: number;

@@ -65,19 +65,7 @@ export const reducer = (state: any, action: any) => {
       };
     case "resetState":
       return {
-        state: {
-          userProfile: {
-            session: {},
-            mobilePhone: "",
-            state: "",
-            tree: "",
-          },
-          phoneAuth: {
-            authCode: "",
-          },
-          loading: false,
-          error: {},
-        },
+        state: initialState,
         error: { ...state.errors, message: action.payload },
       };
     default:

@@ -101,7 +101,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
           id="adminEmail"
           name="adminEmail"
           type="email"
-          value={(state && state.admin && state.admin.email) || ""}
+          value={(state && state.admin && state.admin.adminEmail) || ""}
           onChange={(e) => setEmail(e.target.value)}
           className={styles.input}
         />

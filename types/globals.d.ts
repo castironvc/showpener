@@ -105,6 +105,12 @@ export interface UserProfileAdminProps {
   session: any;
   mobilePhone: any;
 }
+export interface adminMessagesProps {
+  id: number;
+  created_at: string;
+  userid: number;
+  message: string;
+}
 export interface foundArtistsForEventProps {
   artists: foundArtistsOfUsersProps[];
   state: any;

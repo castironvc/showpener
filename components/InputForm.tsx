@@ -1,7 +1,7 @@
 import React, { FunctionComponent /* useState */ } from "react";
 import { adminUserProps } from "../types/globals";
 import Image from "next/image";
-import getStateCode from "../utils/getStateCode";
+import { normalizePhone } from "../utils/validation";
 import { useState, useEffect, useContext } from "react";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
@@ -37,10 +37,10 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       payload: name,
     });
   };
-  const setBusiness = (business: string) => {
+  const setPromoterPhone = (phone: string) => {
     dispatch({
-      type: "SET_BUSINESS_NAME",
-      payload: business,
+      type: "SET_ADMIN_PHONE",
+      payload: phone,
     });
   };
   const setEmail = (email: string) => {
@@ -49,7 +49,12 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       payload: email,
     });
   };
-
+  const setPromoterMessage = (message: string) => {
+    dispatch({
+      type: "SET_ADMIN_MESSAGE",
+      payload: message,
+    });
+  };
   const registerAdminUser = async () => {
     dispatch({
       type: "setLoader",
@@ -65,7 +70,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       body: JSON.stringify({
         adminName: state.admin.adminName,
         adminEmail: state.admin.adminEmail,
-        adminBusiness: state.admin.adminBusiness,
+        adminPhone: state.admin.adminPhone,
+        adminMessage: state.admin.adminMessage,
         id: myuser.id,
       }),
     });
@@ -89,42 +95,56 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
   return (
     <div>
       <p>Tell us a little about yourself to get started.</p>
-      <div className={styles.statePhoneFieldContainer}>
-        <div className={styles.fieldContainer}>
-          <div className={styles.hint}>Enter your Name:</div>
+      <div className="statePhoneFieldContainer">
+        <div className="fieldContainer">
+          <div className="hint">Enter your Name:</div>
           <input
             id="adminName"
             name="adminName"
             type="text"
             value={(state && state.admin && state.admin.adminName) || ""}
             onChange={(e) => setName(e.target.value)}
-            className={styles.input}
+            className="input"
           />
         </div>
-        <div className={styles.fieldContainer}>
-          <div className={styles.hint}>Enter your email</div>
+        <div className="fieldContainer">
+          <div className="hint">Enter your email</div>
           <input
             id="adminEmail"
             name="adminEmail"
             type="email"
             value={(state && state.admin && state.admin.adminEmail) || ""}
             onChange={(e) => setEmail(e.target.value)}
-            className={styles.input}
+            className="input"
           />
         </div>
       </div>
-      <div className={styles.fieldContainer}>
-        <div className={styles.hint}>Name of business:</div>
+      <div className="fieldContainer">
+        <div className="hint">Phone:</div>
         <input
-          id="adminBusiness"
-          name="adminBusiness"
-          type="text"
-          value={(state && state.admin && state.admin.adminBusiness) || ""}
-          onChange={(e) => setBusiness(e.target.value)}
-          className={styles.input}
+          id="phone-number"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          value={(state && state.admin && state.admin.adminPhone) || ""}
+          onChange={(e) => setPromoterPhone(normalizePhone(e.target.value))}
+          className="input"
+          placeholder="(000) 000-0000"
         />
       </div>
-      <div className={styles.fieldContainer} style={{ margin: "40px 0 0px 0" }}>
+      <div className="fieldContainer">
+        <div className="hint">Message:</div>
+        <textarea
+          id="message"
+          name="message"
+          autoComplete="off"
+          value={(state && state.admin && state.admin.adminMessage) || ""}
+          onChange={(e) => setPromoterMessage(e.target.value)}
+          className="input"
+          placeholder="Start typing message"
+        />
+      </div>
+      <div className="fieldContainer" style={{ margin: "40px 0 0px 0" }}>
         <button className="submitButton" onClick={registerAdminUser}>
           <span>Next</span>
         </button>

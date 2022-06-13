@@ -9,9 +9,9 @@ function Custom404() {
     });
   };
   return (
-    <div className={styles.centerColumnContent}>
+    <div className="centerColumnContent">
       <h1>Oops!</h1>
-      <div className={styles.messageContainer}></div>
+      <div className="messageContainer"></div>
       <div className="notice">This page does not exist.</div>
       <button className="submitButton" onClick={goHome}>
         <span>Back to home page</span>

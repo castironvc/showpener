@@ -8,7 +8,7 @@ import { adminUserProps } from "../../types/globals";
 import Roles from "../../components/Roles";
 import Broadcast from "../../components/Broadcast";
 import InputForm from "../../components/InputForm";
-import Image from "next/image";
+
 let i: number = 0;
 /* let getUserOnce: boolean = false; */
 function Promoter() {
@@ -109,9 +109,9 @@ function Promoter() {
   });
 
   return (
-    <div className={styles.centerColumnContent}>
+    <div className="centerColumnContent">
       <h1>Promoter Access</h1>
-      <div className={styles.messageContainer}>
+      <div className="messageContainer">
         {myuser && myuser.role === "standard" ? (
           <p>
             Your request for promoter access has been submitted.

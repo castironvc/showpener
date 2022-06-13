@@ -8,6 +8,8 @@ export const initialState = {
     adminBroadcastMessage: "",
     adminName: "",
     adminEmail: "",
+    adminPhone: "",
+    adminMessage: "",
   },
   phoneAuth: {
     authCode: "",
@@ -37,12 +39,16 @@ export const reducer = (state: any, action: any) => {
         ...state,
         admin: { ...state.admin, adminEmail: action.payload },
       };
-    case "SET_BUSINESS_NAME":
+    case "SET_ADMIN_PHONE":
       return {
         ...state,
-        admin: { ...state.admin, adminBusiness: action.payload },
+        admin: { ...state.admin, adminPhone: action.payload },
       };
-
+    case "SET_ADMIN_MESSAGE":
+      return {
+        ...state,
+        admin: { ...state.admin, adminMessage: action.payload },
+      };
     case "SET_ADMIN_BROADCASTMESSAGE":
       return {
         ...state,

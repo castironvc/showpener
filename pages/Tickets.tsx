@@ -32,7 +32,7 @@ function Tickets() {
   }, [runOnce, status, router]);
   console.log(state);
   return (
-    <div className={styles.centerColumnContent}>
+    <div className="centerColumnContent">
       <h1>Redirecting...</h1>
       <div>
         <p>Taking you to your tickets now.</p>

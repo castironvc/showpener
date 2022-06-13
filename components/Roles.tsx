@@ -2,6 +2,7 @@ import React, { FunctionComponent /* useState */ } from "react";
 import { adminUserProps, adminMessagesProps } from "../types/globals";
 import Image from "next/image";
 import { useState } from "react";
+import { Tooltip } from "@nextui-org/react";
 type RolesProps = {
   allUsers: adminUserProps[];
   getAllUsers: () => void;
@@ -64,7 +65,7 @@ const Roles: FunctionComponent<RolesProps> = ({
 
   return (
     <div style={{ marginBottom: "40px" }}>
-      <p>Manage user roles here:</p>
+      <h3 className="sectionHeading">Manage user roles here:</h3>
       <div className="userRow">
         {messageOpen ? (
           <div className="adminMessages">
@@ -114,7 +115,19 @@ const Roles: FunctionComponent<RolesProps> = ({
                       <div className="disabledText">Not submitted yet</div>
                     )}
                   </div>
-                  <div>{user.adminBusiness}</div>
+                  <Tooltip
+                    color="primary"
+                    content={
+                      <div className="tooltip-container">
+                        <div className="tooltip-text">{user.adminMessage}</div>
+                      </div>
+                    }
+                  >
+                    <span className="adminUserMessage">
+                      {user.adminMessage}
+                    </span>
+                  </Tooltip>
+
                   <div>{user.mobilePhone}</div>
                   <div className="admin-user-row-role">
                     <div id={user.role}>{user.role}</div>
@@ -132,8 +145,9 @@ const Roles: FunctionComponent<RolesProps> = ({
                   </div>
                   <div>
                     {user.role !== "admin" ? (
-                      <button
+                      <div
                         id={user.role}
+                        className="promoteBtn"
                         /*          disabled={user.role === "promoter"} */
                         onClick={() =>
                           makePromoter(
@@ -143,7 +157,7 @@ const Roles: FunctionComponent<RolesProps> = ({
                         }
                       >
                         {user.role === "promoter" ? "Demote" : "Promote"}
-                      </button>
+                      </div>
                     ) : (
                       <div className="button-placeholder"></div>
                     )}

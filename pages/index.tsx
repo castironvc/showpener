@@ -191,9 +191,9 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
           </p>
           <div>
             <input type="hidden" name="remember" defaultValue="true" />
-            <div className={styles.statePhoneFieldContainer}>
-              <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Enter your phone number</div>
+            <div className="statePhoneFieldContainer">
+              <div className="fieldContainer">
+                <div className="hint">Enter your phone number</div>
                 <input
                   id="phone-number"
                   name="phone"
@@ -203,14 +203,14 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                   onChange={(e) =>
                     setPhone(normalizePhone(e.target.value) || "")
                   }
-                  className={styles.input}
+                  className="input"
                   placeholder="(000) 000-0000"
                 />
               </div>
-              <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Choose your state</div>
+              <div className="fieldContainer">
+                <div className="hint">Choose your state</div>
                 <select
-                  className={styles.select}
+                  className="select"
                   onChange={(e) => setStateRegion(e.target)}
                 >
                   {stateCodes.states.map((stateCode: any, i: number) => (
@@ -225,7 +225,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                 </select>
               </div>
             </div>
-            <div className={styles.checkboxContainer}>
+            <div className="checkboxContainer">
               <input
                 type="checkbox"
                 id="TC"
@@ -237,7 +237,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                 I agree to Showpener&apos;s Terms & Privacy Policy
               </label>
             </div>
-            <div className={styles.fieldContainer}>
+            <div className="fieldContainer">
               <button
                 className="submitButton"
                 disabled={!checked}

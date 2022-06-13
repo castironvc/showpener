@@ -1,11 +1,7 @@
 import React, { FunctionComponent /* useState */ } from "react";
 import { ArtistProps, adminUserProps } from "../types/globals";
-
-import Image from "next/image";
 import getStateCode from "../utils/getStateCode";
 import { useState, useEffect, useContext } from "react";
-import styles from "../styles/Home.module.css";
-import adminstyles from "../styles/Admin.module.css";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { useRouter } from "next/router";
 const costPerUser: number = 1;
@@ -144,11 +140,11 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
         cost to reach our network of fans.
       </p>
 
-      <div className={adminstyles.twoColumn}>
-        <div className={styles.fieldContainer}>
-          <div className={styles.hint}>Pick an artist</div>
+      <div className="twoColumn">
+        <div className="fieldContainer">
+          <div className="hint">Pick an artist</div>
           <select
-            className={styles.select}
+            className="select"
             onChange={(e) => setArtist(e.target.value)}
           >
             {artists &&
@@ -159,10 +155,10 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
               ))}
           </select>
         </div>
-        <div className={styles.fieldContainer}>
-          <div className={styles.hint}>Enter your state.</div>
+        <div className="fieldContainer">
+          <div className="hint">Enter your state.</div>
           <select
-            className={styles.select}
+            className="select"
             onChange={(e) => setStateRegion(getStateCode(e.target))}
           >
             {stateCodes.states.map((stateCode: any, i: number) => (
@@ -178,19 +174,17 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
         </div>
       </div>
       {foundUsers ? (
-        <div className={adminstyles.resultsColumn}>
+        <div className="resultsColumn">
           <h2>Results</h2>
           <div>
-            <div className={adminstyles.resultsContainer}>
+            <div className="resultsContainer">
               <div>
-                <div className={adminstyles.resultsHeader}>Total Fans</div>
-                <div className={adminstyles.resultsFigure}>{foundUsers}</div>
+                <div className="resultsHeader">Total Fans</div>
+                <div className="resultsFigure">{foundUsers}</div>
               </div>
               <div>
-                <div className={adminstyles.resultsHeader}>
-                  Estimated Send Cost:
-                </div>
-                <div className={adminstyles.resultsFigure}>${dollarAmount}</div>
+                <div className="resultsHeader">Estimated Send Cost:</div>
+                <div className="resultsFigure">${dollarAmount}</div>
               </div>
             </div>
           </div>
@@ -204,7 +198,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
           </div>
         </div>
       )}
-      <div className={styles.fieldContainer} style={{ margin: "40px 0 0px 0" }}>
+      <div className="fieldContainer" style={{ margin: "40px 0 0px 0" }}>
         <button
           className={`${foundUsers ? "smallButton" : "submitButton"}`}
           onClick={findFans}
@@ -216,8 +210,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
         <div>
           {!submitted ? (
             <div>
-              <div className={styles.fieldContainer}>
-                <div className={styles.hint}>
+              <div className="fieldContainer">
+                <div className="hint">
                   Please provide your desired message copy and content for
                   Showpener approval:
                 </div>
@@ -231,12 +225,12 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
                     ""
                   }
                   onChange={(e) => setBroadcastMessage(e.target.value)}
-                  className={styles.input}
+                  className="input"
                   rows={3}
                 />
               </div>
               <div
-                className={styles.fieldContainer}
+                className="fieldContainer"
                 style={{ margin: "40px 0 0px 0" }}
               >
                 <button className="submitButton" onClick={saveBroadcastMessage}>
@@ -245,7 +239,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
               </div>
             </div>
           ) : (
-            <div className={adminstyles.thankyou}>
+            <div className="thankyou">
               Thank you for submitting your request.
               <br />
               We will be in touch as soon as possible.

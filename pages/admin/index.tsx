@@ -1,10 +1,8 @@
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useContext, useEffect, useRef } from "react";
 import styles from "../../styles/Home.module.css";
 import { AppContext, DispatchContext } from "../../context/StateContext";
 import { normalizePhone, stripLetters } from "../../utils/validation";
-import getStateCode from "../../utils/getStateCode";
 import supabase from "../../lib/supabase";
 import { UserProfileAdminProps } from "../../types/globals";
 const randNum = Math.floor(Math.random() * 4);
@@ -148,8 +146,8 @@ function Promoter() {
               <p className="center-text">
                 Reach music fans across the US and drive ticket sales.
               </p>
-              <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Enter your phone number</div>
+              <div className="fieldContainer">
+                <div className="hint">Enter your phone number</div>
                 <input
                   id="phone-number"
                   name="phone"
@@ -162,12 +160,12 @@ function Promoter() {
                     ""
                   }
                   onChange={(e) => setPhone(normalizePhone(e.target.value))}
-                  className={styles.inputShort}
+                  className="inputShort"
                   placeholder="(000) 000-0000"
                 />
               </div>
               <div
-                className={styles.checkboxContainer}
+                className="checkboxContainer"
                 style={{ marginBottom: "20px" }}
               >
                 <input
@@ -181,7 +179,7 @@ function Promoter() {
                   I agree to Showpener&apos;s Terms & Privacy Policy
                 </label>
               </div>
-              <div className={styles.fieldContainer}>
+              <div className="fieldContainer">
                 <button
                   className="submitButton"
                   disabled={!checked}
@@ -195,10 +193,8 @@ function Promoter() {
             <>
               {!authError ? (
                 <>
-                  <div className={styles.fieldContainer}>
-                    <div className={styles.hint}>
-                      Enter Your Verification Code
-                    </div>
+                  <div className="fieldContainer">
+                    <div className="hint">Enter Your Verification Code</div>
                     <input
                       id="code"
                       name="verifycode"
@@ -210,19 +206,16 @@ function Promoter() {
                         ""
                       }
                       onChange={(e) => setCode(e.target.value)}
-                      className={styles.inputShort}
+                      className="inputShort"
                     />
                   </div>
                   <div
                     onClick={() => tokenScreenSet(false)}
-                    className={`whitelink ${styles.getAnotherCode}`}
+                    className="whitelink getAnotherCode"
                   >
                     Send me another code
                   </div>
-                  <div
-                    className={styles.fieldContainer}
-                    style={{ marginTop: "40px" }}
-                  >
+                  <div className="fieldContainer" style={{ marginTop: "40px" }}>
                     <button className="submitButton" onClick={verifyToken}>
                       <span>Verify</span>
                     </button>
@@ -236,10 +229,7 @@ function Promoter() {
                   >
                     {authError}
                   </div>
-                  <div
-                    className={styles.fieldContainer}
-                    style={{ marginTop: "40px" }}
-                  >
+                  <div className="fieldContainer" style={{ marginTop: "40px" }}>
                     <button className="submitButton" onClick={getNewCode}>
                       <span>Get a new code</span>
                     </button>

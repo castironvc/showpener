@@ -26,9 +26,9 @@ function Oops() {
   }, [status, router]); */
   console.log(state);
   return (
-    <div className={styles.centerColumnContent}>
+    <div className="centerColumnContent">
       <h1>Oops!</h1>
-      <div className={styles.messageContainer}>
+      <div className="messageContainer">
         <p>Looks like we ran into some trouble.</p>
       </div>
 

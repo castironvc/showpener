@@ -24,9 +24,9 @@ function Thanks() {
 
   return (
     <div>
-      <div className={styles.centerColumnContent}>
+      <div className="centerColumnContent">
         <h1>Thank you!</h1>
-        <div className={styles.messageContainer}>
+        <div className="messageContainer">
           <p>
             We will notify you when tickets for the artists you love go on sale!
           </p>
@@ -38,7 +38,7 @@ function Thanks() {
         <span className="whitelink" onClick={logOut}>
           Disconnect from Spotify
         </span>
-        <div className={`caption ${styles.captionContainer}`}>
+        <div className="caption captionContainer">
           Reply STOP to our text messages to unsubscribe from{" "}
           <span className="widow">Showpener alerts</span>.
         </div>

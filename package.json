@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/react": "^1.0.0-beta.9",
     "@supabase/supabase-js": "^1.35.3",
     "@types/spotify-web-api-node": "^5.0.7",
     "concurrently": "^7.2.0",

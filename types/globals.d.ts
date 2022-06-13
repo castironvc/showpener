@@ -50,7 +50,8 @@ export interface adminUserProps {
   totalmessages: number;
   adminName: string;
   adminEmail: string;
-  adminBusiness: string;
+  adminPhone: string;
+  adminMessage: string;
 }
 export interface IdsProps {
   id: number;

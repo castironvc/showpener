@@ -15,11 +15,13 @@ import {
   parseRecentlyPlayed,
   parseTopTracks,
   parseFollowed,
+  parseLikedTracks,
 } from "../../../utils/parsers";
 import { ErrorProps } from "next/error";
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
 const GET_TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
 const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=artist`;
+const LIKED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/tracks/`;
 
 const userProfile: NewUserProfileProps = {
   name: "",
@@ -128,6 +130,37 @@ const addUserArtists = async (
     }
   }
 };
+
+const getLiked = async (headers: HeadersType) => {
+  // Get Recently Played
+  const likedTracks = await fetch(LIKED_TRACKS_ENDPOINT, headers);
+
+  const { error, items: likedTrackArtists } = await likedTracks.json();
+
+  if (error) {
+    return getError(
+      error,
+      "trying to access the Spotify 'Liked Tracks' Endpoint"
+    );
+  } else {
+    const likedTracksResult: any = await parseLikedTracks(likedTrackArtists);
+    return likedTracksResult;
+
+    // Get Top Tracks
+    const topTracks = await fetch(GET_TOP_TRACKS_ENDPOINT, headers);
+    const { error, items: topTracksItems } = await topTracks.json();
+
+    if (error) {
+      return getError(
+        error,
+        "trying to access the Spotify 'Top Tracks' Endpoint"
+      );
+    } else {
+      const topTracksResult: any = await parseLikedTracks(topTracksItems);
+      return topTracksResult;
+    }
+  }
+};
 const getArtists = async (headers: HeadersType) => {
   // Get Recently Played
   const recentlyPlayed = await fetch(RECENTLY_PLAYED_ENDPOINT, headers);
@@ -156,22 +189,42 @@ const getArtists = async (headers: HeadersType) => {
     } else {
       const topTracksResult: any = await parseTopTracks(topTracksItems);
 
-      // Get Followed Artists
-      const followedArtists = await fetch(FOLLOWED_ARTISTS_ENDPOINT, headers);
-      const { error, artists: followedTracks } = await followedArtists.json();
+      // Get Liked Tracks
+      const likedTracks = await fetch(LIKED_TRACKS_ENDPOINT, headers);
+      const { error, items: likedTrackArtists } = await likedTracks.json();
 
       if (error) {
         return getError(
           error,
-          "trying to access the Spotify 'Followed Artists' Endpoint"
+          "trying to access the Spotify 'Liked Tracks' Endpoint"
         );
       } else {
-        const followedResult = await parseFollowed(followedTracks);
-
-        let combinedArtists: foundArtistsOfUsersProps[] = Array.from(
-          recentPlayedResult.concat(topTracksResult).concat(followedResult)
+        const likedTracksResult: any = await parseLikedTracks(
+          likedTrackArtists
         );
-        return combinedArtists;
+
+        // Get Followed Artists
+        const followedArtists = await fetch(FOLLOWED_ARTISTS_ENDPOINT, headers);
+        const { error, artists: followedTracks } = await followedArtists.json();
+
+        if (error) {
+          return getError(
+            error,
+            "trying to access the Spotify 'Followed Artists' Endpoint"
+          );
+        } else {
+          const followedResult = await parseFollowed(followedTracks);
+
+          //Concatonate all results into one array
+          let combinedArtists: foundArtistsOfUsersProps[] = Array.from(
+            recentPlayedResult
+              .concat(topTracksResult)
+              .concat(followedResult)
+              .concat(likedTracksResult)
+          );
+
+          return combinedArtists;
+        }
       }
     }
   }
@@ -266,7 +319,6 @@ export default async function handler(
             )
           );
       } else {
-        /*       */
         if (foundUser && foundUser.length > 0) {
           const userDataIds = makeUserIds(
             foundUser[0].id,

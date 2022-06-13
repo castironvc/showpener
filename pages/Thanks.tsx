@@ -16,11 +16,11 @@ function Thanks() {
   };
 
   useEffect(() => {
-    console.log(status);
+    console.log(session);
     if (status && status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, router]);
+  }, [status, session, router]);
 
   return (
     <div>

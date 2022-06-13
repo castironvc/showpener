@@ -57,3 +57,23 @@ export const parseFollowed = async (data: any) => {
     return "No Followed Tracks";
   }
 };
+
+export const parseLikedTracks = async (data: any) => {
+  console.log(data);
+  let tmpArr: foundArtistsOfUsersProps[] = new Array();
+  if (data) {
+    data.map((artist: any) => {
+      const foundArtists: foundArtistsOfUsersProps = {
+        artistname: artist.track.artists[0].name,
+        spotify_artist_id: artist.track.artists[0].id,
+        external_url: artist.track.artists[0].href,
+        uri: artist.track.artists[0].uri,
+      };
+      tmpArr.push(foundArtists);
+    });
+    return tmpArr;
+  } else {
+    console.log("No Liked Tracks");
+    return "No Liked Tracks";
+  }
+};

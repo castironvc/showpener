@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 
 import Head from "next/head";
 import { Loader } from "../components/Loader";
+import SideNav from "./SideNav";
 import Image from "next/image";
 import { AppContext } from "../context/StateContext";
 const randNum = Math.floor(Math.random() * 10);
@@ -13,6 +14,7 @@ type LayoutProps = {
 
 const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
   const { state } = useContext(AppContext);
+
   return (
     <div>
       <Head>
@@ -26,6 +28,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
 
       <div className="container">
         {state.loading ? <Loader /> : null}
+        <SideNav />
         <div className="main">
           <div className="blackpanel">
             <div className="logo-container">

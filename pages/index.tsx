@@ -72,8 +72,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await user.json();
-    console.log(result);
-    return result;
+
     if (result.error) {
       errorRedirect(result.details.message);
     } else if (result === "user_exists") {

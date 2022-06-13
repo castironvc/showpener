@@ -47,6 +47,7 @@ p {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  transition: all 0.5s ease-in-out;
 }
 .disabledText {
   color: gray;
@@ -402,6 +403,63 @@ h2 {
   font-size: 14px;
   font-style: italic;
   text-align: left;
+}
+
+/* NAVIGATION */
+
+.menu-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.781);
+  height: 100%;
+  width: 80%;
+  max-width: 250px;
+  transform: translateX(-250px);
+  padding: 100px 20px 20px 20px;
+  z-index: 2;
+}
+
+.menu-icon {
+  transform-origin: center;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 45px;
+  height: auto;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 3;
+}
+.menu-item {
+  color: white;
+  padding: 10px 0 10px 0;
+  font-weight: bolder;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.menu-item:hover {
+  color: rgb(194, 154, 214);
+}
+.burger-container {
+  position: relative;
+  height: 22px;
+}
+.menu-icon span {
+  position: absolute;
+  transform-origin: center;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  box-shadow: 1px 1px 3px #000000;
+}
+
+.menu-icon span#burger2 {
+  transform: translateY(10px);
+}
+.menu-icon span#burger3 {
+  transform: translateY(20px);
 }
 @keyframes anim {
   from {

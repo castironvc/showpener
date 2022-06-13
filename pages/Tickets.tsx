@@ -17,7 +17,6 @@ function Tickets() {
 
   useEffect(() => {
     const goToLink = async () => {
-      console.log("fuck");
       setTimeout(function () {
         router.push({
           pathname: `${router.query.tm}`,

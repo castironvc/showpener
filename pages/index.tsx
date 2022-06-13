@@ -185,15 +185,15 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       {Object.values(providers).map((provider: Provider) => (
         <div key={provider.id}>
           <h1 className="mainTitle">Showpener</h1>
-          <h2 className="subTitle">Never Miss A Show.</h2>
+          <h2 className="subTitle">Never Miss A Show</h2>
           <p className="center-text">
-            Text alerts for new concerts in your area and ticket sale releases.
+            Get personal text alerts for upcoming concerts in your area.
           </p>
           <div>
             <input type="hidden" name="remember" defaultValue="true" />
             <div className={styles.statePhoneFieldContainer}>
               <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Enter your phone number.</div>
+                <div className={styles.hint}>Enter your phone number</div>
                 <input
                   id="phone-number"
                   name="phone"
@@ -208,7 +208,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                 />
               </div>
               <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Enter your state.</div>
+                <div className={styles.hint}>Choose your state</div>
                 <select
                   className={styles.select}
                   onChange={(e) => setStateRegion(e.target)}
@@ -229,6 +229,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
               <input
                 type="checkbox"
                 id="TC"
+                checked={checked}
                 onChange={() => acceptTerms(!checked)}
                 value="I agree to Showpener's Terms of Usage & Privacy Policy"
               ></input>

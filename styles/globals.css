@@ -48,6 +48,9 @@ p {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.disabledText {
+  color: gray;
+}
 .spacer1 {
   height: 10px;
 }
@@ -64,21 +67,20 @@ p {
   height: 50px;
 }
 .container {
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 50px 1rem 1rem 1rem;
   display: flex;
   justify-content: center;
   position: relative;
   align-items: center;
-
-  padding-top: 50px;
+  min-height: calc(100vh);
 }
 
 .main {
-  min-height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .widow {
   white-space: nowrap;
@@ -88,7 +90,8 @@ p {
   background-color: rgba(0, 0, 0, 0.618);
   border-radius: 50px;
   padding: 70px 30px 30px 30px;
-  width: 600px;
+  width: auto;
+  min-width: 600px;
 }
 .logo {
   display: flex;
@@ -192,7 +195,16 @@ h2 {
   background-color: rgba(0, 0, 0, 0.355);
   width: 80%;
 }
-/* LOADERS */
+
+.caption {
+  color: rgb(173, 158, 180);
+  font-style: italic;
+  font-size: 14px;
+  word-wrap: break-word;
+  max-width: 500px;
+  text-align: center;
+  line-height: 1.5;
+}
 
 /* LOADERS */
 /* ////////////////////////// */
@@ -242,7 +254,7 @@ h2 {
 }
 .admin-user-row {
   display: grid;
-  grid-template-columns: 0.4fr 3fr 2fr 2fr;
+  grid-template-columns: 0.4fr 2.5fr 3fr 3fr 70px 60px;
   text-align: left;
   width: 100%;
   padding: 10px;
@@ -250,9 +262,16 @@ h2 {
   color: white;
   font-size: 13px;
   margin: 2px;
-  justify-content: center;
-  align-items: center;
   border-bottom: solid 0.5px rgba(255, 255, 255, 0.352);
+}
+.admin-user-row a {
+  text-decoration: underline;
+  color: #a894be;
+}
+.admin-user-row div {
+  /*   background-color: #821db4; */
+  display: flex;
+  align-items: center;
 }
 .noborder {
   border: none;
@@ -278,6 +297,7 @@ h2 {
   border: solid 1px rgba(255, 255, 255, 0.431);
   opacity: 0.6;
 }
+
 .admin-user-row button#standard {
   background-color: #821db4;
   color: white;
@@ -291,7 +311,12 @@ h2 {
 .admin-user-row-role {
   display: flex;
 }
-
+.button-placeholder {
+  width: 100%;
+  padding: 2px 5px 2px 5px;
+  background-color: rgba(255, 166, 0, 0);
+  width: 60px;
+}
 .jewel {
   border-radius: 100%;
   display: flex;
@@ -405,6 +430,7 @@ h2 {
   .blackpanel {
     width: 100%;
     padding: 40px 10px 010px;
+    min-width: 100%;
   }
   p {
     font-size: 14px;
@@ -414,6 +440,7 @@ h2 {
     flex-direction: column;
     gap: 10px;
     padding-bottom: 20px;
+    color: #bef264;
   }
   .userRow {
     width: 100%;

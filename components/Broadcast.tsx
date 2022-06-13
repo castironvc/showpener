@@ -140,8 +140,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
   return (
     <div>
       <p>
-        Enter a state and an artist to estimate reach and cost for direct
-        messaging to your qualified audience of music fans.
+        Choose and artist and event state in order to estimate send size and
+        cost to reach our network of fans.
       </p>
 
       <div className={adminstyles.twoColumn}>
@@ -179,15 +179,17 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       </div>
       {foundUsers ? (
         <div className={adminstyles.resultsColumn}>
-          <div className={styles.hint}>Results</div>
+          <h2>Results</h2>
           <div>
             <div className={adminstyles.resultsContainer}>
               <div>
-                <div className={adminstyles.resultsHeader}>Total Users</div>
+                <div className={adminstyles.resultsHeader}>Total Fans</div>
                 <div className={adminstyles.resultsFigure}>{foundUsers}</div>
               </div>
               <div>
-                <div className={adminstyles.resultsHeader}>Reach cost</div>
+                <div className={adminstyles.resultsHeader}>
+                  Estimated Send Cost:
+                </div>
                 <div className={adminstyles.resultsFigure}>${dollarAmount}</div>
               </div>
             </div>
@@ -197,7 +199,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
         <div>
           <div className="spacer3" />
           <div className="notice">
-            There are no search results. Refine your selection.
+            We do not have any matching results for this search. Please change
+            your selection.
           </div>
         </div>
       )}
@@ -206,7 +209,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
           className={`${foundUsers ? "smallButton" : "submitButton"}`}
           onClick={findFans}
         >
-          <span>{foundUsers ? "Search again" : "Find Fans"}</span>
+          <span>{foundUsers ? "Search Again" : "Find Fans"}</span>
         </button>
       </div>
       {foundUsers ? (
@@ -215,7 +218,8 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
             <div>
               <div className={styles.fieldContainer}>
                 <div className={styles.hint}>
-                  Submit your broadcast message for admin approval.
+                  Please provide your desired message copy and content for
+                  Showpener approval:
                 </div>
                 <textarea
                   id="adminBroadcastMessage"
@@ -236,15 +240,15 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
                 style={{ margin: "40px 0 0px 0" }}
               >
                 <button className="submitButton" onClick={saveBroadcastMessage}>
-                  <span>Submit Broadcast Message</span>
+                  <span>Submit Your Request</span>
                 </button>
               </div>
             </div>
           ) : (
             <div className={adminstyles.thankyou}>
-              Thank you for submitting your suggested broadcast message.
+              Thank you for submitting your request.
               <br />
-              We will be in touch shortly.
+              We will be in touch as soon as possible.
             </div>
           )}
         </div>

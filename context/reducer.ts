@@ -37,6 +37,12 @@ export const reducer = (state: any, action: any) => {
         ...state,
         admin: { ...state.admin, adminEmail: action.payload },
       };
+    case "SET_BUSINESS_NAME":
+      return {
+        ...state,
+        admin: { ...state.admin, adminBusiness: action.payload },
+      };
+
     case "SET_ADMIN_BROADCASTMESSAGE":
       return {
         ...state,

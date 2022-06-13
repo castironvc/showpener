@@ -86,7 +86,7 @@ function Promoter() {
         console.log("Is Admin");
         getAllUsers();
       }
-      if (!result.adminName && result.role === "admin") {
+      if (!result.adminName) {
         engageDataCapture(!dataCapture);
       }
     }
@@ -110,13 +110,13 @@ function Promoter() {
 
   return (
     <div className={styles.centerColumnContent}>
-      <h1>Promoters</h1>
+      <h1>Promoter Access</h1>
       <div className={styles.messageContainer}>
         {myuser && myuser.role === "standard" ? (
           <p>
-            You have been submitted for consideration as a promoter.
+            Your request for promoter access has been submitted.
             <br />
-            One of our agents will call you soon.
+            We will be in touch soon.
           </p>
         ) : null}
         <div>
@@ -150,9 +150,9 @@ function Promoter() {
           <div className="notice">{state.error.message}</div>
         ) : null}
         <div></div>
-        <span className="whitelink" onClick={logOut}>
+        {/*         <span className="whitelink" onClick={logOut}>
           Log out
-        </span>
+        </span> */}
         {/*     <button className="submitButton" onClick={logOut}>
         <span>Log out</span>
       </button> */}

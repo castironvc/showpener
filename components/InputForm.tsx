@@ -37,7 +37,12 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       payload: name,
     });
   };
-
+  const setBusiness = (business: string) => {
+    dispatch({
+      type: "SET_BUSINESS_NAME",
+      payload: business,
+    });
+  };
   const setEmail = (email: string) => {
     dispatch({
       type: "SET_ADMIN_EMAIL",
@@ -60,6 +65,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       body: JSON.stringify({
         adminName: state.admin.adminName,
         adminEmail: state.admin.adminEmail,
+        adminBusiness: state.admin.adminBusiness,
         id: myuser.id,
       }),
     });
@@ -83,30 +89,41 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
   return (
     <div>
       <p>Tell us a little about yourself to get started.</p>
-
+      <div className={styles.statePhoneFieldContainer}>
+        <div className={styles.fieldContainer}>
+          <div className={styles.hint}>Enter your Name:</div>
+          <input
+            id="adminName"
+            name="adminName"
+            type="text"
+            value={(state && state.admin && state.admin.adminName) || ""}
+            onChange={(e) => setName(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.fieldContainer}>
+          <div className={styles.hint}>Enter your email</div>
+          <input
+            id="adminEmail"
+            name="adminEmail"
+            type="email"
+            value={(state && state.admin && state.admin.adminEmail) || ""}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+      </div>
       <div className={styles.fieldContainer}>
-        <div className={styles.hint}>Enter your Name:</div>
+        <div className={styles.hint}>Name of business:</div>
         <input
-          id="adminName"
-          name="adminName"
+          id="adminBusiness"
+          name="adminBusiness"
           type="text"
-          value={(state && state.admin && state.admin.adminName) || ""}
-          onChange={(e) => setName(e.target.value)}
+          value={(state && state.admin && state.admin.adminBusiness) || ""}
+          onChange={(e) => setBusiness(e.target.value)}
           className={styles.input}
         />
       </div>
-      <div className={styles.fieldContainer}>
-        <div className={styles.hint}>Enter your email</div>
-        <input
-          id="adminEmail"
-          name="adminEmail"
-          type="email"
-          value={(state && state.admin && state.admin.adminEmail) || ""}
-          onChange={(e) => setEmail(e.target.value)}
-          className={styles.input}
-        />
-      </div>
-
       <div className={styles.fieldContainer} style={{ margin: "40px 0 0px 0" }}>
         <button className="submitButton" onClick={registerAdminUser}>
           <span>Next</span>

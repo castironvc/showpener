@@ -23,20 +23,26 @@ function Thanks() {
   }, [status, router]);
 
   return (
-    <div className={styles.centerColumnContent}>
-      <h1>All done!</h1>
-      <div className={styles.messageContainer}>
-        <p>
-          We will notify you when tickets for the artists you love go on sale!
-        </p>{" "}
+    <div>
+      <div className={styles.centerColumnContent}>
+        <h1>Thank you!</h1>
+        <div className={styles.messageContainer}>
+          <p>
+            We will notify you when tickets for the artists you love go on sale!
+          </p>
+        </div>
+        {state.error.message ? (
+          <div className="notice">{state.error.message}</div>
+        ) : null}
+
+        <span className="whitelink" onClick={logOut}>
+          Disconnect from Spotify
+        </span>
+        <div className={`caption ${styles.captionContainer}`}>
+          Reply STOP to our text messages to unsubscribe from{" "}
+          <span className="widow">Showpener alerts</span>.
+        </div>
       </div>
-      {state.error.message ? (
-        <div className="notice">{state.error.message}</div>
-      ) : null}
-      <div></div>
-      <button className="submitButton" onClick={logOut}>
-        <span>Log out of Spotify</span>
-      </button>
     </div>
   );
 }

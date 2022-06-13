@@ -107,6 +107,14 @@ const Roles: FunctionComponent<RolesProps> = ({
                   >
                     {user.totalmessages}
                   </div>
+                  <div>
+                    {user.adminEmail ? (
+                      <a href={`mailto:${user.adminEmail}`}>{user.adminName}</a>
+                    ) : (
+                      <div className="disabledText">Not submitted yet</div>
+                    )}
+                  </div>
+                  <div>{user.adminBusiness}</div>
                   <div>{user.mobilePhone}</div>
                   <div className="admin-user-row-role">
                     <div id={user.role}>{user.role}</div>
@@ -136,7 +144,9 @@ const Roles: FunctionComponent<RolesProps> = ({
                       >
                         {user.role === "promoter" ? "Demote" : "Promote"}
                       </button>
-                    ) : null}
+                    ) : (
+                      <div className="button-placeholder"></div>
+                    )}
                   </div>
                 </div>
               );

@@ -36,6 +36,11 @@ function Promoter() {
     }); */
   };
 
+  const getNewCode = () => {
+    setAuthError("");
+    tokenScreenSet(false);
+    setCode("");
+  };
   // set the form fields to the state
   const setPhone = (phone: string) => {
     dispatch({
@@ -141,10 +146,10 @@ function Promoter() {
             <>
               {" "}
               <p className="center-text">
-                Get access to a wide audience of music fans.
+                Reach music fans across the US and drive ticket sales.
               </p>
               <div className={styles.fieldContainer}>
-                <div className={styles.hint}>Log in with your phone number</div>
+                <div className={styles.hint}>Enter your phone number</div>
                 <input
                   id="phone-number"
                   name="phone"
@@ -168,6 +173,7 @@ function Promoter() {
                 <input
                   type="checkbox"
                   id="TC"
+                  checked={checked}
                   onChange={() => acceptTerms(!checked)}
                   value="I agree to Showpener's Terms of Usage & Privacy Policy"
                 ></input>
@@ -191,7 +197,7 @@ function Promoter() {
                 <>
                   <div className={styles.fieldContainer}>
                     <div className={styles.hint}>
-                      Enter your verification code
+                      Enter Your Verification Code
                     </div>
                     <input
                       id="code"
@@ -206,6 +212,12 @@ function Promoter() {
                       onChange={(e) => setCode(e.target.value)}
                       className={styles.inputShort}
                     />
+                  </div>
+                  <div
+                    onClick={() => tokenScreenSet(false)}
+                    className={`whitelink ${styles.getAnotherCode}`}
+                  >
+                    Send me another code
                   </div>
                   <div
                     className={styles.fieldContainer}
@@ -228,11 +240,8 @@ function Promoter() {
                     className={styles.fieldContainer}
                     style={{ marginTop: "40px" }}
                   >
-                    <button
-                      className="submitButton"
-                      onClick={() => tokenScreenSet(false)}
-                    >
-                      <span>Try Again</span>
+                    <button className="submitButton" onClick={getNewCode}>
+                      <span>Get a new code</span>
                     </button>
                   </div>
                 </div>

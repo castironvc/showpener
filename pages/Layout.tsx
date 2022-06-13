@@ -42,10 +42,10 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
             </div>
             <div>{children}</div>
           </div>
-          <footer className="disclaimer">
+          {/*      <footer className="disclaimer">
             We will not be sharing your personal information with{" "}
             <span className="widow">third parties.</span>
-          </footer>
+          </footer> */}
         </div>
       </div>
     </div>

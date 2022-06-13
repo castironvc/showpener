@@ -63,7 +63,11 @@
   gap: 20px;
   margin-bottom: 30px;
 }
-
+.getAnotherCode {
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
 @media (max-width: 600px) {
   .statePhoneFieldContainer {
     grid-template-columns: 1fr;

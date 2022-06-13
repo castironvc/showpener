@@ -48,6 +48,9 @@ export interface adminUserProps {
   mobilePhone: string;
   role: string;
   totalmessages: number;
+  adminName: string;
+  adminEmail: string;
+  adminBusiness: string;
 }
 export interface IdsProps {
   id: number;

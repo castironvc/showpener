@@ -15,7 +15,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   if (req.body.role === "admin") {
     let { error, data: foundMessages } = await supabase
       .from("broadcastmessages_table")

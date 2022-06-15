@@ -59,7 +59,6 @@ export const parseFollowed = async (data: any) => {
 };
 
 export const parseLikedTracks = async (data: any) => {
-  console.log(data);
   let tmpArr: foundArtistsOfUsersProps[] = new Array();
   if (data) {
     data.map((artist: any) => {

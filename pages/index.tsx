@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useContext, useEffect, useRef } from "react";
-import styles from "../styles/Home.module.css";
+import { newUserAdminEmail } from "../utils/adminemail";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { normalizePhone } from "../utils/validation";
 
@@ -13,6 +13,7 @@ import {
   Provider,
   foundArtistsForEventProps,
   UserProfileProps,
+  adminEmailProps,
 } from "../types/globals";
 let states = require("../utils/states");
 const randNum = Math.floor(Math.random() * 4);
@@ -86,12 +87,17 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         artists: result,
         state: state.userProfile.state,
       };
-
+      const newUserEmail: adminEmailProps = {
+        name: state.userProfile.session.name,
+        mobilePhone: state.userProfile.mobilePhone,
+        state: state.userProfile.state,
+      };
+      // SEND EMAIL TO CHARLIE
+      const adminEmail = await newUserAdminEmail("new_enduser", newUserEmail);
+      console.log(adminEmail);
       // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
 
       const ticketData = await fetchTicketData(artistObj);
-
-      console.log(ticketData);
 
       if (ticketData.error) {
         errorRedirect(ticketData.details.message);

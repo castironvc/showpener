@@ -28,6 +28,6 @@ export default async function handler(
   });
 
   return res.status(200).json(sendResult); */
-  console.log(req.body);
+
   return res.status(200).json(req.body);
 }

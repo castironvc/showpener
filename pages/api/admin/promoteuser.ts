@@ -15,7 +15,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   let { error, data: changedRoleUser } = await supabase
     .from("adminusers_table")
     .upsert({

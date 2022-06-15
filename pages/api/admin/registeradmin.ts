@@ -15,7 +15,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   let { error, data: updatedUser } = await supabase
     .from("adminusers_table")
     .upsert(req.body)
@@ -31,7 +31,6 @@ export default async function handler(
         )
       );
   } else if (updatedUser) {
-    console.log(updatedUser);
     return res.status(200).json(updatedUser[0]);
   }
 }

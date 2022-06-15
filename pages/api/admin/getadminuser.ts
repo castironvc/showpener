@@ -15,7 +15,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   let { error, data: foundUser } = await supabase
     .from("adminusers_table")
     .select("*")
@@ -31,7 +31,6 @@ export default async function handler(
         )
       );
   } else if (foundUser) {
-    console.log(foundUser);
     return res.status(200).json(foundUser[0]);
   }
 }

@@ -3,7 +3,7 @@ import { adminUserProps } from "../types/globals";
 import Image from "next/image";
 import { normalizePhone } from "../utils/validation";
 import { useState, useEffect, useContext } from "react";
-import styles from "../styles/Home.module.css";
+import { newUserAdminEmail } from "../utils/adminemail";
 import { useRouter } from "next/router";
 import { AppContext, DispatchContext } from "../context/StateContext";
 
@@ -81,6 +81,9 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       errorRedirect(result.details.message);
     } else {
       console.log(result);
+      const adminEmail = await newUserAdminEmail("promoter", result);
+      console.log(adminEmail);
+
       setGetUserOnce(false);
       engageDataCapture(false);
     }

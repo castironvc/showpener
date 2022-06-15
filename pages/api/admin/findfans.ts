@@ -16,7 +16,6 @@ export default async function handler(
     },
   }; */
 
-  console.log(req.body.stateCode);
   let { error, data: users } = await supabase
     .from("users_table")
     .select("*")

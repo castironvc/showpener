@@ -15,7 +15,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   let { error, data: insertedMessage } = await supabase
     .from("broadcastmessages_table")
     .insert(req.body);
@@ -33,7 +33,7 @@ export default async function handler(
     let incremented = await supabase.rpc("increment_messages", {
       user_id: Number(req.body.userid),
     });
-    console.log(req.body);
+
     if (error) {
       return res
         .status(500)

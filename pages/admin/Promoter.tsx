@@ -79,7 +79,6 @@ function Promoter() {
       //errorRedirect(result.details.message);
       console.log(result.details.message);
     } else {
-      console.log(result);
       setUser(result);
 
       if (result.adminName && result.role === "admin") {
@@ -150,9 +149,9 @@ function Promoter() {
           <div className="notice">{state.error.message}</div>
         ) : null}
         <div></div>
-        {/*         <span className="whitelink" onClick={logOut}>
+        <span className="whitelink" onClick={logOut}>
           Log out
-        </span> */}
+        </span>
         {/*     <button className="submitButton" onClick={logOut}>
         <span>Log out</span>
       </button> */}

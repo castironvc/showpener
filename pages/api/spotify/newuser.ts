@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getError } from "../../../utils/error";
 import { dedupeArray } from "../../../utils/dedupeArray";
 import supabase from "../../../lib/supabase";
+import { newUserAdminEmail } from "../../../utils/adminemail";
 import { passEncrypt } from "../auth/crypt";
 import {
   foundArtistsOfUsersProps,
@@ -82,7 +83,6 @@ const addArtists = async (records: foundArtistsOfUsersProps[]) => {
 
     /*  return records; */
   }
-  return records;
 };
 
 const addUserArtists = async (
@@ -131,36 +131,6 @@ const addUserArtists = async (
   }
 };
 
-const getLiked = async (headers: HeadersType) => {
-  // Get Recently Played
-  const likedTracks = await fetch(LIKED_TRACKS_ENDPOINT, headers);
-
-  const { error, items: likedTrackArtists } = await likedTracks.json();
-
-  if (error) {
-    return getError(
-      error,
-      "trying to access the Spotify 'Liked Tracks' Endpoint"
-    );
-  } else {
-    const likedTracksResult: any = await parseLikedTracks(likedTrackArtists);
-    return likedTracksResult;
-
-    // Get Top Tracks
-    const topTracks = await fetch(GET_TOP_TRACKS_ENDPOINT, headers);
-    const { error, items: topTracksItems } = await topTracks.json();
-
-    if (error) {
-      return getError(
-        error,
-        "trying to access the Spotify 'Top Tracks' Endpoint"
-      );
-    } else {
-      const topTracksResult: any = await parseLikedTracks(topTracksItems);
-      return topTracksResult;
-    }
-  }
-};
 const getArtists = async (headers: HeadersType) => {
   // Get Recently Played
   const recentlyPlayed = await fetch(RECENTLY_PLAYED_ENDPOINT, headers);
@@ -293,15 +263,13 @@ export default async function handler(
       );
   } else {
     if (updatedUser && updatedUser.length > 0) {
-      const userDataIds = makeUserIds(
+      const userDataIds: IdsProps = makeUserIds(
         updatedUser[0].id,
         updatedUser[0].spotify_user_id,
         updatedUser[0].name,
         updatedUser[0].mobilePhone
       );
       addUser(userDataIds);
-
-      // return res.status(200).json(artistData);
     } else if (!updatedUser || updatedUser.length === 0) {
       // User already exists which is why no data was returned
       let { error, data: foundUser } = await supabase

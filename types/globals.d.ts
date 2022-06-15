@@ -166,3 +166,8 @@ export interface errorProps {
   };
   error: boolean;
 }
+export interface adminEmailProps {
+  mobilePhone: string;
+  name: string;
+  state: string;
+}

@@ -21,7 +21,7 @@ export default async function handler(
       Authorization: `Bearer ${req.body.session.access_token}`,
     },
   }; */
-  console.log(req.body);
+
   userAdminProfile.mobilePhone = req.body.mobilePhone;
   userAdminProfile.role = "standard";
   let { error, data: updatedUser } = await supabase

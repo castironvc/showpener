@@ -261,7 +261,43 @@ export default async function handler(
         getError(error, "trying to add the new user to the 'Users' table.")
       );
   } else {
+    let { error, data: foundUser } = await supabase
+      .from("users_table")
+      .select("id,spotify_user_id,name,mobilePhone")
+      .match({ spotify_user_id: userProfile.spotify_user_id });
+
+    if (error) {
+      return res
+        .status(500)
+        .json(
+          getError(error, "trying to get data from a user that already exists")
+        );
+    } else {
+      if (foundUser && foundUser.length > 0) {
+        const userDataIds: IdsProps = makeUserIds(
+          foundUser[0].id,
+          foundUser[0].spotify_user_id,
+          foundUser[0].name,
+          foundUser[0].mobilePhone
+        );
+
+        addUser(userDataIds);
+      } else {
+        return res
+          .status(500)
+          .json(
+            getError(
+              error,
+              "trying to retrieve either the newly signed up user or the same user if existing during login process (newuser)"
+            )
+          );
+      }
+    }
+
+    /* 
+
     if (updatedUser && updatedUser.length > 0) {
+      // Returning the record that was just posted means it was a first-time user.
       const userDataIds: IdsProps = makeUserIds(
         updatedUser[0].id,
         updatedUser[0].spotify_user_id,
@@ -287,7 +323,7 @@ export default async function handler(
           );
       } else {
         if (foundUser && foundUser.length > 0) {
-          const userDataIds = makeUserIds(
+          const userDataIds: IdsProps = makeUserIds(
             foundUser[0].id,
             foundUser[0].spotify_user_id,
             foundUser[0].name,
@@ -306,6 +342,6 @@ export default async function handler(
             "something occured while upserting the user data. It was supposed to return either the record that was updated, or an empty array but it came back with neither."
           )
         );
-    }
+    } */
   }
 }

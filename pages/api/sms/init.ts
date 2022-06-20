@@ -21,13 +21,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  /*   const sendResult = await client.messages.create({
-    body: "hello how are you",
+  const sendResult = await client.messages.create({
+    body: "Welcome to Showpener! We’ll keep track of your favorite artists and send you any new concerts that are announced in your area. To unsubscribe and disconnect your Spotify at any time please reply STOP.",
     from: phonenumber,
-    to: "+19176782017",
+    to: req.body.mobilePhone,
   });
 
-  return res.status(200).json(sendResult); */
-
-  return res.status(200).json(req.body);
+  return res.status(200).json(sendResult);
 }

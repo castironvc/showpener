@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getError } from "../../../utils/error";
 import { dedupeArray } from "../../../utils/dedupeArray";
 import supabase from "../../../lib/supabase";
-import { newUserAdminEmail } from "../../../utils/adminemail";
 import { passEncrypt } from "../auth/crypt";
 import {
   foundArtistsOfUsersProps,

@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminEmailProps } from "../../../types/globals";
 require("dotenv").config({ path: "../../../.env" });
 const mgprivatekey = process.env.MAILGUN_PRIVATE;
 const domain = process.env.MAILGUN_DOMAIN;
-
+const adminEmail = process.env.ADMIN_EMAIL;
 export const mailgun = require("mailgun-js")({
   apiKey: mgprivatekey,
   domain: domain,
@@ -16,7 +15,7 @@ export default async function handler(
   console.log(req.body);
   let data = {
     from: `Showpener < noReply@showpener.com>`,
-    to: `${req.body.name} < ${req.body.email} >`,
+    to: `Showpener < ${adminEmail} >`,
     subject: req.body.subject,
     html: req.body.content,
   };

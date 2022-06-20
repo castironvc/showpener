@@ -6,34 +6,39 @@ export const newUserAdminEmail = async (type: string, content: any) => {
       content: emailTemplate({
         name: content.adminName,
         phone: content.mobilePhone,
-        promoterEmail: content.email,
+        email: content.adminEmail,
         adminEmail: "mike@gamaroff.net",
-        message: content.message,
+        message: content.adminMessage,
         type: "promoter",
+        emailTitle: "New Promoter Sign up!",
       }),
-      email: content.adminEmail,
       name: content.adminName,
       subject: "New Promoter Sign up",
+      message: content.adminMessage,
       type: "promoter",
     };
   } else if (type === "new_enduser") {
-    /*     emailTemplate = {
-      content:
-        "Hello Cool " +
-        content.name +
-        " would like to say hello. His phone number is " +
-        content.mobilePhone +
-        " and lives in " +
-        content.state +
-        " and here is what I have to say: ",
-      email: "mike@gamaroff.net",
-      name: content.name,
-      subject: "New Music Fan Sign Up",
-    }; */
-    /*     EmailTemplate({myuser: emailTemplate, type: "new_enduser"}) */
+    /*     name: state.userProfile.session.name,
+    mobilePhone: state.userProfile.mobilePhone,
+    state: state.userProfile.state, */
+    emailTemplateObj = {
+      content: emailTemplate({
+        name: content.name,
+        phone: content.mobilePhone,
+        email: "",
+        adminEmail: "mike@gamaroff.net",
+        message: content.state,
+        type: "new_enduser",
+        emailTitle: "New Music Fan Sign up!",
+      }),
+      name: content.adminName,
+      subject: "New Music Fan Sign up!",
+      message: "",
+      type: "new_enduser",
+    };
   }
 
-  const events = await fetch("/api/email/mailgun", {
+  const events = await fetch("/api/email/mailgun_admin", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(emailTemplateObj),

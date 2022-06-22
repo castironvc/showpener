@@ -35,7 +35,6 @@ function SideNav() {
     });
   };
 
-  console.log(state);
   return (
     <>
       <div className="menu-icon" onClick={toggleMenu}>
@@ -52,7 +51,9 @@ function SideNav() {
         <div className="menu-item" onClick={() => goTo("/admin")}>
           Promoter Access
         </div>
-        <div className="menu-item">Contact Us</div>
+        <div className="menu-item" onClick={() => goTo("/contact")}>
+          Contact Us
+        </div>
         <div className="menu-item">Terms</div>
       </div>
     </>

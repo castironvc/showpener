@@ -36,6 +36,26 @@ export const newUserAdminEmail = async (type: string, content: any) => {
       message: "",
       type: "new_enduser",
     };
+  } else if (type === "contact") {
+    /*     name: state.userProfile.session.name,
+    mobilePhone: state.userProfile.mobilePhone,
+    state: state.userProfile.state, */
+    console.log(content.name);
+    emailTemplateObj = {
+      content: emailTemplate({
+        name: content.name,
+        phone: content.phone,
+        email: content.email,
+        adminEmail: "mike@gamaroff.net",
+        message: content.message,
+        type: "contact_form",
+        emailTitle: "Contact Form Signup",
+      }),
+      name: content.name,
+      subject: "New Contact Form",
+      message: content.message,
+      type: "contact_form",
+    };
   }
 
   const events = await fetch("/api/email/mailgun_admin", {

@@ -15,7 +15,7 @@ export default async function handler(
   let data = {
     from: `Showpener < noReply@showpener.com>`,
     to: `Showpener < ${adminEmail} >`,
-    subject: req.body.subject,
+    subject: "Showpener Contact Form",
     html: req.body.content,
   };
 

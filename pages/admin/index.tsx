@@ -127,7 +127,6 @@ function Promoter() {
   };
 
   useEffect(() => {
-    console.log(state);
     if (session && status === "authenticated" && !addUserOnce) {
       createAdminUser();
     }

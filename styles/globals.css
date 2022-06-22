@@ -15,14 +15,12 @@
   --primary-gray: #cac0d3 !important;
   --primary-color-dark: #371d51 !important;
   --primary-loader: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='88px' height='47px' viewBox='0 0 88 47'>    <g id='medalFill' >        <g id='logoLoader' >            <path d='M87.707,12.806 C81.9341016,12.9433463 77.3251665,17.6614684 77.323,23.436 C77.3251665,29.2105316 81.9341016,33.9286537 87.707,34.066 L87.707,46.54 L0.483,46.54 L0.483,34.067 C0.571,34.069 0.655,34.08 0.743,34.08 C6.62124265,34.0799999 11.3864998,29.3147426 11.3864998,23.4365 C11.3864998,17.5582574 6.62124265,12.7930001 0.743,12.793 C0.655,12.793 0.57,12.806 0.483,12.806 L0.483,0.332 L87.707,0.332 L87.707,12.806 Z M24.106,30.966 C26.1025497,30.966 28.017326,30.1728737 29.4290998,28.7610998 C30.8408737,27.349326 31.634,25.4345497 31.634,23.438 C31.634,19.2804004 28.2635996,15.91 24.106,15.91 C19.9484004,15.91 16.578,19.2804004 16.578,23.438 C16.578,27.5955996 19.9484004,30.966 24.106,30.966 Z M44.354,30.966 C48.5115996,30.966 51.882,27.5955996 51.882,23.438 C51.882,19.2804004 48.5115996,15.91 44.354,15.91 C40.1964004,15.91 36.826,19.2804004 36.826,23.438 C36.826,27.5955996 40.1964004,30.966 44.354,30.966 Z M64.602,30.966 L64.6,30.966 C66.5968962,30.9665305 68.5121863,30.1736384 69.9243928,28.7618071 C71.3365992,27.3499757 72.1300001,25.4348963 72.13,23.438 C72.13,19.2804004 68.7595996,15.91 64.602,15.91 C60.4444004,15.91 57.074,19.2804004 57.074,23.438 C57.074,27.5955996 60.4444004,30.966 64.602,30.966 Z' id='Shape'></path>        </g>    </g></svg>");
-  font-family: "Muli", sans-serif !important;
 }
 
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Muli", sans-serif;
 }
 body {
   background-color: black;
@@ -31,7 +29,6 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  font-family: "Muli", sans-serif;
   position: relative;
 }
 a {
@@ -41,6 +38,9 @@ a {
 p {
   color: white;
   line-height: 1.3;
+}
+.para {
+  letter-spacing: 0.4px;
 }
 .link {
   cursor: pointer;
@@ -55,6 +55,8 @@ p {
   transition: all 0.5s ease-in-out;
   letter-spacing: normal;
   color: white;
+  font-family: "Muli", sans-serif;
+  letter-spacing: 0.4px;
 }
 .disabledText {
   color: gray;
@@ -112,7 +114,8 @@ p {
 }
 
 h1,
-h2 {
+h2,
+.mainTitle {
   color: white;
   display: flex;
   justify-content: center;
@@ -120,10 +123,11 @@ h2 {
   width: 100%;
   text-align: center;
 }
-h1 {
+h1,
+.mainTitle {
   margin: 0;
-  font-size: 40px;
-  font-weight: 800;
+  font-size: 50px;
+  font-weight: 900;
 }
 h2 {
   margin-top: 10px;

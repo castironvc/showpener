@@ -462,6 +462,64 @@ line-height: 24px;
         next steps.
     </p>
     `;
+  } else if (type === "contact_form") {
+    customContent = `
+    
+    <p style="
+    font-family: 'fieldwork', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3c4043;
+    letter-spacing: -0.02px;
+    line-height: 24px;
+    margin-top: 30px;
+    ">
+       A user has submitted the contact form on the web site and
+        they submitted the following information:
+    </p>
+    
+    <h3>Name:</h3>
+    <p style="
+    font-family: 'fieldwork', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3c4043;
+    letter-spacing: -0.02px;
+    line-height: 24px;
+    ">
+        ${name}
+    </p>
+    <h3>Phone number:</h3>
+    <p style="
+    font-family: 'fieldwork', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3c4043;
+    letter-spacing: -0.02px;
+    line-height: 24px;
+    ">
+        ${phone}
+    </p>
+    <h3>And they said:</h3>
+    <p style="
+    font-family: 'fieldwork', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3c4043;
+    letter-spacing: -0.02px;
+    line-height: 24px;
+    ">
+        ${message}
+    </p>
+    <div style="height: 2px; background: lightgray; margin-top:
+        40px"></div>
+    <p style=" font-family: 'fieldwork' , sans-serif; font-weight:
+        500; font-size: 16px; color: #3c4043; letter-spacing:
+        -0.02px; line-height: 24px; ">
+        Go to Showpener.com, or contact the promoter for
+        next steps.
+    </p>
+    `;
   }
   return `${emailHeadHtml}${customContent}${emailFootHtml}`;
 };

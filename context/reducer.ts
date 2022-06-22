@@ -11,6 +11,13 @@ export const initialState = {
     adminPhone: "",
     adminMessage: "",
   },
+  contact: {
+    contactName: "",
+    contactEmail: "",
+    contactPhone: "",
+    contactMessage: "",
+    contactStatus: false,
+  },
   phoneAuth: {
     authCode: "",
   },
@@ -54,7 +61,31 @@ export const reducer = (state: any, action: any) => {
         ...state,
         admin: { ...state.admin, adminBroadcastMessage: action.payload },
       };
-
+    case "SET_CONTACT_NAME":
+      return {
+        ...state,
+        contact: { ...state.contact, contactName: action.payload },
+      };
+    case "SET_CONTACT_EMAIL":
+      return {
+        ...state,
+        contact: { ...state.contact, contactEmail: action.payload },
+      };
+    case "SET_CONTACT_PHONE":
+      return {
+        ...state,
+        contact: { ...state.contact, contactPhone: action.payload },
+      };
+    case "SET_CONTACT_MESSAGE":
+      return {
+        ...state,
+        contact: { ...state.contact, contactMessage: action.payload },
+      };
+    case "SET_CONTACT_STATUS":
+      return {
+        ...state,
+        contact: { ...state.contact, contactStatus: action.payload },
+      };
     case "setSession":
       return {
         ...state,

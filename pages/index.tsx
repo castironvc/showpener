@@ -192,7 +192,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         <div key={provider.id}>
           <h1 className="mainTitle">Showpener</h1>
           <h2 className="subTitle">Never Miss A Show</h2>
-          <p className="center-text">
+          <p className="center-text para">
             Get personal text alerts for upcoming concerts in your area.
           </p>
           <div>

@@ -21,6 +21,11 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
       search: `?message=${encodeURIComponent(message)}`,
     });
   };
+  const goTo = async (path: string) => {
+    router.push({
+      pathname: path,
+    });
+  };
   const setName = (name: string) => {
     dispatch({
       type: "SET_CONTACT_NAME",
@@ -82,65 +87,82 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
   }); */
   return (
     <div>
-      <p>Tell us what is on your mind.</p>
-      <div className="statePhoneFieldContainer">
-        <div className="fieldContainer">
-          <div className="hint">Enter your Name:</div>
-          <input
-            id="contactName"
-            name="contactName"
-            type="text"
-            value={(state && state.contact && state.contact.contactName) || ""}
-            onChange={(e) => setName(e.target.value)}
-            className="input"
-          />
+      {!state.contact.contactStatus ? (
+        <>
+          <p className="center-text para">Tell us what is on your mind.</p>
+          <div className="statePhoneFieldContainer">
+            <div className="fieldContainer">
+              <div className="hint">Enter your Name:</div>
+              <input
+                id="contactName"
+                name="contactName"
+                type="text"
+                value={
+                  (state && state.contact && state.contact.contactName) || ""
+                }
+                onChange={(e) => setName(e.target.value)}
+                className="input"
+              />
+            </div>
+            <div className="fieldContainer">
+              <div className="hint">Enter your email</div>
+              <input
+                id="contactEmail"
+                name="contactEmail"
+                type="email"
+                value={
+                  (state && state.contact && state.contact.contactEmail) || ""
+                }
+                onChange={(e) => setEmail(e.target.value)}
+                className="input"
+              />
+            </div>
+          </div>
+          <div className="fieldContainer">
+            <div className="hint">Phone:</div>
+            <input
+              id="contactPhone"
+              name="contactPhone"
+              type="tel"
+              autoComplete="tel"
+              value={
+                (state && state.contact && state.contact.contactPhone) || ""
+              }
+              onChange={(e) => setPhone(normalizePhone(e.target.value))}
+              className="input"
+              placeholder="(000) 000-0000"
+            />
+          </div>
+          <div className="fieldContainer">
+            <div className="hint">Message:</div>
+            <textarea
+              id="contactMessage"
+              name="contactMessage"
+              autoComplete="off"
+              value={
+                (state && state.contact && state.contact.contactMessage) || ""
+              }
+              onChange={(e) => setMessage(e.target.value)}
+              className="input"
+              placeholder="Start typing message"
+            />
+          </div>
+          <div className="fieldContainer" style={{ margin: "40px 0 0px 0" }}>
+            <button className="submitButton" onClick={submitContactForm}>
+              <span>Submit</span>
+            </button>
+          </div>
+        </>
+      ) : (
+        <div>
+          <div className="thanksMessage">Thank you for submitting the form</div>
+          <div className="fieldContainer" style={{ margin: "40px 0 0px 0" }}>
+            <button className="submitButton" onClick={() => goTo("/")}>
+              <span>Back to home</span>
+            </button>
+          </div>
         </div>
-        <div className="fieldContainer">
-          <div className="hint">Enter your email</div>
-          <input
-            id="contactEmail"
-            name="contactEmail"
-            type="email"
-            value={(state && state.contact && state.contact.contactEmail) || ""}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input"
-          />
-        </div>
-      </div>
-      <div className="fieldContainer">
-        <div className="hint">Phone:</div>
-        <input
-          id="contactPhone"
-          name="contactPhone"
-          type="tel"
-          autoComplete="tel"
-          value={(state && state.contact && state.contact.contactPhone) || ""}
-          onChange={(e) => setPhone(normalizePhone(e.target.value))}
-          className="input"
-          placeholder="(000) 000-0000"
-        />
-      </div>
-      <div className="fieldContainer">
-        <div className="hint">Message:</div>
-        <textarea
-          id="contactMessage"
-          name="contactMessage"
-          autoComplete="off"
-          value={(state && state.contact && state.contact.contactMessage) || ""}
-          onChange={(e) => setMessage(e.target.value)}
-          className="input"
-          placeholder="Start typing message"
-        />
-      </div>
-      <div className="fieldContainer" style={{ margin: "40px 0 0px 0" }}>
-        {!state.contact.contactStatus ? (
-          <button className="submitButton" onClick={submitContactForm}>
-            <span>Submit</span>
-          </button>
-        ) : (
-          <div>Thank you for submitting the form</div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

@@ -33,7 +33,7 @@ function Tickets() {
   console.log(state);
   return (
     <div className="centerColumnContent">
-      <h1>Redirecting...</h1>
+      <h1 className="mainTitle">Redirecting...</h1>
       <div>
         <p>Taking you to your tickets now.</p>
       </div>

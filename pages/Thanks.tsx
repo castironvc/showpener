@@ -25,7 +25,8 @@ function Thanks() {
   return (
     <div>
       <div className="centerColumnContent">
-        <h1>Thank you!</h1>
+        <h1 className="mainTitle">Thank you!</h1>
+
         <div className="messageContainer">
           <p>
             We will notify you when tickets for the artists you love go on sale!

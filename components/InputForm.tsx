@@ -97,7 +97,10 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
   }); */
   return (
     <div>
-      <p>Tell us a little about yourself to get started.</p>
+      <h2 className="subTitle">
+        Tell us a little about yourself to get started.
+      </h2>
+
       <div className="statePhoneFieldContainer">
         <div className="fieldContainer">
           <div className="hint">Enter your Name:</div>

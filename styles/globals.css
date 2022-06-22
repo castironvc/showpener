@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Muli:300,400,700,800&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Cabin:wght@400;600;700&display=swap");
 :root {
   --background: #ffffff !important;
   --card-background: #fffeff !important;
@@ -55,7 +54,7 @@ p {
   transition: all 0.5s ease-in-out;
   letter-spacing: normal;
   color: white;
-  font-family: "Muli", sans-serif;
+  font-family: "Cabin", sans-serif;
   letter-spacing: 0.4px;
 }
 .disabledText {
@@ -115,19 +114,27 @@ p {
 
 h1,
 h2,
-.mainTitle {
+.mainTitle,
+.subTitle {
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 h1,
 .mainTitle {
   margin: 0;
-  font-size: 50px;
+
   font-weight: 900;
+}
+.subTitle {
+  font-size: 25px;
+  font-weight: 200;
+  color: rgb(215, 184, 255);
+  padding: 12px;
 }
 h2 {
   margin-top: 10px;
@@ -189,7 +196,7 @@ h2 {
 .smallButton {
   cursor: pointer;
   height: auto;
-  margin: 0 0 10px 0;
+  margin: 20px 0 10px 0;
   position: relative;
   float: left;
   color: #000;

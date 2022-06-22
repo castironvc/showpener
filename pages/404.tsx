@@ -10,7 +10,7 @@ function Custom404() {
   };
   return (
     <div className="centerColumnContent">
-      <h1>Oops!</h1>
+      <h1 className="mainTitle">Oops!</h1>
       <div className="messageContainer"></div>
       <div className="notice">This page does not exist.</div>
       <button className="submitButton" onClick={goHome}>

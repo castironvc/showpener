@@ -26,7 +26,7 @@ function Contact() {
 
   return (
     <div className="centerColumnContent">
-      <h1>Get in touch!</h1>
+      <h1 className="mainTitle">Get in touch!</h1>
 
       <ContactForm />
     </div>

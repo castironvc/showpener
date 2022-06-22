@@ -27,7 +27,7 @@ function Oops() {
   console.log(state);
   return (
     <div className="centerColumnContent">
-      <h1>Oops!</h1>
+      <h1 className="mainTitle">Oops!</h1>
       <div className="messageContainer">
         <p>Looks like we ran into some trouble.</p>
       </div>

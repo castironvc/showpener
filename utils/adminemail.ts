@@ -1,4 +1,7 @@
 import emailTemplate from "../templates/EmailTemplate";
+require("dotenv").config({ path: "../.env" });
+
+const adminEmail = process.env.ADMIN_EMAIL;
 export const newUserAdminEmail = async (type: string, content: any) => {
   let emailTemplateObj = {};
   if (type === "promoter") {
@@ -7,7 +10,7 @@ export const newUserAdminEmail = async (type: string, content: any) => {
         name: content.adminName,
         phone: content.mobilePhone,
         email: content.adminEmail,
-        adminEmail: "mike@gamaroff.net",
+        adminEmail: adminEmail || "",
         message: content.adminMessage,
         type: "promoter",
         emailTitle: "New Promoter Sign up!",
@@ -26,7 +29,7 @@ export const newUserAdminEmail = async (type: string, content: any) => {
         name: content.name,
         phone: content.mobilePhone,
         email: "",
-        adminEmail: "mike@gamaroff.net",
+        adminEmail: adminEmail || "",
         message: content.state,
         type: "new_enduser",
         emailTitle: "New Music Fan Sign up!",
@@ -46,7 +49,7 @@ export const newUserAdminEmail = async (type: string, content: any) => {
         name: content.name,
         phone: content.phone,
         email: content.email,
-        adminEmail: "mike@gamaroff.net",
+        adminEmail: adminEmail || "",
         message: content.message,
         type: "contact_form",
         emailTitle: "Contact Form Signup",

@@ -89,7 +89,8 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
     <div>
       {!state.contact.contactStatus ? (
         <>
-          <p className="center-text para">Tell us what is on your mind.</p>
+          <h2 className="subTitle">Tell us what is on your mind.</h2>
+
           <div className="statePhoneFieldContainer">
             <div className="fieldContainer">
               <div className="hint">Enter your Name:</div>

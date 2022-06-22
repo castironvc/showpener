@@ -51,7 +51,7 @@ function SideNav() {
         <div className="menu-item" onClick={() => goTo("/admin")}>
           Promoter Access
         </div>
-        <div className="menu-item" onClick={() => goTo("/contact")}>
+        <div className="menu-item" onClick={() => goTo("/Contact")}>
           Contact Us
         </div>
         <div className="menu-item">Terms</div>

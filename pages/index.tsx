@@ -17,7 +17,9 @@ import {
 } from "../types/globals";
 let states = require("../utils/states");
 const randNum = Math.floor(Math.random() * 4);
-
+let thanked: boolean = false;
+let disableLoader: boolean = false;
+let newUserFetch: boolean = false;
 function Home({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);
@@ -26,17 +28,24 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   const { status, data: session } = useSession();
   const [stateCodes, setStates] = useState(states);
 
-  /*   if (status === "authenticated") {
-    router.push("/Thanks");
-  }
- */
-
   // handle errors
   const errorRedirect = (message: string) => {
     router.push({
       pathname: "/Oops/",
       search: `?message=${encodeURIComponent(message)}`,
     });
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
+  };
+  const thanksRedirect = () => {
+    if (!thanked) {
+      router.push({
+        pathname: "/Thanks/",
+      });
+      thanked = true;
+    }
   };
 
   // set the form fields to the state
@@ -77,10 +86,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     if (result.error) {
       errorRedirect(result.details.message);
     } else if (result === "user_exists") {
-      router.push({
-        pathname: "/Thanks",
-        //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
-      });
+      thanksRedirect();
     } else {
       // Retrieved the stuff needed to proceed to TicketMaster for the event data
       const artistObj: foundArtistsForEventProps = {
@@ -92,6 +98,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         mobilePhone: state.userProfile.mobilePhone,
         state: state.userProfile.state,
       };
+
       // SEND EMAIL TO CHARLIE
       const adminEmail = await newUserAdminEmail("new_enduser", newUserEmail);
       console.log(adminEmail);
@@ -117,12 +124,14 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
         await welcomeText(state.userProfile);
 
         if (status === "authenticated") {
-          router.push({
-            pathname: "/Thanks",
-          });
+          thanksRedirect();
         }
         return ticketData;
       }
+      /*       dispatch({
+        type: "setLoader",
+        payload: false,
+      }); */
       //// ***** HERE IS WHERE IT ALL ENDS
     }
   };
@@ -165,7 +174,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   };
 
   useEffect(() => {
-    console.log(status);
     if (
       session &&
       router.query.phone &&
@@ -177,84 +185,102 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       state.userProfile.session = session.user;
 
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
-      createNewUser(state.userProfile);
-      console.log(session);
-    } else if (status === "authenticated") {
-      router.push({
-        pathname: "/Thanks",
-      });
+
+      if (!newUserFetch) {
+        createNewUser(state.userProfile);
+        console.log(session);
+        newUserFetch = true;
+      }
+    }
+    if (status === "authenticated" && !router.query.phone) {
+      thanksRedirect();
+    }
+
+    if (status === "unauthenticated" && !router.query.phone) {
+      if (!disableLoader) {
+        dispatch({
+          type: "setLoader",
+          payload: false,
+        });
+
+        disableLoader = true;
+      }
     }
   });
 
   return (
     <div>
-      {Object.values(providers).map((provider: Provider) => (
-        <div key={provider.id}>
-          <h1 className="mainTitle">Showpener</h1>
-          <h2 className="subTitle">Never Miss A Show</h2>
-          <p className="center-text para">
-            Get personal text alerts for upcoming concerts in your area.
-          </p>
-          <div>
-            <input type="hidden" name="remember" defaultValue="true" />
-            <div className="statePhoneFieldContainer">
-              <div className="fieldContainer">
-                <div className="hint">Enter your phone number</div>
-                <input
-                  id="phone-number"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  value={state.userProfile.mobilePhone}
-                  onChange={(e) =>
-                    setPhone(normalizePhone(e.target.value) || "")
-                  }
-                  className="input"
-                  placeholder="(000) 000-0000"
-                />
-              </div>
-              <div className="fieldContainer">
-                <div className="hint">Choose your state</div>
-                <select
-                  className="select"
-                  onChange={(e) => setStateRegion(e.target)}
-                >
-                  {stateCodes.states.map((stateCode: any, i: number) => (
-                    <option
-                      key={i}
-                      id={Object.keys(stateCode)[i]}
-                      value={Object.keys(stateCode)[i]}
+      {!state.loading && status === "unauthenticated" ? (
+        <>
+          {Object.values(providers).map((provider: Provider) => (
+            <div key={provider.id}>
+              <h1 className="mainTitle">Showpener</h1>
+              <h2 className="subTitle">Never Miss A Show</h2>
+              <p className="center-text para">
+                Get personal text alerts for upcoming concerts in your area.
+              </p>
+              <div>
+                <input type="hidden" name="remember" defaultValue="true" />
+                <div className="statePhoneFieldContainer">
+                  <div className="fieldContainer">
+                    <div className="hint">Enter your phone number</div>
+                    <input
+                      id="phone-number"
+                      name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      value={state.userProfile.mobilePhone}
+                      onChange={(e) =>
+                        setPhone(normalizePhone(e.target.value) || "")
+                      }
+                      className="input"
+                      placeholder="(000) 000-0000"
+                    />
+                  </div>
+                  <div className="fieldContainer">
+                    <div className="hint">Choose your state</div>
+                    <select
+                      className="select"
+                      onChange={(e) => setStateRegion(e.target)}
                     >
-                      {Object.values(stateCode)}
-                    </option>
-                  ))}
-                </select>
+                      {stateCodes.states.map((stateCode: any, i: number) => (
+                        <option
+                          key={i}
+                          id={Object.keys(stateCode)[i]}
+                          value={Object.keys(stateCode)[i]}
+                        >
+                          {Object.values(stateCode)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="checkboxContainer">
+                  <input
+                    type="checkbox"
+                    id="TC"
+                    checked={checked}
+                    onChange={() => acceptTerms(!checked)}
+                    value="I agree to Showpener's Terms of Usage & Privacy Policy"
+                  ></input>
+                  <label htmlFor="TC" className="">
+                    I agree to Showpener&apos;s Terms & Privacy Policy
+                  </label>
+                </div>
+                <div className="fieldContainer">
+                  <button
+                    className="submitButton"
+                    disabled={!checked}
+                    onClick={() => beginSignIn(provider)}
+                  >
+                    <span>Log in with {provider.name}</span>
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="checkboxContainer">
-              <input
-                type="checkbox"
-                id="TC"
-                checked={checked}
-                onChange={() => acceptTerms(!checked)}
-                value="I agree to Showpener's Terms of Usage & Privacy Policy"
-              ></input>
-              <label htmlFor="TC" className="">
-                I agree to Showpener&apos;s Terms & Privacy Policy
-              </label>
-            </div>
-            <div className="fieldContainer">
-              <button
-                className="submitButton"
-                disabled={!checked}
-                onClick={() => beginSignIn(provider)}
-              >
-                <span>Log in with {provider.name}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
+          ))}
+        </>
+      ) : null}
     </div>
   );
 }

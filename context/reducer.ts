@@ -21,7 +21,7 @@ export const initialState = {
   phoneAuth: {
     authCode: "",
   },
-  loading: false,
+  loading: true,
   error: {},
 };
 export const reducer = (state: any, action: any) => {

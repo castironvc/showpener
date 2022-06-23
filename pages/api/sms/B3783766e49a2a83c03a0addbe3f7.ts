@@ -17,9 +17,9 @@ const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
 const appUURL = process.env.VERCEL_URL;
 // use this to set how long before the On Sale date/time to send the message
-const daysOrMinutes = "days";
+const daysOrMinutes = "minutes";
 const unitsBeforeAlert = 30;
-
+let i = 0;
 const client = twilio(accountSid, token);
 
 export default async function handler(
@@ -33,6 +33,13 @@ export default async function handler(
     const sendResult = await client.messages.create(messageDetails);
     return res.status(200).json(sendResult);
   };
+
+  // GET RID OF THIS WHEN DONE WITH CRON TEST
+  const events = await fetch("/api/email/test", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: "This is a cool Cron Test" + i++,
+  });
 
   const matchEventsToUsers = async (artist: shortEvent) => {
     let { error, data } = await supabase
@@ -74,12 +81,11 @@ export default async function handler(
   /// IT'S SO THAT YOU CANNOT TRIGGER THE ENDPOINT IF YOU FIND IT IN THE BROWSER
   // if (req.body.dbcall === true) {
 
-  let { error, data } = await supabase
+  let { error, data: EventHitsResult } = await supabase
     .from("events_table")
     .select("*")
     .gt("event_sale_date", nowDate)
     .lt("event_sale_date", timeBefore);
-  let EventHitsResult = data;
 
   if (error) {
     return res.status(200).json(error);

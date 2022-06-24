@@ -51,7 +51,6 @@ p {
   color: #b893de;
 }
 ul {
-  list-style-type: circle;
   color: white;
 }
 ul li {
@@ -76,6 +75,10 @@ ul li::before {
   color: white;
   font-family: "Cabin", sans-serif;
   letter-spacing: 0.4px;
+}
+.disabled {
+  pointer-events: none;
+  color: red;
 }
 .body-text {
   padding: 50px 20px 20px 20px;
@@ -160,14 +163,45 @@ h1,
   color: rgb(215, 184, 255);
   padding: 12px;
 }
-.subTitle-left {
+.subTitle-left,
+.subTitle-left-secondary {
   text-align: left;
   padding-left: 0px;
   margin: 40px 0px -10px 0px;
+  letter-spacing: 0.5px;
+}
+.subTitle-left-secondary {
+  font-size: 20px;
+  font-style: italic;
+  margin-top: 120px;
 }
 h2 {
   margin-top: 10px;
 }
+.table {
+  margin-top: 50px;
+}
+
+.row #row-title {
+  font-weight: bolder;
+  color: rgb(235, 207, 255);
+  text-transform: uppercase;
+}
+.col3 div {
+  border: 1px solid #565656;
+  padding: 10px;
+}
+.col3 {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+.col2 {
+  grid-template-columns: 1fr 1fr;
+}
+.col1 {
+  grid-template-columns: 1fr;
+}
+
 .center-text {
   text-align: center;
 }

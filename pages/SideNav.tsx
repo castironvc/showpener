@@ -6,7 +6,10 @@ function SideNav() {
   const [open, menuOpen] = useState(false);
   const { dispatch } = useContext(DispatchContext);
   const router = useRouter();
+  const { asPath } = useRouter();
+
   const toggleMenu = () => {
+    console.log(asPath);
     const menu = document.getElementById("sideMenu");
     const burger1 = document.getElementById("burger1");
     const burger2 = document.getElementById("burger2");
@@ -49,17 +52,35 @@ function SideNav() {
         </div>
       </div>
       <div className="menu-container" id="sideMenu">
-        <div className="menu-item" onClick={() => goTo("/")}>
+        <div
+          className={`menu-item ${asPath === "/" && "disabled"}`}
+          onClick={() => goTo("/")}
+        >
           Home
         </div>
-        <div className="menu-item" onClick={() => goTo("/admin")}>
+        <div
+          className={`menu-item ${asPath === "/admin/" && "disabled"}`}
+          onClick={() => goTo("/admin")}
+        >
           Promoter Access
         </div>
-        <div className="menu-item" onClick={() => goTo("/Contact")}>
+        <div
+          className={`menu-item ${asPath === "/Contact/" && "disabled"}`}
+          onClick={() => goTo("/Contact")}
+        >
           Contact Us
         </div>
-        <div className="menu-item" onClick={() => goTo("/Terms")}>
+        <div
+          className={`menu-item ${asPath === "/Terms/" && "disabled"}`}
+          onClick={() => goTo("/Terms")}
+        >
           Terms
+        </div>
+        <div
+          className={`menu-item ${asPath === "/Privacy/" && "disabled"}`}
+          onClick={() => goTo("/Privacy")}
+        >
+          Privacy
         </div>
       </div>
     </>

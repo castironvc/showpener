@@ -130,7 +130,11 @@ function Promoter() {
     if (session && status === "authenticated" && !addUserOnce) {
       createAdminUser();
     }
-  });
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
+  }, []);
 
   return (
     <div>

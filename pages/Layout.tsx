@@ -5,7 +5,7 @@ import { Loader } from "../components/Loader";
 import SideNav from "./SideNav";
 import Image from "next/image";
 import { AppContext } from "../context/StateContext";
-const randNum = Math.floor(Math.random() * 10);
+const randNum = Math.floor(Math.random() * 9);
 const customCss = `body {background: url(/images/Showpener_BG${randNum}.jpg) no-repeat center center fixed;}`;
 
 type LayoutProps = {

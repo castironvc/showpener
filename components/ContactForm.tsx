@@ -71,7 +71,6 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
     if (contactEmail.error) {
       errorRedirect(contactEmail.details.message);
     } else {
-      console.log(contactEmail);
       dispatch({
         type: "SET_CONTACT_STATUS",
         payload: true,

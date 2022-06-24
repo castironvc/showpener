@@ -30,9 +30,12 @@ body {
   background-size: cover;
   position: relative;
 }
-a {
-  color: inherit;
-  text-decoration: none;
+.links {
+  text-decoration: underline;
+  color: white;
+}
+.links:hover {
+  color: #b893de;
 }
 p {
   color: white;
@@ -47,15 +50,35 @@ p {
 .link:hover {
   color: #b893de;
 }
+ul {
+  list-style-type: circle;
+  color: white;
+}
+ul li {
+  list-style: none;
+  position: relative;
+  padding: 3px 0 2px 25px;
+}
+
+ul li::before {
+  content: "●";
+  position: absolute;
+  top: 6px;
+  left: 0;
+}
+
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.2s ease-in-out;
   letter-spacing: normal;
   color: white;
   font-family: "Cabin", sans-serif;
   letter-spacing: 0.4px;
+}
+.body-text {
+  padding: 50px 20px 20px 20px;
 }
 .disabledText {
   color: gray;
@@ -96,7 +119,7 @@ p {
 }
 .blackpanel {
   position: relative;
-  background-color: rgba(0, 0, 0, 0.618);
+  background-color: rgba(0, 0, 0, 0.818);
   border-radius: 50px;
   padding: 70px 30px 30px 30px;
   width: auto;
@@ -130,11 +153,17 @@ h1,
 
   font-weight: 900;
 }
-.subTitle {
+.subTitle,
+.subTitle-left {
   font-size: 25px;
   font-weight: 200;
   color: rgb(215, 184, 255);
   padding: 12px;
+}
+.subTitle-left {
+  text-align: left;
+  padding-left: 0px;
+  margin: 40px 0px -10px 0px;
 }
 h2 {
   margin-top: 10px;

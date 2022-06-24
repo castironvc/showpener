@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
-import { AppContext } from "../context/StateContext";
-
+import { AppContext, DispatchContext } from "../context/StateContext";
 function SideNav() {
   const { state } = useContext(AppContext);
   const [open, menuOpen] = useState(false);
+  const { dispatch } = useContext(DispatchContext);
   const router = useRouter();
   const toggleMenu = () => {
     const menu = document.getElementById("sideMenu");
@@ -29,6 +29,10 @@ function SideNav() {
     console.log(open);
   };
   const goTo = async (path: string) => {
+    dispatch({
+      type: "setLoader",
+      payload: true,
+    });
     toggleMenu();
     router.push({
       pathname: path,
@@ -54,7 +58,9 @@ function SideNav() {
         <div className="menu-item" onClick={() => goTo("/Contact")}>
           Contact Us
         </div>
-        <div className="menu-item">Terms</div>
+        <div className="menu-item" onClick={() => goTo("/Terms")}>
+          Terms
+        </div>
       </div>
     </>
   );

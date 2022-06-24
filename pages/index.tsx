@@ -17,7 +17,7 @@ import {
 } from "../types/globals";
 let states = require("../utils/states");
 const randNum = Math.floor(Math.random() * 4);
-let thanked: boolean = false;
+
 let disableLoader: boolean = false;
 let newUserFetch: boolean = false;
 function Home({ providers }: { providers: { spotify: Provider } }) {
@@ -27,7 +27,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   const router = useRouter();
   const { status, data: session } = useSession();
   const [stateCodes, setStates] = useState(states);
-
+  const [loading, stopLoading] = useState(true);
   // handle errors
   const errorRedirect = (message: string) => {
     router.push({
@@ -40,6 +40,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
   };
   const thanksRedirect = () => {
+    let thanked: boolean = false;
     if (!thanked) {
       router.push({
         pathname: "/Thanks/",
@@ -193,20 +194,15 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       }
     }
     if (status === "authenticated" && !router.query.phone) {
+      console.log(status);
       thanksRedirect();
+    } else {
+      dispatch({
+        type: "setLoader",
+        payload: false,
+      });
     }
-
-    if (status === "unauthenticated" && !router.query.phone) {
-      if (!disableLoader) {
-        dispatch({
-          type: "setLoader",
-          payload: false,
-        });
-
-        disableLoader = true;
-      }
-    }
-  });
+  }, []);
 
   return (
     <div>
@@ -264,7 +260,14 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                     value="I agree to Showpener's Terms of Usage & Privacy Policy"
                   ></input>
                   <label htmlFor="TC" className="">
-                    I agree to Showpener&apos;s Terms & Privacy Policy
+                    I agree to Showpener&apos;s{" "}
+                    <a className="links" href="/Terms" target="_blank">
+                      Terms
+                    </a>{" "}
+                    &{" "}
+                    <a className="links" href="/Privacy" target="_blank">
+                      Privacy Policy
+                    </a>
                   </label>
                 </div>
                 <div className="fieldContainer">

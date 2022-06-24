@@ -1,15 +1,15 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { getProviders, signOut, useSession } from "next-auth/react";
 import { AppContext, DispatchContext } from "../context/StateContext";
 
-let disableLoader: boolean = false;
 function Thanks() {
   const { state } = useContext(AppContext);
   const { status, data: session } = useSession();
   const router = useRouter();
   const { dispatch } = useContext(DispatchContext);
+
   const logOut = async (e: any) => {
     dispatch({
       type: "setLoader",
@@ -23,16 +23,12 @@ function Thanks() {
     if (status && status === "unauthenticated") {
       router.push("/");
     } else {
-      if (!disableLoader) {
-        dispatch({
-          type: "setLoader",
-          payload: false,
-        });
-
-        disableLoader = true;
-      }
+      dispatch({
+        type: "setLoader",
+        payload: false,
+      });
     }
-  }, [dispatch, status, session, router]);
+  }, [status]);
 
   return (
     <div>

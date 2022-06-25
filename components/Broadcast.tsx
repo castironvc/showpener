@@ -20,7 +20,6 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
   const [artist, setArtist] = useState<string>();
   const [stateCodes, setStates] = useState(states);
   const router = useRouter();
-  const [getArtistOnce, setGetArtistOnce] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [artists, setAllArtists] = useState<ArtistProps[]>([]);
   const [dollarAmount, setDollarAmount] = useState(0);
@@ -79,7 +78,6 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       type: "setLoader",
       payload: true,
     });
-    setGetArtistOnce(true);
 
     const foundFans = await fetch("/api/admin/findfans", {
       method: "POST",
@@ -107,7 +105,6 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
     });
   };
   const getAllArtists = async () => {
-    setGetArtistOnce(true);
     const foundArtists = await fetch("/api/admin/getallartists", {
       method: "GET",
       headers: {
@@ -123,16 +120,13 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       //errorRedirect(result.details.message);
       console.log(result.details.message);
     } else {
-      console.log(result);
       setAllArtists(result);
     }
   };
 
   useEffect(() => {
-    if (!getArtistOnce) {
-      getAllArtists();
-    }
-  });
+    getAllArtists();
+  }, []);
   return (
     <div>
       <p>

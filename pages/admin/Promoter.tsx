@@ -4,25 +4,40 @@ import { useEffect, useContext, useState } from "react";
 import supabase from "../../lib/supabase";
 import styles from "../../styles/thanks.module.css";
 import { AppContext, DispatchContext } from "../../context/StateContext";
-import { adminUserProps } from "../../types/globals";
+import { adminUserProps, Provider } from "../../types/globals";
+
 import Roles from "../../components/Roles";
 import Broadcast from "../../components/Broadcast";
 import InputForm from "../../components/InputForm";
-
+import "../api/spotify/test_recentplayed";
+import { getProviders, signIn, useSession } from "next-auth/react";
 let i: number = 0;
 /* let getUserOnce: boolean = false; */
-function Promoter() {
+function Promoter({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const [session, setSession] = useState(supabase.auth.session());
   const [status, setStatus] = useState(
     session && session.user && session.user.aud
   );
+  const [artists, setArtists] = useState([]);
+  const [endpointTest, setEndpointTest] = useState(false);
   const [myuser, setUser] = useState<adminUserProps>();
   const [dataCapture, engageDataCapture] = useState<boolean>(false);
   const [getUserOnce, setGetUserOnce] = useState<boolean>(false);
   const [allUsers, setAllUsers] = useState<[adminUserProps]>();
   const router = useRouter();
   const { dispatch } = useContext(DispatchContext);
+  const { status: fanstatus, data: fansession } = useSession();
+  const errorRedirect = (message: string) => {
+    router.push({
+      pathname: "/Oops/",
+      search: `?message=${encodeURIComponent(message)}`,
+    });
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
+  };
   const logOut = async (e: any) => {
     setGetUserOnce(false);
     dispatch({
@@ -90,6 +105,34 @@ function Promoter() {
       }
     }
   };
+  const beginSignIn = () => {
+    signIn("spotify", {
+      callbackUrl: `/admin/Promoter`,
+    });
+  };
+  const getRecentPlayed = async (endpoint: string, name: string) => {
+    const postData = {
+      session: fansession,
+      endpoint: { name: name, url: endpoint },
+    };
+    const recentplayed = await fetch("../../api/spotify/test_recentplayed", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    const result = await recentplayed.json();
+
+    if (result.error) {
+      console.log(result);
+      /*       errorRedirect(result.details.message); */
+    } else {
+      console.log(result);
+      setArtists(result);
+    }
+  };
 
   useEffect(() => {
     if (session && status === "authenticated" && !getUserOnce) {
@@ -99,17 +142,108 @@ function Promoter() {
         pathname: "/admin/",
         //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
       });
-    } /* else if (!session) {
-      router.push({
-        pathname: "/admin/",
-        //  search: `?message=" + ${encodeURIComponent(result.details.message)}`,
-      });
-    } */
-  });
+    }
+
+    if (fanstatus === "unauthenticated") {
+      beginSignIn();
+    }
+
+    dispatch({
+      type: "setLoader",
+      payload: false,
+    });
+  }, [getUserOnce, session, fanstatus]);
 
   return (
     <div className="centerColumnContent">
       <h1>Promoter Access</h1>
+
+      {fanstatus === "authenticated" ? (
+        <span
+          className="top-right pillnav"
+          onClick={() => setEndpointTest(true)}
+        >
+          API Test
+        </span>
+      ) : null}
+      {endpointTest ? (
+        <div className="absolute modal">
+          <div
+            className="top-right closex"
+            onClick={() => setEndpointTest(false)}
+          >
+            X
+          </div>
+          {fanstatus && fanstatus === "authenticated" ? (
+            <div className="mini-nav">
+              <span
+                onClick={() =>
+                  getRecentPlayed(
+                    "https://api.spotify.com/v1/me/player/recently-played",
+                    "recentlyplayed"
+                  )
+                }
+              >
+                Recently Played
+              </span>
+              <span
+                onClick={() =>
+                  getRecentPlayed(
+                    "https://api.spotify.com/v1/me/top/tracks",
+                    "toptracks"
+                  )
+                }
+              >
+                Get Top Tracks
+              </span>
+              <span
+                onClick={() =>
+                  getRecentPlayed(
+                    "https://api.spotify.com/v1/me/following?type=artist",
+                    "followedartists"
+                  )
+                }
+              >
+                Followed Artists
+              </span>
+              <span
+                onClick={() =>
+                  getRecentPlayed(
+                    "https://api.spotify.com/v1/me/tracks/",
+                    "likedtracks"
+                  )
+                }
+              >
+                Liked Tracks
+              </span>
+            </div>
+          ) : (
+            <div className="fieldContainer">
+              {Object.values(providers).map((provider: Provider) => (
+                <div key={provider.toString()}>
+                  <button className="submitButton" onClick={beginSignIn}>
+                    <span>Log in with {provider.name}</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="testArtist-result">
+            {fanstatus &&
+              artists &&
+              artists.map((artist: any, i: number) => {
+                return (
+                  <div
+                    className="testrecord"
+                    key={artist.spotify_artist_id + "" + i}
+                  >
+                    {artist.artistname}
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      ) : null}
       <div className="messageContainer">
         {myuser && myuser.role === "standard" ? (
           <p>
@@ -139,7 +273,7 @@ function Promoter() {
                 <InputForm
                   myuser={myuser}
                   engageDataCapture={engageDataCapture}
-                  setGetUserOnce={setGetUserOnce}
+                  /*    setGetUserOnce={setGetUserOnce} */
                 />
               ) : null}
             </div>
@@ -161,3 +295,11 @@ function Promoter() {
 }
 
 export default Promoter;
+export const getServerSideProps: GetServerSideProps = async ({}) => {
+  const providers = await getProviders();
+  return {
+    props: {
+      providers,
+    },
+  };
+};

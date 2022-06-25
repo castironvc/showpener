@@ -53,8 +53,7 @@ export const parseFollowed = async (data: any) => {
     });
     return tmpArr;
   } else {
-    console.log("No Followed Tracks");
-    return "No Followed Tracks";
+    return [];
   }
 };
 

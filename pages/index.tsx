@@ -19,7 +19,6 @@ let states = require("../utils/states");
 const randNum = Math.floor(Math.random() * 4);
 
 let disableLoader: boolean = false;
-let newUserFetch: boolean = false;
 function Home({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);
@@ -175,6 +174,8 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   };
 
   useEffect(() => {
+    if (status && status === "authenticated") {
+    }
     if (
       session &&
       router.query.phone &&
@@ -187,22 +188,18 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
 
-      if (!newUserFetch) {
-        createNewUser(state.userProfile);
-        console.log(session);
-        newUserFetch = true;
-      }
-    }
-    if (status === "authenticated" && !router.query.phone) {
-      console.log(status);
-      thanksRedirect();
+      createNewUser(state.userProfile);
+      console.log(session);
     } else {
       dispatch({
         type: "setLoader",
         payload: false,
       });
     }
-  }, []);
+    if (status === "authenticated" && !router.query.phone) {
+      thanksRedirect();
+    }
+  }, [session]);
 
   return (
     <div>

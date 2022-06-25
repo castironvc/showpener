@@ -11,13 +11,13 @@ type BroadcasterProps = {
   /*   userid: number; */
   myuser: adminUserProps;
   engageDataCapture: (val: boolean) => void;
-  setGetUserOnce: (val: boolean) => void;
+  /*   setGetUserOnce: (val: boolean) => void; */
 };
 
 const Broadcast: FunctionComponent<BroadcasterProps> = ({
   myuser,
   engageDataCapture,
-  setGetUserOnce,
+  /*   setGetUserOnce, */
 }) => {
   /*  const [logoChoice, logoSet] = useState(logo); */
   let states = require("../utils/states");
@@ -84,7 +84,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       const adminEmail = await newUserAdminEmail("promoter", result);
       console.log(adminEmail);
 
-      setGetUserOnce(false);
+      /*    setGetUserOnce(false); */
       engageDataCapture(false);
     }
     dispatch({

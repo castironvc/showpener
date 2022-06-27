@@ -18,9 +18,9 @@ import {
   parseLikedTracks,
 } from "../../../utils/parsers";
 import { ErrorProps } from "next/error";
-const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
-const GET_TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
-const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=artist`;
+const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=50`;
+const GET_TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?limit=50`;
+const FOLLOWED_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/following?type=artist&limit=50`;
 const LIKED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/tracks/?limit=50`;
 
 const userProfile: NewUserProfileProps = {

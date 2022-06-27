@@ -174,6 +174,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   };
 
   useEffect(() => {
+    console.log(session);
     if (status && status === "authenticated") {
     }
     if (

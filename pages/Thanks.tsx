@@ -18,7 +18,7 @@ function Thanks() {
     e.preventDefault();
     signOut();
   };
-
+  console.log(session);
   useEffect(() => {
     if (status && status === "unauthenticated") {
       router.push("/");

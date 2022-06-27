@@ -134,7 +134,7 @@ function Promoter() {
       type: "setLoader",
       payload: false,
     });
-  }, []);
+  }, [session]);
 
   return (
     <div>

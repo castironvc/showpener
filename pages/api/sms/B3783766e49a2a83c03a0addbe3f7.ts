@@ -1,8 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 import supabase from "../../../lib/supabase";
 import moment from "moment";
+
 import { passDecrypt } from "../auth/crypt";
 import {
   EventDetailProps,
@@ -11,6 +13,10 @@ import {
   eventForBroadcast,
 } from "../../../types/globals";
 require("dotenv").config({ path: "../../../.env" });
+
+const mgprivatekey = process.env.MAILGUN_PRIVATE;
+const domain = process.env.MAILGUN_DOMAIN;
+const adminEmail = process.env.ADMIN_EMAIL;
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
@@ -21,11 +27,31 @@ const daysOrMinutes = "minutes";
 const unitsBeforeAlert = 30;
 let i = 0;
 const client = twilio(accountSid, token);
-
+export const mailgun = require("mailgun-js")({
+  apiKey: mgprivatekey,
+  domain: domain,
+});
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  let data = {
+    from: `Showpener Cron Test < noReply@showpener.com>`,
+    to: `Mike < mike@gamaroff.net>`,
+    subject: "Showpener Cron Test",
+    text: "This is a Cron Test" + i++,
+  };
+  await mailgun.messages().send(data, function (error: any, body: any) {
+    if (error) {
+      return error;
+    } else {
+      res.json({ message: req.body });
+      return res.json(body);
+    }
+    /*     res.json({ message: `Thanks ${name}!` });
+    return res.json(body); */
+  });
+
   const nowDate = moment.utc();
   const timeBefore = moment.utc(nowDate).add(unitsBeforeAlert, daysOrMinutes);
 
@@ -34,13 +60,7 @@ export default async function handler(
     return res.status(200).json(sendResult);
   };
 
-  // GET RID OF THIS WHEN DONE WITH CRON TEST
-  const events = await fetch("/api/email/test", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: "This is a cool Cron Test" + i++,
-  });
-
+  /* 
   const matchEventsToUsers = async (artist: shortEvent) => {
     let { error, data } = await supabase
       .from("userartists_table")
@@ -102,7 +122,7 @@ export default async function handler(
     } else {
       return res.status(200).json("No events found");
     }
-  }
+  } */
   /*  
 /// END OF PG_CRON TEST WHEN NOT TESTING
 } else {

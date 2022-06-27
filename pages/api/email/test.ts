@@ -12,19 +12,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log(req.body);
   let data = {
     from: `Showpener Cron Test < noReply@showpener.com>`,
     to: `Mike < mike@gamaroff.net>`,
     subject: "Showpener Cron Test",
-    text: req.body.content,
+    text: req.body,
   };
 
   await mailgun.messages().send(data, function (error: any, body: any) {
     if (error) {
-      console.log(error);
-      return res.status(400).json(error);
+      return error;
     } else {
-      return res.status(200).json(body);
+      res.json({ message: req.body });
+      return res.json(body);
     }
     /*     res.json({ message: `Thanks ${name}!` });
     return res.json(body); */

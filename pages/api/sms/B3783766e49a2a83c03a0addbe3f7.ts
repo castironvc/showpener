@@ -35,6 +35,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  /* 
+  // CRON TEST
   let data = {
     from: `Showpener Cron Test < noReply@showpener.com>`,
     to: `Mike < mike@gamaroff.net>`,
@@ -47,10 +49,8 @@ export default async function handler(
     } else {
       return res.json({ message: body });
     }
-    /*     res.json({ message: `Thanks ${name}!` });
-    return res.json(body); */
   });
-
+ */
   const nowDate = moment.utc();
   const timeBefore = moment.utc(nowDate).add(unitsBeforeAlert, daysOrMinutes);
 
@@ -59,7 +59,6 @@ export default async function handler(
     return res.status(200).json(sendResult);
   };
 
-  /* 
   const matchEventsToUsers = async (artist: shortEvent) => {
     let { error, data } = await supabase
       .from("userartists_table")
@@ -98,34 +97,32 @@ export default async function handler(
 
   /// THIS CHECK IS FOR THE PG_CRON
   /// IT'S SO THAT YOU CANNOT TRIGGER THE ENDPOINT IF YOU FIND IT IN THE BROWSER
-  // if (req.body.dbcall === true) {
+  if (req.body.dbcall) {
+    let { error, data: EventHitsResult } = await supabase
+      .from("events_table")
+      .select("*")
+      .gt("event_sale_date", nowDate)
+      .lt("event_sale_date", timeBefore);
 
-  let { error, data: EventHitsResult } = await supabase
-    .from("events_table")
-    .select("*")
-    .gt("event_sale_date", nowDate)
-    .lt("event_sale_date", timeBefore);
-
-  if (error) {
-    return res.status(200).json(error);
-  } else {
-    // return res.status(200).json(data);
-    if (EventHitsResult && EventHitsResult.length > 0) {
-      EventHitsResult.map(async (event: EventDetailProps) => {
-        const match = await matchEventsToUsers({
-          spotify_artist_id: event.spotify_artist_id,
-          event_url: event.event_url,
-        });
-        return res.status(200).json(match);
-      });
+    if (error) {
+      return res.status(200).json(error);
     } else {
-      return res.status(200).json("No events found");
+      // return res.status(200).json(data);
+      if (EventHitsResult && EventHitsResult.length > 0) {
+        EventHitsResult.map(async (event: EventDetailProps) => {
+          const match = await matchEventsToUsers({
+            spotify_artist_id: event.spotify_artist_id,
+            event_url: event.event_url,
+          });
+          return res.status(200).json(match);
+        });
+      } else {
+        return res.status(200).json("No events found");
+      }
     }
-  } */
-  /*  
-/// END OF PG_CRON TEST WHEN NOT TESTING
-} else {
+
+    /// END OF PG_CRON TEST WHEN NOT TESTING
+  } else {
     return res.status(200).json("How on earth did you find this endpoint?");
   }
- */
 }

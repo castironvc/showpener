@@ -179,7 +179,7 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
               <span
                 onClick={() =>
                   getRecentPlayed(
-                    "https://api.spotify.com/v1/me/player/recently-played",
+                    "https://api.spotify.com/v1/me/player/recently-played?limit=50",
                     "recentlyplayed"
                   )
                 }
@@ -189,7 +189,7 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
               <span
                 onClick={() =>
                   getRecentPlayed(
-                    "https://api.spotify.com/v1/me/top/tracks",
+                    "https://api.spotify.com/v1/me/top/tracks?limit=50",
                     "toptracks"
                   )
                 }
@@ -199,7 +199,7 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
               <span
                 onClick={() =>
                   getRecentPlayed(
-                    "https://api.spotify.com/v1/me/following?type=artist",
+                    "https://api.spotify.com/v1/me/following?type=artist&limit=50",
                     "followedartists"
                   )
                 }
@@ -209,7 +209,7 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
               <span
                 onClick={() =>
                   getRecentPlayed(
-                    "https://api.spotify.com/v1/me/tracks/",
+                    "https://api.spotify.com/v1/me/tracks?limit=50",
                     "likedtracks"
                   )
                 }

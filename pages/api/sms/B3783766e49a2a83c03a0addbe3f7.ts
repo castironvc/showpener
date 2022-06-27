@@ -45,8 +45,7 @@ export default async function handler(
     if (error) {
       return error;
     } else {
-      res.json({ message: req.body });
-      return res.json(body);
+      return res.json({ message: body });
     }
     /*     res.json({ message: `Thanks ${name}!` });
     return res.json(body); */

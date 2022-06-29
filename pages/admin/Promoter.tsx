@@ -126,10 +126,8 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
     const result = await recentplayed.json();
 
     if (result.error) {
-      console.log(result);
       /*       errorRedirect(result.details.message); */
     } else {
-      console.log(result);
       setArtists(result);
     }
   };

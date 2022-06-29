@@ -18,6 +18,11 @@ function Thanks() {
     e.preventDefault();
     signOut();
   };
+
+  const gotoSpotify = () => {
+    router.push("http://spotify.com");
+  };
+
   console.log(session);
   useEffect(() => {
     if (status && status === "unauthenticated") {
@@ -34,7 +39,7 @@ function Thanks() {
     <div>
       {status && status === "authenticated" ? (
         <div className="centerColumnContent">
-          <h1 className="mainTitle">Thank you!</h1>
+          <h1 className="mainTitle">Wait for the magic...</h1>
 
           <div className="messageContainer">
             <p>
@@ -46,9 +51,12 @@ function Thanks() {
             <div className="notice">{state.error.message}</div>
           ) : null}
 
-          <span className="whitelink" onClick={logOut}>
+          <span className="whitelink" onClick={gotoSpotify}>
             Disconnect from Spotify
           </span>
+          {/*   <button className="submitButton" onClick={gotoSpotify}>
+            <span>Go to Spotify</span>
+          </button> */}
           <div className="caption captionContainer">
             Reply STOP to our text messages to unsubscribe from{" "}
             <span className="widow">Showpener alerts</span>.

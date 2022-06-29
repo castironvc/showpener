@@ -7,7 +7,13 @@ import { normalizePhone } from "../utils/validation";
 
 import getStateCode from "../utils/getStateCode";
 
-import { getProviders, signIn, useSession } from "next-auth/react";
+import {
+  getProviders,
+  signIn,
+  signOut,
+  getSession,
+  useSession,
+} from "next-auth/react";
 
 import {
   Provider,
@@ -26,7 +32,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
   const router = useRouter();
   const { status, data: session } = useSession();
   const [stateCodes, setStates] = useState(states);
-  const [loading, stopLoading] = useState(true);
+
   // handle errors
   const errorRedirect = (message: string) => {
     router.push({
@@ -62,14 +68,28 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
   };
 
-  const beginSignIn = (provider: Provider) => {
+  const beginSignIn = async () => {
     dispatch({
       type: "setLoader",
       payload: true,
     });
-    signIn(provider.id, {
+
+    const token = signIn("spotify", {
       callbackUrl: `/?phone=${state.userProfile.mobilePhone}&state=${state.userProfile.state}`,
     });
+
+    console.log(token);
+    return token;
+
+    /*     const user = await fetch("/api/auth/getToken", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    console.log(user); */
   };
 
   const createNewUser = async (tmpProfile: UserProfileProps) => {
@@ -101,7 +121,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
       // SEND EMAIL TO CHARLIE
       const adminEmail = await newUserAdminEmail("new_enduser", newUserEmail);
-      console.log(adminEmail);
+
       // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
 
       const ticketData = await fetchTicketData(artistObj);
@@ -175,8 +195,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
   useEffect(() => {
     console.log(session);
-    if (status && status === "authenticated") {
-    }
     if (
       session &&
       router.query.phone &&
@@ -190,7 +208,6 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       // STEP 1: THIS IS WHERE WE BEGIN THE PROCESS OF ADDING A NEW USER AND EXTRACTING THEIR ARTISTS
 
       createNewUser(state.userProfile);
-      console.log(session);
     } else {
       dispatch({
         type: "setLoader",
@@ -272,7 +289,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
                   <button
                     className="submitButton"
                     disabled={!checked}
-                    onClick={() => beginSignIn(provider)}
+                    onClick={beginSignIn}
                   >
                     <span>Log in with {provider.name}</span>
                   </button>
@@ -289,6 +306,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 export default Home;
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   const providers = await getProviders();
+
   return {
     props: {
       providers,

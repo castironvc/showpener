@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import styles from "../styles/thanks.module.css";
 import { AppContext } from "../context/StateContext";
@@ -10,10 +10,6 @@ function Tickets() {
   const { status, data: session } = useSession();
   const router = useRouter();
   const [runOnce, setRunOnce] = useState(false);
-  const logOut = async (e: any) => {
-    e.preventDefault();
-    signOut();
-  };
 
   useEffect(() => {
     const goToLink = async () => {

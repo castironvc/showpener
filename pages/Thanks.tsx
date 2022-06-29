@@ -47,13 +47,11 @@ function Thanks() {
               sale!
             </p>
           </div>
-          {state.error.message ? (
+          {/*           {state.error.message ? (
             <div className="notice">{state.error.message}</div>
           ) : null}
+ */}
 
-          {/*   <button className="submitButton" onClick={gotoSpotify}>
-            <span>Go to Spotify</span>
-          </button> */}
           <div className="caption captionContainer">
             Reply STOP to our text messages to unsubscribe from{" "}
             <span className="widow">Showpener alerts</span>.

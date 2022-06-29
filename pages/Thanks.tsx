@@ -51,9 +51,6 @@ function Thanks() {
             <div className="notice">{state.error.message}</div>
           ) : null}
 
-          <span className="whitelink" onClick={gotoSpotify}>
-            Disconnect from Spotify
-          </span>
           {/*   <button className="submitButton" onClick={gotoSpotify}>
             <span>Go to Spotify</span>
           </button> */}
@@ -61,6 +58,13 @@ function Thanks() {
             Reply STOP to our text messages to unsubscribe from{" "}
             <span className="widow">Showpener alerts</span>.
           </div>
+          <span
+            className="whitelink"
+            style={{ fontSize: "12px" }}
+            onClick={gotoSpotify}
+          >
+            Disconnect from Spotify
+          </span>
         </div>
       ) : null}
     </div>

@@ -35,13 +35,15 @@ const makeUserIds = (
   id: number,
   spotify_user_id: string,
   name: string,
-  mobilePhone: string
+  mobilePhone: string,
+  state: string
 ) => {
   return {
     id: id,
     spotify_user_id: spotify_user_id,
     name: name,
     mobilePhone: mobilePhone,
+    state: state,
   };
 };
 
@@ -98,8 +100,10 @@ const addUserArtists = async (
       spotify_artist_id: artist.spotify_artist_id,
       spotify_user_id: ids.spotify_user_id,
       user_phone: ids.mobilePhone,
+      user_state: ids.state,
     });
   });
+
   const dedupedArtists = dedupeArray(userArtistBridge, "spotify_artist_id");
 
   // UPDATE THE USER ARTISTS TABLE
@@ -117,6 +121,7 @@ const addUserArtists = async (
     );
   } else {
     // now add the artists again, including any new ones. This keeps Database clean
+
     let { error, data: userArtists } = await supabase
       .from("userartists_table")
       .insert(dedupedArtists)
@@ -217,6 +222,29 @@ export default async function handler(
 
   // Add user function
   const addUser = async (userDataIds: IdsProps) => {
+    // update state table
+    let { error: stateError, data: updatedState } = await supabase
+      .from("states_table")
+      .upsert(
+        { state_code: userDataIds.state },
+        {
+          ignoreDuplicates: true,
+          onConflict: "state_code",
+        }
+      );
+    if (stateError) {
+      return res
+        .status(500)
+        .json(
+          getError(
+            stateError,
+            "trying to add a state to the states table when the user signs up"
+          )
+        );
+    } else {
+      console.log(updatedState);
+    }
+
     // 1. GET ARTISTS OF USER
     let getArtistData: foundArtistsOfUsersProps | ErrorProps | any =
       await getArtists(headers);
@@ -263,7 +291,7 @@ export default async function handler(
   } else {
     let { error, data: foundUser } = await supabase
       .from("users_table")
-      .select("id,spotify_user_id,name,mobilePhone")
+      .select("id,spotify_user_id,name,mobilePhone,state")
       .match({ spotify_user_id: userProfile.spotify_user_id });
 
     if (error) {
@@ -278,7 +306,8 @@ export default async function handler(
           foundUser[0].id,
           foundUser[0].spotify_user_id,
           foundUser[0].name,
-          foundUser[0].mobilePhone
+          foundUser[0].mobilePhone,
+          foundUser[0].state
         );
 
         addUser(userDataIds);

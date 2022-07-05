@@ -63,13 +63,27 @@ export default async function handler(
     let { error, data } = await supabase
       .from("userartists_table")
       .select("*")
-      .match({ spotify_artist_id: artist.spotify_artist_id });
+      .match({
+        spotify_artist_id: artist.spotify_artist_id,
+        user_state: artist.state_code,
+      });
 
     // GET THIS ARRAY FROM THE RESPONSE
     // WHICH WILL SHOW ALL THE ARTISTS
     // MATCHED TO THE EVENTS FOUND WITHIN THE TIMEFRAME
     // AND THE USER PHONE NUMBER
     // TO SEND THE ALERT TO
+
+    // ********** IMPORTANT *********
+
+    // We need to send users texts for all matches, however it must also match the State of the user.
+    // So below, instead of just sending texts to users if they have an event/artist match,
+    // we need to make sure that they don't get texts from other states
+    // so when we are cycling through the results to send texts to, we need to discard states that don't match the user.
+    // So you need state code to appear now in the User Artists table.
+
+    // The logic will be: if eventItem.state (from events_table) === state code from the userartists_table, send
+    // otherwise ignore that record.
 
     if (error) {
       return res.status(200).json(error);
@@ -97,32 +111,33 @@ export default async function handler(
 
   /// THIS CHECK IS FOR THE PG_CRON
   /// IT'S SO THAT YOU CANNOT TRIGGER THE ENDPOINT IF YOU FIND IT IN THE BROWSER
-  if (req.body.dbcall) {
-    let { error, data: EventHitsResult } = await supabase
-      .from("events_table")
-      .select("*")
-      .gt("event_sale_date", nowDate)
-      .lt("event_sale_date", timeBefore);
+  /*   if (req.body.dbcall) { */
+  let { error, data: EventHitsResult } = await supabase
+    .from("events_table")
+    .select("*")
+    .gt("event_sale_date", nowDate)
+    .lt("event_sale_date", timeBefore);
 
-    if (error) {
-      return res.status(200).json(error);
-    } else {
-      // return res.status(200).json(data);
-      if (EventHitsResult && EventHitsResult.length > 0) {
-        EventHitsResult.map(async (event: EventDetailProps) => {
-          const match = await matchEventsToUsers({
-            spotify_artist_id: event.spotify_artist_id,
-            event_url: event.event_url,
-          });
-          return res.status(200).json(match);
-        });
-      } else {
-        return res.status(200).json("No events found");
-      }
-    }
-
-    /// END OF PG_CRON TEST WHEN NOT TESTING
+  if (error) {
+    return res.status(200).json(error);
   } else {
-    return res.status(200).json("How on earth did you find this endpoint?");
+    // return res.status(200).json(data);
+    if (EventHitsResult && EventHitsResult.length > 0) {
+      EventHitsResult.map(async (event: EventDetailProps) => {
+        const match = await matchEventsToUsers({
+          spotify_artist_id: event.spotify_artist_id,
+          event_url: event.event_url,
+          state_code: event.state_code,
+        });
+        return res.status(200).json(match);
+      });
+    } else {
+      return res.status(200).json("No events found");
+    }
   }
+
+  /// END OF PG_CRON TEST WHEN NOT TESTING
+  /*   } else {
+    return res.status(200).json("How on earth did you find this endpoint?");
+  } */
 }

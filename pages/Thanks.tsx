@@ -22,6 +22,23 @@ function Thanks() {
   const gotoSpotify = () => {
     router.push("http://spotify.com");
   };
+  const deleteAllUsers = async () => {
+    const deletedUsers = await fetch("/api/admin/deleteAllUsers", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await deletedUsers.json();
+
+    if (result.error) {
+      //errorRedirect(result.details.message);
+      console.log(result.details.message);
+    } else {
+      console.log(result);
+    }
+  };
 
   console.log(session);
   useEffect(() => {
@@ -59,10 +76,19 @@ function Thanks() {
           <span
             className="whitelink"
             style={{ fontSize: "12px" }}
-            onClick={gotoSpotify}
+            /*     onClick={gotoSpotify} */
+            onClick={logOut}
           >
             Disconnect from Spotify
           </span>
+
+          {/*    <span
+            className="whitelink"
+            style={{ fontSize: "12px" }}
+            onClick={deleteAllUsers}
+          >
+            Delete all users
+          </span> */}
         </div>
       ) : null}
     </div>

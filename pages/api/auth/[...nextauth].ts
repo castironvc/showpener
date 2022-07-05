@@ -3,12 +3,7 @@ import SpotifyProviders from "next-auth/providers/spotify";
 import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
 import { JWT } from "next-auth/jwt";
 import { ProvidersType, UserProps } from "../../../types/globals";
-let user: UserProps = {
-  id: "",
-  name: "",
-  accessToken: "",
-  refreshToken: "",
-};
+
 const options: NextAuthOptions = {
   providers: [
     SpotifyProviders<ProvidersType>({
@@ -30,9 +25,10 @@ const options: NextAuthOptions = {
     async jwt({ token, user, account, profile, isNewUser }) {
       //   initial sign in
 
+      console.log(profile, isNewUser);
       const isSignIn = user ? true : false;
       const tmpToken: any = token.accessTokenExpiresAt;
-      if (account && isSignIn) {
+      if (account && user) {
         token.user = { id: user!.id };
 
         console.log("New User");
@@ -42,13 +38,23 @@ const options: NextAuthOptions = {
           refreshToken: account.refresh_token,
           username: account.providerAccountId,
           accessTokenExpiresAt: account.expires_at! * 1000,
-          user: profile,
+          user,
         };
+        /*       if (account && user) {
+        return {
+          ...token,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          username: account.providerAccountId,
+          accessTokenExpiresAt: account.expires_at! * 1000,
+          user,
+        };
+      } */
       }
       //   Return previous token if the access token has not expired yet
       else if (token && tmpToken > Date.now()) {
         console.log("Existing token still valid");
-
+        /*         console.log(token); */
         return token;
       } else {
         //   Refresh token
@@ -92,5 +98,11 @@ async function refreshAccessToken(token: JWT) {
     };
   }
 }
+let user: UserProps = {
+  id: "",
+  name: "",
+  accessToken: "",
+  refreshToken: "",
+};
 
 export default NextAuth(options);

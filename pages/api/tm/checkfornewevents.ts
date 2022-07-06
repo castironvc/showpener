@@ -34,7 +34,7 @@ export default async function handler(
           );
       } else {
         console.log(events);
-        return res.status(200).json(events);
+        return events;
       }
     } else {
       return "No Events Found";
@@ -145,7 +145,7 @@ export default async function handler(
       if (statecodes!.length > 0) {
         // Loop Trigger
         await getArtistEvent(statecodes![j].state_code);
-        return true;
+        return res.status(200).json("Fetching new events");
       }
       return true;
     }

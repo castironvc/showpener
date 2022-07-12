@@ -21,9 +21,9 @@ const adminEmail = process.env.ADMIN_EMAIL;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
-const appUURL = process.env.VERCEL_URL;
+const appURL = process.env.VERCEL_URL;
 // use this to set how long before the On Sale date/time to send the message
-const daysOrMinutes = "minutes";
+const daysOrMinutes = "days";
 const unitsBeforeAlert = 30;
 let i = 0;
 const client = twilio(accountSid, token);
@@ -35,7 +35,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  /* 
+  /*
   // CRON TEST
   let data = {
     from: `Showpener Cron Test < noReply@showpener.com>`,
@@ -95,9 +95,9 @@ export default async function handler(
             "Tickets for " +
             eventItem.artist +
             " are going on sale in the next 30 minutes! Click here to get them before it's too late: " +
-            appUURL +
-            "Tickets/?tm=" +
-            artist.event_url,
+            appURL +
+            "/Tickets/?tm=" +
+            artist.event_id,
           from: phonenumber,
           to: decryptedNumber,
         });
@@ -121,10 +121,10 @@ export default async function handler(
   if (error) {
     return res.status(200).json(error);
   } else {
-    // return res.status(200).json(data);
     if (EventHitsResult && EventHitsResult.length > 0) {
       EventHitsResult.map(async (event: EventDetailProps) => {
         const match = await matchEventsToUsers({
+          event_id: event.event_id,
           spotify_artist_id: event.spotify_artist_id,
           event_url: event.event_url,
           state_code: event.state_code,

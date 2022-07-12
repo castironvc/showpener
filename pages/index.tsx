@@ -48,7 +48,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     let thanked: boolean = false;
     if (!thanked) {
       router.push({
-        pathname: "/Thanks/",
+        pathname: "/Thanks",
       });
       thanked = true;
     }

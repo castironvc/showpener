@@ -11,22 +11,41 @@ function Tickets() {
   const router = useRouter();
   const [runOnce, setRunOnce] = useState(false);
 
+  const goToLink = async (result: any) => {
+    setTimeout(function () {
+      router.push({
+        pathname: `${result.event_url}`,
+      });
+    }, 3000);
+  };
+
+  const getEvent = async (eventid: any) => {
+    const foundEvent = await fetch("/api/tm/getevent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ eventid: eventid }),
+    });
+
+    const result = await foundEvent.json();
+    console.log(result);
+    if (result.error) {
+      //errorRedirect(result.details.message);
+      console.log(result.details.message);
+    } else {
+      goToLink(result);
+    }
+    setRunOnce(true);
+  };
   useEffect(() => {
-    const goToLink = async () => {
-      setTimeout(function () {
-        router.push({
-          pathname: `${router.query.tm}`,
-        });
-      }, 3000);
-      setRunOnce(true);
-    };
     if (!runOnce) {
       if (router.query.tm) {
-        goToLink();
+        getEvent(router.query.tm);
       }
     }
-  }, [runOnce, status, router]);
-  console.log(state);
+  });
+
   return (
     <div className="centerColumnContent">
       <h1 className="mainTitle">Redirecting...</h1>

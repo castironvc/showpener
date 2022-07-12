@@ -136,6 +136,7 @@ export interface shortEvent {
   spotify_artist_id: string;
   event_url: string;
   state_code: string;
+  event_id: string;
 }
 export interface messageDetails {
   body: string;

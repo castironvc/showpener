@@ -23,7 +23,7 @@ const token = process.env.TWILIO_AUTH_TOKEN;
 const phonenumber = process.env.TWILIO_NUMBER;
 const appURL = process.env.VERCEL_URL;
 // use this to set how long before the On Sale date/time to send the message
-const daysOrMinutes = "days";
+const daysOrMinutes = "minutes";
 const unitsBeforeAlert = 30;
 let i = 0;
 const client = twilio(accountSid, token);
@@ -56,7 +56,8 @@ export default async function handler(
 
   const sendAlert = async (messageDetails: messageDetails) => {
     const sendResult = await client.messages.create(messageDetails);
-    return res.status(200).json(sendResult);
+    // Should be doing error checking on this send result and at least logging it
+    return sendResult;
   };
 
   const matchEventsToUsers = async (artist: shortEvent) => {
@@ -86,15 +87,18 @@ export default async function handler(
     // otherwise ignore that record.
 
     if (error) {
-      return res.status(200).json(error);
+      return error;
     } else if (data) {
       data.map((eventItem: eventForBroadcast) => {
+        //   return res.status(200).json(eventItem);
         const decryptedNumber = passDecrypt(eventItem.user_phone).toString();
         sendAlert({
           body:
-            "Tickets for " +
+            "Hey, " +
             eventItem.artist +
-            " are going on sale in the next 30 minutes! Click here to get them before it's too late: " +
+            " tickets for their upcoming show in " +
+            eventItem.user_state +
+            " go on sale soon, hit the link below to go to the event page: " +
             appURL +
             "/Tickets/?tm=" +
             artist.event_id,
@@ -105,7 +109,7 @@ export default async function handler(
 
       return data;
     } else {
-      return res.status(200).json("No Events for that artist found");
+      return "No Events for that artist found";
     }
   };
 

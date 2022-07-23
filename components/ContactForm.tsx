@@ -31,7 +31,7 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
       type: "SET_CONTACT_NAME",
       payload: name,
     });
-    console.log(state);
+    //console.log(state);
   };
   const setPhone = (phone: string) => {
     dispatch({
@@ -66,7 +66,7 @@ const ContactForm: FunctionComponent<BroadcasterProps> = ({}) => {
 
     const contactEmail = await newUserAdminEmail("contact", postData);
 
-    console.log(contactEmail);
+    //console.log(contactEmail);
 
     if (contactEmail.error) {
       errorRedirect(contactEmail.details.message);

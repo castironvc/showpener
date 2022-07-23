@@ -615,6 +615,17 @@ h2 {
 .menu-icon span#burger3 {
   transform: translateY(20px);
 }
+.downloadLinks {
+  padding: 20px;
+}
+.downloadLink {
+  padding-top: 20px;
+  padding-left: 10px;
+}
+.downloadLink a {
+  color: rgb(247, 165, 224);
+  text-decoration: underline;
+}
 @keyframes anim {
   from {
     transform: rotate(0deg);

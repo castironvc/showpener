@@ -54,11 +54,9 @@ const addArtists = async (records: foundArtistsOfUsersProps[]) => {
       ignoreDuplicates: true,
       onConflict: "spotify_artist_id",
     });
-  /*     .select("artistname,spotify_artist_id"); */
 
-  /*   data!.map(async (id: any) => {
-    await addUserArtists(id, artistData);
-  }); */
+  // print this result
+
   if (error) {
     return getError(error, "issues inserting into the Artists table");
   } else {
@@ -242,7 +240,7 @@ export default async function handler(
           )
         );
     } else {
-      console.log(updatedState);
+      //  console.log(updatedState);
     }
 
     // 1. GET ARTISTS OF USER
@@ -323,7 +321,7 @@ export default async function handler(
       }
     }
 
-    /* 
+    /*
 
     if (updatedUser && updatedUser.length > 0) {
       // Returning the record that was just posted means it was a first-time user.

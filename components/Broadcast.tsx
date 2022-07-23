@@ -64,7 +64,7 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
       console.log(result.error);
     } else {
       setSubmitted(true);
-      console.log(result);
+      //  console.log(result);
       /*       setGetUserOnce(false);
       engageDataCapture(false); */
     }

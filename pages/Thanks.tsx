@@ -40,7 +40,7 @@ function Thanks() {
     }
   };
 
-  console.log(session);
+  //console.log(session);
   useEffect(() => {
     if (status && status === "unauthenticated") {
       router.push("/");

@@ -33,7 +33,7 @@ export default async function handler(
         )
       );
   } else if (changedRoleUser) {
-    console.log(changedRoleUser);
+    //console.log(changedRoleUser);
     return res.status(200).json(changedRoleUser[0]);
   }
 }

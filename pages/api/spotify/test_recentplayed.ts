@@ -38,7 +38,7 @@ export default async function handler(
     const { error, artists: spotifyItems } = await spotifyFetch.json();
 
     if (error) {
-      console.log(error);
+      // console.log(error);
       return res
         .status(400)
         .json(
@@ -56,7 +56,7 @@ export default async function handler(
     const { error, items: spotifyItems } = await spotifyFetch.json();
 
     if (error) {
-      console.log(error);
+      // console.log(error);
       return res
         .status(400)
         .json(

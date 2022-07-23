@@ -70,9 +70,9 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
 
     if (result.error) {
       //errorRedirect(result.details.message);
-      console.log(result.details.message);
+      //   console.log(result.details.message);
     } else {
-      console.log(result);
+      //   console.log(result);
       setAllUsers(result);
     }
   };
@@ -92,12 +92,12 @@ function Promoter({ providers }: { providers: { spotify: Provider } }) {
 
     if (result.error) {
       //errorRedirect(result.details.message);
-      console.log(result.details.message);
+      //  console.log(result.details.message);
     } else {
       setUser(result);
 
       if (result.adminName && result.role === "admin") {
-        console.log("Is Admin");
+        // console.log("Is Admin");
         getAllUsers();
       }
       if (!result.adminName) {

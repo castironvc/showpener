@@ -29,10 +29,10 @@ function Tickets() {
     });
 
     const result = await foundEvent.json();
-    console.log(result);
+    //  console.log(result);
     if (result.error) {
       //errorRedirect(result.details.message);
-      console.log(result.details.message);
+      // console.log(result.details.message);
     } else {
       goToLink(result);
     }

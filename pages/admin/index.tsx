@@ -27,7 +27,7 @@ function Promoter() {
 
   // handle errors
   const errorRedirect = (message: string) => {
-    console.log(message);
+    //console.log(message);
     /*  router.push({
       pathname: "/Oops/",
       search: `?message=${encodeURIComponent(message)}`,
@@ -59,11 +59,11 @@ function Promoter() {
       type: "setLoader",
       payload: true,
     });
-    console.log(stripLetters(state.userProfile.mobilePhone));
+    //console.log(stripLetters(state.userProfile.mobilePhone));
     const result = await supabase.auth.signIn({
       phone: stripLetters(state.userProfile.mobilePhone),
     });
-    console.log(result);
+    //console.log(result);
     tokenScreenSet(true);
     dispatch({
       type: "setLoader",
@@ -83,7 +83,7 @@ function Promoter() {
 
     if (error) {
       setAuthError(error.message);
-      console.log(error.message);
+      //  console.log(error.message);
     } else if (session && session.user) {
       setSession(session);
       setStatus(session.user.aud);

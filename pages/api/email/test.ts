@@ -12,7 +12,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req.body);
+  // console.log(req.body);
   let data = {
     from: `Showpener Cron Test < noReply@showpener.com>`,
     to: `Mike < mike@gamaroff.net>`,

@@ -80,9 +80,9 @@ const Broadcast: FunctionComponent<BroadcasterProps> = ({
     if (result.error) {
       errorRedirect(result.details.message);
     } else {
-      console.log(result);
+      // console.log(result);
       const adminEmail = await newUserAdminEmail("promoter", result);
-      console.log(adminEmail);
+      //  console.log(adminEmail);
 
       /*    setGetUserOnce(false); */
       engageDataCapture(false);

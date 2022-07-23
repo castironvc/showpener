@@ -33,7 +33,7 @@ export default async function handler(
             )
           );
       } else {
-        console.log(events);
+        // console.log(events);
         return events;
       }
     } else {
@@ -119,7 +119,7 @@ export default async function handler(
                 }
               });
             }
-            console.log(allEventsJson);
+            //  console.log(allEventsJson);
             i++;
 
             getArtistEvent(statecode);

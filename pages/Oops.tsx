@@ -24,7 +24,7 @@ function Oops() {
       router.push("/");
     }
   }, [status, router]); */
-  console.log(state);
+  //  console.log(state);
   return (
     <div className="centerColumnContent">
       <h1 className="mainTitle">Oops!</h1>

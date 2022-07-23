@@ -1,10 +1,8 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useContext, useEffect, useRef } from "react";
-import { newUserAdminEmail } from "../utils/adminemail";
 import { AppContext, DispatchContext } from "../context/StateContext";
 import { normalizePhone } from "../utils/validation";
-
 import getStateCode from "../utils/getStateCode";
 
 import {
@@ -21,17 +19,40 @@ import {
   UserProfileProps,
   adminEmailProps,
 } from "../types/globals";
+
 let states = require("../utils/states");
+
+let dataUser = "ccarlisle9";
 const randNum = Math.floor(Math.random() * 4);
 
 let disableLoader: boolean = false;
 function Home({ providers }: { providers: { spotify: Provider } }) {
   const { state } = useContext(AppContext);
   const [checked, acceptTerms] = useState(false);
+  const [json, setjson] = useState("");
   const { dispatch } = useContext(DispatchContext);
   const router = useRouter();
   const { status, data: session } = useSession();
   const [stateCodes, setStates] = useState(states);
+
+  // Generate JSON files
+
+  const generateJSON = (element: string, data: any) => {
+    const blob = new Blob([JSON.stringify({ data }, null, 4)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "backup.json";
+    a.textContent = `Download_${element}_data.json`;
+
+    const el = document.getElementById(element);
+    if (el) {
+      el.innerHTML = "";
+      el.appendChild(a);
+    }
+  };
 
   // handle errors
   const errorRedirect = (message: string) => {
@@ -45,12 +66,14 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
   };
   const thanksRedirect = () => {
-    let thanked: boolean = false;
-    if (!thanked) {
-      router.push({
-        pathname: "/Thanks",
-      });
-      thanked = true;
+    if (state.userProfile.session.name !== dataUser) {
+      let thanked: boolean = false;
+      if (!thanked) {
+        router.push({
+          pathname: "/Thanks",
+        });
+        thanked = true;
+      }
     }
   };
 
@@ -78,7 +101,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       callbackUrl: `/?phone=${state.userProfile.mobilePhone}&state=${state.userProfile.state}`,
     });
 
-    console.log(token);
+    //console.log(token);
     return token;
 
     /*     const user = await fetch("/api/auth/getToken", {
@@ -103,12 +126,20 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
     const result = await user.json();
 
+    // if (tmpProfile.session.user.name === "ccarlisle9") {
+
+    /*   setjson(JSON.stringify(result)); */
+    //}
+
+    generateJSON("artists", result);
+
     if (result.error) {
       errorRedirect(result.details.message);
     } else if (result === "user_exists") {
       thanksRedirect();
     } else {
       // Retrieved the stuff needed to proceed to TicketMaster for the event data
+
       const artistObj: foundArtistsForEventProps = {
         artists: result,
         state: state.userProfile.state,
@@ -120,7 +151,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
       };
 
       // SEND EMAIL TO CHARLIE
-      const adminEmail = await newUserAdminEmail("new_enduser", newUserEmail);
+      //  const adminEmail = await newUserAdminEmail("new_enduser", newUserEmail);
 
       // STEP 2: THIS IS WHERE WE GET THE TICKET DATA FOR THE USER'S ARTISTS WE JUST EXTRACTED
 
@@ -145,6 +176,8 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
         if (status === "authenticated") {
           thanksRedirect();
+
+          //
         }
         return ticketData;
       }
@@ -167,6 +200,8 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
     const result = await events.json();
 
+    generateJSON("events", result);
+
     return result;
   };
 
@@ -177,7 +212,7 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await events.json();
-    console.log(result);
+    // console.log(result);
     return result;
   };
   const welcomeText = async (tmpProfile: UserProfileProps) => {
@@ -190,11 +225,11 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
     });
 
     const result = await user.json();
-    console.log(result);
+    // console.log(result);
   };
 
   useEffect(() => {
-    console.log(session);
+    // console.log(session);
     if (
       session &&
       router.query.phone &&
@@ -221,12 +256,27 @@ function Home({ providers }: { providers: { spotify: Provider } }) {
 
   return (
     <div>
+      {session && session.user && session.user.name === dataUser ? (
+        <div className="downloadLinks">
+          Charlie, here is the data that only you can see. Give it a chance to
+          load
+          <div className="downloadLink" id="artists">
+            Loading...
+          </div>
+          <div className="downloadLink" id="events">
+            Loading...
+          </div>
+        </div>
+      ) : null}
+
       {!state.loading && status === "unauthenticated" ? (
         <>
           {Object.values(providers).map((provider: Provider) => (
             <div key={provider.id}>
               <h1 className="mainTitle">Showpener</h1>
+
               <h2 className="subTitle">Never Miss A Show</h2>
+
               <p className="center-text para">
                 Get personal text alerts for upcoming concerts in your area.
               </p>

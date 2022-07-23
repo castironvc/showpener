@@ -50,7 +50,7 @@ export default async function handler(
     /*  let numberOfRecordsToGet: number =
       dedupedArtistArray.length > 10 ? 10 : dedupedArtistArray.length; // NUMBER OF ARTISTS I WANT TO CHECK EVENTS FOR */
     let eventArray: EventDetailProps[] = new Array();
-
+    let rawEvents: any[] = new Array();
     const getArtistEvent = async () => {
       if (i < dedupedArtistArray.length) {
         const NEW_EVENTS_ENDPOINT =
@@ -59,7 +59,7 @@ export default async function handler(
         const allEvents = await fetch(NEW_EVENTS_ENDPOINT);
 
         const allEventsJson = await allEvents.json();
-
+        rawEvents.push(allEventsJson);
         if (allEventsJson.error) {
           return res
             .status(200)
@@ -105,11 +105,10 @@ export default async function handler(
 
           i++;
           getArtistEvent();
-
-          return true;
         }
+        return true;
       } else {
-        /*     return res.status(200).json(eventArray); */
+        return res.status(200).json(rawEvents);
 
         await addEvents(eventArray);
       }

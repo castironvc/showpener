@@ -33,7 +33,7 @@ export default async function handler(
           )
         );
     } else if (foundMessages) {
-      console.log(foundMessages);
+      // console.log(foundMessages);
       return res.status(200).json(foundMessages);
     }
   } else {

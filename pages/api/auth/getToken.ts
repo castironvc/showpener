@@ -9,11 +9,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const token = await getToken({ req, secret });
-  console.log(req);
-  console.log(token);
+  //  console.log(req);
+  // console.log(token);
   if (token) {
     // Signed in
-    console.log("JSON Web Token", JSON.stringify(token, null, 2));
+    //console.log("JSON Web Token", JSON.stringify(token, null, 2));
   } else {
     // Not Signed in
     res.status(401);

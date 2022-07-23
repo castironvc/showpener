@@ -43,7 +43,7 @@ export const newUserAdminEmail = async (type: string, content: any) => {
     /*     name: state.userProfile.session.name,
     mobilePhone: state.userProfile.mobilePhone,
     state: state.userProfile.state, */
-    console.log(content.name);
+    /// console.log(content.name);
     emailTemplateObj = {
       content: emailTemplate({
         name: content.name,

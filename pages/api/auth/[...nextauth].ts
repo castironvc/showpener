@@ -25,13 +25,13 @@ const options: NextAuthOptions = {
     async jwt({ token, user, account, profile, isNewUser }) {
       //   initial sign in
 
-      console.log(profile, isNewUser);
+      //   console.log(profile, isNewUser);
       const isSignIn = user ? true : false;
       const tmpToken: any = token.accessTokenExpiresAt;
       if (account && user) {
         token.user = { id: user!.id };
 
-        console.log("New User");
+        // console.log("New User");
         return {
           ...token,
           accessToken: account.access_token,
@@ -53,7 +53,7 @@ const options: NextAuthOptions = {
       }
       //   Return previous token if the access token has not expired yet
       else if (token && tmpToken > Date.now()) {
-        console.log("Existing token still valid");
+        //   console.log("Existing token still valid");
         /*         console.log(token); */
         return token;
       } else {

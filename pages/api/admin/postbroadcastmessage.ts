@@ -44,7 +44,7 @@ export default async function handler(
           )
         );
     } else if (incremented) {
-      console.log(incremented);
+      //   console.log(incremented);
       return res.status(200).json(incremented);
     }
   }

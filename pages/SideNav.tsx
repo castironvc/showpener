@@ -9,7 +9,7 @@ function SideNav() {
   const { asPath } = useRouter();
 
   const toggleMenu = () => {
-    console.log(asPath);
+    // console.log(asPath);
     const menu = document.getElementById("sideMenu");
     const burger1 = document.getElementById("burger1");
     const burger2 = document.getElementById("burger2");
@@ -29,7 +29,7 @@ function SideNav() {
       })`; */
     }
     menuOpen(!open);
-    console.log(open);
+    // console.log(open);
   };
   const goTo = async (path: string) => {
     dispatch({

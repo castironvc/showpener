@@ -21,7 +21,7 @@ export default async function handler(
 
   await mailgun.messages().send(data, function (error: any, body: any) {
     if (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(400).json(error);
     } else {
       return res.status(200).json(body);

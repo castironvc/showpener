@@ -152,6 +152,7 @@ export interface eventForBroadcast {
   spotify_artist_id: string;
   spotify_user_id: string;
   user_phone: string;
+  user_state: string;
 }
 export interface errorProps {
   error: {

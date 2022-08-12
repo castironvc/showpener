@@ -131,12 +131,17 @@ export interface EventDetailProps {
   event_sale_date: string;
   event_url: string;
   state_code: string;
+  event_venue: string;
+  event_city: string;
 }
 export interface shortEvent {
   spotify_artist_id: string;
   event_url: string;
   state_code: string;
   event_id: string;
+  event_venue: string;
+  event_city: string;
+  event_date: string;
 }
 export interface messageDetails {
   body: string;

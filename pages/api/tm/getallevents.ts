@@ -60,6 +60,7 @@ export default async function handler(
 
         const allEventsJson = await allEvents.json();
         rawEvents.push(allEventsJson);
+
         if (allEventsJson.error) {
           return res
             .status(200)
@@ -98,6 +99,8 @@ export default async function handler(
                     eventItem.sales.public.localDate,
                   event_url: eventItem.url,
                   state_code: req.body.state,
+                  event_venue: eventItem._embedded.venues[0].name,
+                  event_city: eventItem._embedded.venues[0].city.name,
                 });
               }
             });
@@ -108,8 +111,8 @@ export default async function handler(
         }
         return true;
       } else {
-        return res.status(200).json(rawEvents);
-
+        // return res.status(200).json(rawEvents);
+        console.log(eventArray);
         await addEvents(eventArray);
       }
     };

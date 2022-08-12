@@ -115,11 +115,13 @@ export default async function handler(
                       eventItem.sales.public.localDate,
                     event_url: eventItem.url,
                     state_code: statecode,
+                    event_venue: eventItem._embedded.venues[0].name,
+                    event_city: eventItem._embedded.venues[0].city.name,
                   });
                 }
               });
             }
-            //  console.log(allEventsJson);
+            console.log(allEventsJson);
             i++;
 
             getArtistEvent(statecode);

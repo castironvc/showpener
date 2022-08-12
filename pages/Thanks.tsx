@@ -82,13 +82,13 @@ function Thanks() {
             Disconnect from Spotify
           </span>
 
-          {/*    <span
+          <span
             className="whitelink"
             style={{ fontSize: "12px" }}
             onClick={deleteAllUsers}
           >
             Delete all users
-          </span> */}
+          </span>
         </div>
       ) : null}
     </div>

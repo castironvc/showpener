@@ -27,6 +27,7 @@ const daysOrMinutes = "minutes";
 const unitsBeforeAlert = 30;
 let i = 0;
 const client = twilio(accountSid, token);
+let matchArr: any[] = new Array();
 export const mailgun = require("mailgun-js")({
   apiKey: mgprivatekey,
   domain: domain,
@@ -61,6 +62,7 @@ export default async function handler(
   };
 
   const matchEventsToUsers = async (artist: shortEvent) => {
+    console.log(artist);
     let { error, data } = await supabase
       .from("userartists_table")
       .select("*")
@@ -92,16 +94,22 @@ export default async function handler(
       data.map((eventItem: eventForBroadcast) => {
         //   return res.status(200).json(eventItem);
         const decryptedNumber = passDecrypt(eventItem.user_phone).toString();
+
         sendAlert({
-          body:
-            "Hey, " +
-            eventItem.artist +
-            " tickets for their upcoming show in " +
-            eventItem.user_state +
-            " go on sale soon, hit the link below to go to the event page: " +
-            appURL +
-            "/Tickets/?tm=" +
-            artist.event_id,
+          body: `Hey, ${
+            eventItem.artist
+          } tickets for their upcoming show on ${moment
+            .utc(artist.event_date)
+            .format("dddd")} ${moment
+            .utc(artist.event_date)
+            .format("MMM Do")} at ${artist.event_venue}, ${
+            artist.event_city
+          }, ${
+            eventItem.user_state
+          } go on sale soon, hit the link below to go to the event page: ${
+            appURL + "/Tickets/?tm=" + artist.event_id
+          }`,
+
           from: phonenumber,
           to: decryptedNumber,
         });
@@ -123,7 +131,7 @@ export default async function handler(
     .lt("event_sale_date", timeBefore);
 
   if (error) {
-    return res.status(200).json(error);
+    return res.status(401).json(error);
   } else {
     if (EventHitsResult && EventHitsResult.length > 0) {
       EventHitsResult.map(async (event: EventDetailProps) => {
@@ -132,9 +140,15 @@ export default async function handler(
           spotify_artist_id: event.spotify_artist_id,
           event_url: event.event_url,
           state_code: event.state_code,
+          event_venue: event.event_venue,
+          event_city: event.event_city,
+          event_date: event.event_date,
         });
-        return res.status(200).json(match);
+        matchArr.push(match);
+
+        // return match;
       });
+      return res.status(200).json(matchArr);
     } else {
       return res.status(200).json("No events found");
     }
